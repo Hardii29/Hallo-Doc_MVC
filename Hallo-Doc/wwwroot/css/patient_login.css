@@ -1,0 +1,115 @@
+﻿.container {
+    position: relative;
+    height: 90vh;
+}
+
+    .container::before {
+        content: '';
+        background-image: url("./../images/plateform_login_img.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.1;
+        z-index: -1;
+    }
+
+.content {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.mode {
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
+}
+
+.back {
+    left: 0;
+}
+
+.fontuser {
+    position: relative;
+}
+
+    .fontuser i {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        color: gray;
+    }
+
+.fontpass {
+    position: relative;
+}
+
+    .fontpass i {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        color: gray;
+    }
+
+input[type=email], input[type=password] {
+    width: 100%;
+    margin: 5px 0 22px 0;
+    background: transparent;
+}
+
+    input[type=email]:focus, input[type=password]:focus {
+        outline: none;
+    }
+
+.logo {
+    margin-bottom: 200px;
+}
+
+.btn:hover {
+    opacity: 1;
+}
+
+.out {
+    border: none;
+}
+
+.icon {
+    padding: 5rem 1rem 1rem 15rem;
+    min-width: 40px;
+}
+
+.forgot {
+    color: #0dcaf0;
+    margin-top: 3rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+footer {
+    bottom: 0;
+    text-align: center;
+    margin: 2rem auto 0 auto;
+}
+
+@media screen and (max-width:900px) {
+    .form-control {
+        margin: 2px;
+    }
+}
+
+@media screen and (max-width:360px) {
+    .logo {
+        display: none;
+    }
+
+    .login-form {
+        margin-top: 200px;
+    }
+}

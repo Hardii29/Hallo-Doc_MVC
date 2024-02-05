@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewData["Title"] = "Create_concierge_req";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css\bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/create_request.css" rel="stylesheet">
+    <style>
+        .darkMode .content {
+            background-color: black;
+            color: white;
+            box-shadow: 0 4px 8px 0 rgba(256, 256, 256, 0.2), 0 6px 20px 0 rgba(256, 256, 256, 0.19);
+        }
+
+        .darkMode .container {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-light bg-white">
+        <a class="navbar-brand" href="#">
+            <img src="./../images/logo.png" height="65" width="100">
+        </a>
+        <form class="form-inline my-2 my-lg-0">
+            <a class="btn btn-outline-info mode" onclick="darkMode()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
+                    <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" />
+                </svg>
+            </a>
+        </form>
+    </nav>
+    <div class="container">
+
+        <form class="form-inline my-2 my-lg-0" style="text-align: right;">
+            <a class="btn btn-outline-info out back" asp-action="Create_request" asp-controller="Patient">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </form>
+        <div class="content">
+            <form class="row g-2 first">
+                <p class="mt-4">Concirge Information</p>
+                <div class="row g-2">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="Your Firstname">
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="Your Lastname">
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control" placeholder="123-45-67">
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="email" class="form-control" placeholder="Your Email">
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="Hotel/Property Name">
+                    </div>
+                </div>
+            </form>
+            <form class="row g-2 first">
+                <p class="mt-4">Concirge Location</p>
+                <div class="row g-2">
+                    <div class="col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="street">
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="city">
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6 col-sm-12">
+                            <input type="text" class="form-control" placeholder="State">
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <input type="number" class="form-control" placeholder="Zip">
+                        </div>
+</div>
+                    </div>
+            </form>
+            <form class="row g-2 first">
+                <p class="mt-4">Patient Information</p>
+                <div class="mb-3">
+                    <textarea class="form-control" id="symptomsDtails" placeholder="Enter brief details of your symptoms" rows="3"></textarea>
+                </div>
+                <div class="row g-2">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="Date of Birth" onfocus="(this.type='date')">
+                    </div>
+                </div>
+            </form>
+            <form class="row g-2 first">
+                <p class="mt-4">Patient Contact Information</p>
+                <div class="row g-2">
+                    <div class="col-md-6 col-sm-12">
+                        <input type="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <input type="tel" class="form-control" placeholder="123-45-67">
+                    </div>
+                </div>
+            </form>
+            <form class="row g-2 first">
+                <p class="mt-4">Patient Location</p>
+                <div class="row g-2">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Room#/Suite (Optional)">
+                    </div>
+                </div>
+            </form>
+            <form class="g-2 mt-4 first" style="text-align: right;">
+                <button type="button" class="btn btn-info text-white">Submit</button>
+                <button type="button" class="btn btn-outline-info">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function darkMode() {
+            var element = document.body;
+            element.classList.toggle("darkMode");
+        }
+    </script>
+</body>
+
+</html>
