@@ -38,23 +38,22 @@
                     <div class="content">
                         <h5>Login to your account</h5>
                         <div class="login-form">
-<form>
-                                <div class="form-group form-floating m-3 fontuser">
-                                    <input type="email" class="form-control" id="email" placeholder="Email">
+<form method="post" asp-controller="AspnetUsers" asp-action="Patient_dashboard">
+                                <div class="form-group form-floating mt-3 fontuser">
+                                    <input type="email" name="email" class="form-control" id="email" placeholder="Email">
                                     <label for="email">Email</label>
                                     <i class="fa fa-user-circle-o"></i>
                                 </div>
 
-                                <div class="form-group form-floating m-3 fontpass">
-                                    <input type="password" class="form-control" id="password" placeholder="Password">
+                                <div class="form-group form-floating mt-3 fontpass">
+                                    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
                                     <label for="Password">Password</label>
                                     <i class="fa fa-eye"></i>
                                 </div>
 
-                                <a asp-action="Patient_dashboard" asp-controller="Patient" class="btn btn-info btn-lg btn-block" style="width: 90%; color: white;">Log In</a>
+                                <button type="submit" class="btn btn-info btn-lg btn-block" style="width: 90%; color: white;">Log In</button>
 
                                 <a class="forgot" asp-action="Reset_password" asp-controller="Patient">Forgot Password?</a>
-
 
                             </form>
                         </div>

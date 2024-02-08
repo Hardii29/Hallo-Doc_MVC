@@ -108,7 +108,9 @@ footer {
     .logo {
         display: none;
     }
-
+    input{
+        width: 360px !important;
+    }
     .login-form {
         margin-top: 200px;
     }
