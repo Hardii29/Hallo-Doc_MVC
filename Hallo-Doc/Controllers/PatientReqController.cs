@@ -3,6 +3,11 @@ using Hallo_Doc.Data;
 using Hallo_Doc.Models;
 using Hallo_Doc.Models.ViewModel;
 using System.Collections;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.CodeAnalysis.Scripting;
+using BCrypt.Net;
+using System.IO;
 
 namespace Hallo_Doc.Controllers
 {
@@ -13,30 +18,43 @@ namespace Hallo_Doc.Controllers
         {
             _context = context;
         }
+        public IActionResult Index()
+        {
+            return View("../Patient/Create_patient_req");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-
+   
         public async Task<IActionResult> Create(PatientReq PatientReq)
         {
-            var Aspnetuser = new AspnetUser();
-            var User = new User();
-            var Request = new Request();
-            //var Requestclient = new RequestClient();
-
             //if (ModelState.IsValid)
             //{
-            Aspnetuser.Id = "gju";
+                //var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == PatientReq.Email);
+                //if (existingUser != null)
+                //{
+                //    ModelState.AddModelError(string.Empty, "Email already exists");
+                //    return View("../Patient/Create_patient_req", PatientReq);
+                //}
+
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(PatientReq.Password);
+
+                var Aspnetuser = new AspnetUser();
+            var User = new User();
+            var Request = new Request();
+            var Requestclient = new Requestclient();
+            var RequestType = new RequestType();
+
+
+                Aspnetuser.Id = Guid.NewGuid().ToString();
             Aspnetuser.Username = PatientReq.FirstName;
-            Aspnetuser.Passwordhash = "hardi";
             Aspnetuser.Email = PatientReq.Email;
-            Aspnetuser.Phonenumber = PatientReq.Mobile;
-            Aspnetuser.Emailconfirmed = new BitArray(1);
-            Aspnetuser.Phonenumberconfirmed = new BitArray(1);
-            Aspnetuser.Twofactorenabled = new BitArray(1);
+                Aspnetuser.Passwordhash = hashedPassword;
+                Aspnetuser.Phonenumber = PatientReq.Mobile;
+            Aspnetuser.Createddate = DateTime.Now;
             _context.AspnetUsers.Add(Aspnetuser);
             await _context.SaveChangesAsync();
 
-            User.Aspnetuserid = PatientReq.Id;
+            User.Aspnetuserid = Aspnetuser.Id;
             User.Firstname = PatientReq.FirstName;
             User.Lastname = PatientReq.LastName;
             User.Email = PatientReq.Email;
@@ -50,6 +68,10 @@ namespace Hallo_Doc.Controllers
             _context.Users.Add(User);
             await _context.SaveChangesAsync();
 
+            RequestType.Name = "Patient";
+            _context.RequestTypes.Add(RequestType);
+            await _context.SaveChangesAsync();
+
             Request.RequestTypeId = 2;
             Request.UserId = User.Userid;
             Request.FirstName = PatientReq.FirstName;
@@ -57,27 +79,51 @@ namespace Hallo_Doc.Controllers
             Request.Email = PatientReq.Email;
             Request.PhoneNumber = PatientReq.Mobile;
             Request.Status = 4;
-            _context.Requests.Add(Request);
+                Request.CreatedDate = DateTime.Now;
+                _context.Requests.Add(Request);
             await _context.SaveChangesAsync();
 
-            //Requestclient.RequestId = Request.RequestId;
-            //Requestclient.FirstName = viewPatientReq.FirstName;
-            //Requestclient.LastName = viewPatientReq.LastName;
-            //Requestclient.Address = viewPatientReq.Street;
-            //Requestclient.Email = viewPatientReq.Email;
-            //Requestclient.PhoneNumber = viewPatientReq.Mobile;
-            //_context.RequestClients.Add(Requestclient);
-            //await _context.SaveChangesAsync();
+            Requestclient.RequestId = Request.RequestId;
+            Requestclient.FirstName = PatientReq.FirstName;
+            Requestclient.LastName = PatientReq.LastName;
+            Requestclient.Address = PatientReq.Street;
+            Requestclient.Email = PatientReq.Email;
+            Requestclient.PhoneNumber = PatientReq.Mobile;
+            _context.Requestclients.Add(Requestclient);
+            await _context.SaveChangesAsync();
 
-            return View("../Home/Index");
-            //return RedirectToAction("FamilyReq", "PatientForm");
+            if (PatientReq.File != null && PatientReq.File.Length > 0)
+            {
+                var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
+
+                if (!Directory.Exists(uploadsDirectory))
+                {
+                    Directory.CreateDirectory(uploadsDirectory);
+                }
+
+                var fileName = Path.GetFileName(PatientReq.File.FileName);
+                var filePath = Path.Combine(uploadsDirectory, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await PatientReq.File.CopyToAsync(stream)
+;
+                }
+
+                var requestWiseFile = new RequestWiseFile
+                {
+                    RequestId = Request.RequestId,
+                    FileName = fileName,
+                    CreatedDate = DateTime.Now,
+                };
+                //PatientReq.FileName = filePath;
+                _context.RequestWiseFiles.Add(requestWiseFile);
+                await _context.SaveChangesAsync();
+            }
+
             //}
-            //return RedirectToAction("Index", "Home");
-        }
-        public IActionResult Index()
-        {
-            return View("../Patient/Create_patient_req");
-        }
-
+            return RedirectToAction("Index", "Home");
+    }
+   
     }
 }

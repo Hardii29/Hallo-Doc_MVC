@@ -1,16 +1,20 @@
-﻿using Hallo_Doc.Models;
+﻿using Hallo_Doc.Data;
+using Hallo_Doc.Models;
+using Hallo_Doc.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Hallo_Doc.Controllers
 {
     public class PatientController : Controller
     {
-        private readonly ILogger<PatientController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public PatientController(ILogger<PatientController> logger)
+        public PatientController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
         public IActionResult Login()
         {
@@ -40,9 +44,38 @@ namespace Hallo_Doc.Controllers
         {
             return View("Create_concierge_req");
         }
-        public IActionResult Patient_dashboard()
+        public async Task<IActionResult> Patient_dashboard()
         {
-            return View("Patient_dashboard");
+            var model = new DashboardList
+            {
+                Requests = _context.Requests.ToList()
+            };
+            //var requests = await _context.Requests
+            //    .Include(r => r.RequestWiseFiles)
+            //    .ToListAsync();
+
+            //var requestViewModels = requests.Select(r => new RequestViewModel
+            //{
+            //    RequestId = r.RequestId,
+            //    CreatedDate = (DateTime)r.CreatedDate,
+            //    Status = r.Status,
+            //    HasFile = r.RequestWiseFiles != null && r.RequestWiseFiles.Any()
+            //}).ToList();
+
+            //var model = new DashboardList
+            //{
+            //    Requests = requestViewModels
+            //};
+
+            return View(model);
+        }
+        public IActionResult View_document()
+        {
+            return View("View_document");
+        }
+        public IActionResult Patient_profile()
+        {
+            return View("Patient_profile");
         }
         public IActionResult Error()
         {

@@ -45,6 +45,7 @@ namespace Hallo_Doc.Controllers
             return View(aspnetUser);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Patient_dashboard(string email, string password)
         {
             if (email == null || password == null)
@@ -59,7 +60,7 @@ namespace Hallo_Doc.Controllers
                 return NotFound();
             }
 
-            return View("Patient_dashboard");
+            return RedirectToAction("Patient_dashboard", "Patient");
         }
 
         // GET: AspnetUsers/Create
@@ -68,12 +69,9 @@ namespace Hallo_Doc.Controllers
             return View();
         }
 
-        // POST: AspnetUsers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Username,Passwordhash,Securitystamp,Email,Emailconfirmed,Phonenumber,Phonenumberconfirmed,Twofactorenabled")] AspnetUser aspnetUser)
+        public async Task<IActionResult> Create([Bind("Id,Username,Passwordhash,Email,Phonenumber")] AspnetUser aspnetUser)
         {
             if (ModelState.IsValid)
             {
@@ -100,9 +98,7 @@ namespace Hallo_Doc.Controllers
             return View(aspnetUser);
         }
 
-        // POST: AspnetUsers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Id,Username,Passwordhash,Securitystamp,Email,Emailconfirmed,Phonenumber,Phonenumberconfirmed,Twofactorenabled")] AspnetUser aspnetUser)

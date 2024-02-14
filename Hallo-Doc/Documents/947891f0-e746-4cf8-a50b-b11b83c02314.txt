@@ -1,0 +1,32 @@
+Scaffold-DbContext "User ID = postgres;Password=&^54UYtr;Server=localhost;Database=Hallo-Doc;Integrated Security=true;Pooling=true;" Npgsql.EntityFrameworkCore.PostgreSQL -OutputDir "Models" –context "ApplicationDbContext" –contextDir "Data" -f;
+[HttpPost]
+public async Task<IActionResult> Patient_dashboard(string email, string password)
+{
+    if (email == null || password == null)
+    {
+        return NotFound("Email and Password Required.");
+    }
+
+    var User = await _context.AspnetUsers
+        .FirstOrDefaultAsync(m => m.Email == email && m.Passwordhash == password);
+    if (User == null)
+    {
+        return NotFound();
+    }
+
+    return View("Patient_dashboard");
+}
+asp-for="f_firstname"
+asp-for="f_lastname"
+asp-for="f_mobile"
+ asp-for="f_email"
+asp-for="f_relation"
+ asp-for="FirstName"
+asp-for="LastName"
+asp-for="DOB"
+asp-for="Email"
+asp-for="Mobile"
+asp-for="Street"
+asp-for="City"
+asp-for="State"
+asp-for="ZipCode"

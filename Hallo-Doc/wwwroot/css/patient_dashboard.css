@@ -8,6 +8,7 @@ body{
     margin-right: auto; 
    width: 100%;
 }
+
 .content{
     background-color: white;
     width: 100%;
@@ -16,7 +17,14 @@ body{
     margin: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-
+.nav-tabs .nav-item .nav-link {
+    background-color: white;
+    color: black;
+}
+.nav-link .active a {
+    text-decoration: none;
+    color: #0dcaf0;
+}
 h3{
     font-weight: bold;
 }

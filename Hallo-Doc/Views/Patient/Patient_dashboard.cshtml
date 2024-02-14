@@ -1,4 +1,12 @@
-﻿@{
+﻿@* @using Microsoft.AspNetCore.Http
+@using Hallo_Doc.Models;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
+} *@
+@model Hallo_Doc.Models.ViewModel.DashboardList;
+@{
     ViewData["Title"] = "Patient_dashboard";
 }
 <!DOCTYPE html>
@@ -34,7 +42,7 @@
     </style>
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white flex-column">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img src="./../images/logo.png" height="65" width="100">
@@ -42,11 +50,11 @@
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item d-inline">
-                    <p class="navbar-text">Welcome <span style="font-weight: bold;">Test Testing</span></p>
+                    <p class="navbar-text">Welcome <span style="font-weight: bold;">Hardi</span></p>
                 </li>
                 <li class="nav-item d-inline">
                     <form class="form-inline my-2 my-lg-0 ">
-                        <a class="btn btn-outline-info out back" asp-action="Login" asp-controller="Patient">Logout</a>
+                        <a class="btn btn-outline-info out back" asp-action="Login" asp-controller="PatientDashboard">Logout</a>
 
                         <a class="btn btn-outline-info mode" onclick="darkMode()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
@@ -60,98 +68,54 @@
 
         </div>
         <hr>
+        <div class="container-fluid">
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active"
-                   aria-current="page" href="#">Home</a>
+                   aria-current="page" href="#">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Courses</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Articles</a>
+                    <a class="nav-link" asp-controller="Patient" asp-action="Patient_profile">Profile</a>
             </li>
            
         </ul>
+        </div>
     </nav>
     <div class="container mt-5">
         <h3>Medical History</h3>
+        <form asp-action="Patient_dashboard" asp-controller="Patient">
         <div class="content">
-            <form class="form-inline my-2 my-lg-0" style="text-align: right;">
+          
+            <div class="form-inline my-2 my-lg-0" style="text-align: right;">
                 <button type="button" class="btn btn-outline-info out back">Create new Request</button>
-            </form>
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr class="row">
+            </div>
+            <table class="table-responsive" style="width:100%">
+                <thead class="thead-dark bg-light">
+                    <tr class="row" style="padding:5px">
                         <th class="col">Created Date</th>
                         <th class="col-6">Current status</th>
                         <th class="col">Document</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="row">
-                        <td class="col">Mark</td>
-                        <td class="col-6">Otto</td>
-                        <td class="col">mdo</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Jacob</td>
-                        <td class="col-6">Thornton</td>
-                        <td class="col">fat</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Larry</td>
-                        <td class="col-6">the Bird</td>
-                        <td class="col">twitter</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Mark</td>
-                        <td class="col-6">Otto</td>
-                        <td class="col">mdo</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Jacob</td>
-                        <td class="col-6">Thornton</td>
-                        <td class="col">fat</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Larry</td>
-                        <td class="col-6">the Bird</td>
-                        <td class="col">twitter</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Mark</td>
-                        <td class="col-6">Otto</td>
-                        <td class="col">mdo</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Jacob</td>
-                        <td class="col-6">Thornton</td>
-                        <td class="col">fat</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Larry</td>
-                        <td class="col-6">the Bird</td>
-                        <td class="col">twitter</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Mark</td>
-                        <td class="col-6">Otto</td>
-                        <td class="col">mdo</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Jacob</td>
-                        <td class="col-6">Thornton</td>
-                        <td class="col">fat</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col">Larry</td>
-                        <td class="col-6">the Bird</td>
-                        <td class="col">twitter</td>
-                    </tr>
+                <tbody >
+                    
+                        @foreach (var item in Model.Requests)
+                        {
+                            <tr class="row">
+                                <td class="col"> @item.CreatedDate</td>
+                                <td class="col-6">@item.Status</td>
+                                <td class="col">
+                                    
+                                    <a class="btn btn-outline-info out back" asp-controller="Patient" asp-action="View_document">Document(1)</a>
+                                    
+                                </td>
+                            </tr>
+                    }
                 </tbody>
             </table>
+           
         </div>
+        </form>
     </div>
     <script>
         function darkMode() {

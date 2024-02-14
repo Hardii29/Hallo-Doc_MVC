@@ -8,7 +8,7 @@ public partial class User
 {
     public int Userid { get; set; }
 
-    public string? Aspnetuserid { get; set; }
+    public string Aspnetuserid { get; set; } = null!;
 
     public string Firstname { get; set; } = null!;
 
@@ -32,7 +32,7 @@ public partial class User
 
     public string? Strmonth { get; set; }
 
-    public int? Stryear { get; set; }
+    public int? Intyear { get; set; }
 
     public int? Intdate { get; set; }
 
@@ -54,7 +54,7 @@ public partial class User
 
     public string? Dob { get; set; }
 
-    public virtual AspnetUser? Aspnetuser { get; set; }
+    public virtual AspnetUser Aspnetuser { get; set; } = null!;
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 }

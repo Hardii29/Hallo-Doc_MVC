@@ -1,4 +1,4 @@
-﻿
+﻿@model Hallo_Doc.Models.ViewModel.FamilyReq;
 @{
     ViewData["Title"] = "Create_family_req";
 }
@@ -46,75 +46,76 @@
             </a>
         </form>
         <div class="content">
-            <form class="row g-2 first">
+            <form asp-action="Create" asp-controller="FamilyReq" method="post">
+            <div class="row g-2 first">
                 <p class="mt-4">Family/Friend Information</p>
                 <div class="row g-2">
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="Your Firstname">
+                        <input type="text" asp-for="f_firstname" class="form-control" placeholder="Your Firstname">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="Your Lastname">
+                            <input type="text" asp-for="f_lastname" class="form-control" placeholder="Your Lastname">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="tel" class="form-control" placeholder="123-45-67">
+                            <input type="tel" asp-for="f_mobile" class="form-control" placeholder="123-45-67">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="email" class="form-control" placeholder="Your Email">
+                            <input type="email" asp-for="f_email" class="form-control" placeholder="Your Email">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="Relation with Patient">
+                            <input type="text" asp-for="f_relation" class="form-control" placeholder="Relation with Patient">
                     </div>
                 </div>
-            </form>
-            <form class="row g-2 first">
+            </div>
+            <div class="row g-2 first">
                 <p class="mt-4">Patient Information</p>
                 <div class="mb-3">
                     <textarea class="form-control" id="symptomsDtails" placeholder="Enter brief details of your symptoms" rows="3"></textarea>
                 </div>
                 <div class="row g-2">
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+                            <input type="text" asp-for="FirstName" class="form-control" placeholder="First name" aria-label="First name">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                            <input type="text" asp-for="LastName" class="form-control" placeholder="Last name" aria-label="Last name">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="Date of Birth" onfocus="(this.type='date')">
+                            <input type="text" asp-for="DOB" class="form-control" placeholder="Date of Birth" onfocus="(this.type='date')">
                     </div>
                 </div>
-            </form>
-            <form class="row g-2 first">
+            </div>
+            <div class="row g-2 first">
                 <p class="mt-4">Patient Contact Information</p>
                 <div class="row g-2">
                     <div class="col-md-6 col-sm-12">
-                        <input type="email" class="form-control" placeholder="Email">
+                            <input type="email" asp-for="Email" class="form-control" placeholder="Email">
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <input type="tel" class="form-control" placeholder="123-45-67">
+                            <input type="tel" asp-for="Mobile" class="form-control" placeholder="123-45-67">
                     </div>
                 </div>
-            </form>
-            <form class="row g-2 first">
+            </div>
+            <div class="row g-2 first">
                 <p class="mt-4">Patient Location</p>
                 <div class="row g-2">
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="street">
+                            <input type="text" asp-for="Street" class="form-control" placeholder="street">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="city">
+                            <input type="text" asp-for="City" class="form-control" placeholder="city">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" placeholder="State">
+                            <input type="text" asp-for="State" class="form-control" placeholder="State">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <input type="number" class="form-control" placeholder="Zip">
+                            <input type="number" asp-for="ZipCode" class="form-control" placeholder="Zip">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <input type="text" class="form-control" placeholder="Room#/Suite (Optional)">
                     </div>
                 </div>
-            </form>
-            <form class="row g-2 first">
+            </div>
+            <div class="row g-2 first">
                 <p class="mt-4">(Optional) Upload photo or Document</p>
                 <div class="input-group mb-3">
                     <input type="file" class="form-control" placeholder="Select file" aria-label="Select file" id="button-addon2">
@@ -125,10 +126,11 @@
                         </svg> upload
                     </button>
                 </div>
-            </form>
-            <form class="g-2 mt-4 first" style="text-align: right;">
-                <button type="button" class="btn btn-info text-white">Submit</button>
+            </div>
+            <div class="g-2 mt-4 first" style="text-align: right;">
+                <button type="submit" class="btn btn-info text-white">Submit</button>
                 <button type="button" class="btn btn-outline-info">Cancel</button>
+            </div>
             </form>
         </div>
     </div>
