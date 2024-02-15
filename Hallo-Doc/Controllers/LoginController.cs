@@ -6,6 +6,7 @@ using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Hallo_Doc.Models.ViewModel;
 using Microsoft.AspNetCore.Identity;
+using System.Net.Mail;
 
 namespace Hallo_Doc.Controllers
 {
@@ -73,6 +74,8 @@ namespace Hallo_Doc.Controllers
             //    return View("../Patient/Login");
             //}
         }
+        
     }
-    }
+}
+    
 

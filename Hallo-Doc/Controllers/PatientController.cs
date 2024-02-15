@@ -50,32 +50,44 @@ namespace Hallo_Doc.Controllers
             {
                 Requests = _context.Requests.ToList()
             };
-            //var requests = await _context.Requests
-            //    .Include(r => r.RequestWiseFiles)
-            //    .ToListAsync();
-
-            //var requestViewModels = requests.Select(r => new RequestViewModel
-            //{
-            //    RequestId = r.RequestId,
-            //    CreatedDate = (DateTime)r.CreatedDate,
-            //    Status = r.Status,
-            //    HasFile = r.RequestWiseFiles != null && r.RequestWiseFiles.Any()
-            //}).ToList();
-
-            //var model = new DashboardList
-            //{
-            //    Requests = requestViewModels
-            //};
 
             return View(model);
         }
         public IActionResult View_document()
         {
-            return View("View_document");
+            var files = new DashboardList
+            {
+                RequestWiseFiles = _context.RequestWiseFiles.ToList()
+        };
+            
+            return View(files);
+        }
+        [HttpGet]
+        public IActionResult DownloadFile(int fileID)
+        {
+            var file = _context.RequestWiseFiles.FirstOrDefault(f => f.RequestWiseFileId == fileID);
+            if (file == null)
+            {
+                return NotFound();
+            }
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Documents", file.FileName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+            return PhysicalFile(filePath, "application/octet-stream" ,file.FileName);
         }
         public IActionResult Patient_profile()
         {
             return View("Patient_profile");
+        }
+        public IActionResult Submit_req_Me()
+        {
+            return View("Submit_req_Me");
+        }
+        public IActionResult Submit_req_Someone()
+        {
+            return View("Submit_req_Someone");
         }
         public IActionResult Error()
         {

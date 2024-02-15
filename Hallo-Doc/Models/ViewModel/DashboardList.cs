@@ -11,6 +11,10 @@
     public class DashboardList
     {
         public List<Request> Requests { get; set; }
-        public List<RequestWiseFile> RequestFiles { get; set; }
+        public List<RequestWiseFile> RequestWiseFiles { get; set; }
+        //public int RequestWiseFileID { get; set; }
+        //public string FileName { get; set; }
+        //public DateTime CreatedDate { get; set; }
     }
+ 
 }

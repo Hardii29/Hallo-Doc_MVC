@@ -30,6 +30,18 @@ h1{
     display: flex;
     justify-content: space-between;
 }
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+.uneditable-input:focus {
+    border-color: #0dcaf0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(13, 202, 240, 0.6);
+    outline: 0 none;
+}
 footer{
     background-color: rgb(39, 38, 38);
     text-align: right;

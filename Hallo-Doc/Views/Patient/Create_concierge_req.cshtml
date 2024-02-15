@@ -20,6 +20,23 @@
             background-color: black;
             color: white;
         }
+
+        textarea:focus,
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        .uneditable-input:focus {
+            border-color: #0dcaf0;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(13, 202, 240, 0.6);
+            outline: 0 none;
+        }
+
+        label {
+            color: gray;
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -49,75 +66,91 @@
             <div class="row g-2 first">
                 <p class="mt-4">Concirge Information</p>
                 <div class="row g-2">
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" asp-for="c_firstname" class="form-control" placeholder="Your Firstname">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="c_firstname" class="form-control" id="c_firstname" placeholder="Your Firstname">
+                            <label for="c_firstname">Your Firstname</label>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" asp-for="c_lastname" class="form-control" placeholder="Your Lastname">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="c_lastname" class="form-control" id="c_lastname" placeholder="Your Lastname">
+                            <label for="c_lastname">Your Lastname</label>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="tel" asp-for="c_mobile" class="form-control" placeholder="123-45-67">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="tel" asp-for="c_mobile" class="form-control" id="c_mobile" placeholder="123-45-67">
+                            <label for="c_mobile">Mobile</label>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="email" asp-for="c_email" class="form-control" placeholder="Your Email">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="email" asp-for="c_email" class="form-control" id="c_email" placeholder="Your Email">
+                            <label for="c_email">Your Email</label>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" asp-for="c_address" class="form-control" placeholder="Hotel/Property Name">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="c_address" class="form-control" id="c_address" placeholder="Hotel/Property Name">
+                            <label for="c_address">Hotel/Property Name</label>
                     </div>
                 </div>
             </div>
             <div class="row g-2 first">
                 <p class="mt-4">Concirge Location</p>
                 <div class="row g-2">
-                    <div class="col-md-6 col-sm-12">
-                        <input type="text" asp-for="c_street" class="form-control" placeholder="street">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="c_street" class="form-control" id="Street" placeholder="street">
+                            <label for="Street">Street</label>
                     </div>
-                    <div class="col-md-6 col-sm-12">
-                            <input type="text" asp-for="c_city" class="form-control" placeholder="city">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="c_city" class="form-control" id="City" placeholder="city">
+                            <label for="City">City</label>
                     </div>
-                    <div class="row g-2">
-                        <div class="col-md-6 col-sm-12">
-                                <input type="text" asp-for="c_state" class="form-control" placeholder="State">
+                   
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="c_state" class="form-control" id="State" placeholder="State">
+                            <label for="State">State</label>
                         </div>
-                        <div class="col-md-6 col-sm-12">
-                                <input type="number" asp-for="c_zip" class="form-control" placeholder="Zip">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="number" asp-for="c_zip" class="form-control" id="Zip" placeholder="ZipCode">
+                            <label for="Zip">ZipCode</label>
                         </div>
 </div>
-                    </div>
+                    
             </div>
             <div class="row g-2 first">
                 <p class="mt-4">Patient Information</p>
-                <div class="mb-3">
-                    <textarea class="form-control" id="symptomsDtails" placeholder="Enter brief details of your symptoms" rows="3"></textarea>
+                    <div class="form-group form-floating mb-3">
+                    <textarea class="form-control" id="symptoms" placeholder="Enter brief details of your symptoms" rows="3"></textarea>
+                        <label for="symptoms">Enter brief details of your symptoms</label>
                 </div>
                 <div class="row g-2">
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" asp-for="FirstName" class="form-control" placeholder="First name" aria-label="First name">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="FirstName" class="form-control" id="First name" placeholder="First name" aria-label="First name">
+                            <label for="First name">First name</label>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" asp-for="LastName" class="form-control" placeholder="Last name" aria-label="Last name">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="LastName" class="form-control" id="Last name" placeholder="Last name" aria-label="Last name">
+                            <label for="Last name">Last name</label>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" asp-for="DOB" class="form-control" placeholder="Date of Birth" onfocus="(this.type='date')">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" asp-for="DOB" class="form-control" id="Date of Birth" placeholder="Date of Birth" onfocus="(this.type='date')">
+                            <label for="Date of Birth">Date of Birth</label>
                     </div>
                 </div>
             </div>
             <div class="row g-2 first">
                 <p class="mt-4">Patient Contact Information</p>
                 <div class="row g-2">
-                    <div class="col-md-6 col-sm-12">
-                            <input type="email" asp-for="Email" class="form-control" placeholder="Email">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="email" asp-for="Email" class="form-control" id="Email" placeholder="Email">
+                            <label for="Email">Email</label>
                     </div>
-                    <div class="col-md-6 col-sm-12">
-                            <input type="tel" asp-for="Mobile" class="form-control" placeholder="123-45-67">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="tel" asp-for="Mobile" class="form-control" id="mobile" placeholder="123-45-67">
+                            <label for="mobile">Mobile</label>
                     </div>
                 </div>
             </div>
             <div class="row g-2 first">
                 <p class="mt-4">Patient Location</p>
                 <div class="row g-2">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Room#/Suite (Optional)">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" class="form-control" id="Room" placeholder="Room#/Suite (Optional)">
+                            <label for="Room">Room#/Suite (Optional)</label>
                     </div>
                 </div>
             </div>

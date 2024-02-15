@@ -1,6 +1,9 @@
-﻿@model Hallo_Doc.Models.ViewModel.PatientReq;
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Hallo_Doc.Models.ViewModel.PatientReq;
 @{
-    ViewData["Title"] = "Create_patient_req";
+    ViewData["Title"] = "Submit Request For SomeOne Else";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -14,76 +17,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
-        p{
+        p {
             color: black;
         }
+
         .darkMode, body {
             background-color: black;
             color: white;
         }
-        .darkMode .content {
-            background-color: black;
-            color: white;
-            box-shadow: 0 4px 8px 0 rgba(256, 256, 256, 0.2), 0 6px 20px 0 rgba(256, 256, 256, 0.19);
-        }
 
-        .darkMode p {
-            color: white;
-        }
-        .darkMode .container{
-            background-color: black;
-            color: white;
-        }
+            .darkMode .content {
+                background-color: black;
+                color: white;
+                box-shadow: 0 4px 8px 0 rgba(256, 256, 256, 0.2), 0 6px 20px 0 rgba(256, 256, 256, 0.19);
+            }
 
-        textarea:focus,
-        input[type="text"]:focus,
-        input[type="password"]:focus,
-        input[type="date"]:focus,
-        input[type="number"]:focus,
-        input[type="email"]:focus,
-        input[type="tel"]:focus,
-        .uneditable-input:focus {
-            border-color: #0dcaf0;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(13, 202, 240, 0.6);
-            outline: 0 none;
-        }
-        label{
+            .darkMode p {
+                color: white;
+            }
+
+            .darkMode .container {
+                background-color: black;
+                color: white;
+            }
+
+        label {
             color: gray;
         }
     </style>
 </head>
 <body class="bg-light">
     <header>
-    <nav class="navbar navbar-light bg-white">
-        <a class="navbar-brand" href="#">
-            <img src="./../images/logo.png" height="65" width="100">
-        </a>
-        <form class="form-inline my-2 my-lg-0">
-            <a class="btn btn-outline-info mode" onclick="darkMode()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
-                    <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" />
-                </svg>
+        <nav class="navbar navbar-light bg-white">
+            <a class="navbar-brand" href="#">
+                <img src="./../images/logo.png" height="65" width="100">
             </a>
-        </form>
-    </nav>
+            <form class="form-inline my-2 my-lg-0">
+                <a class="btn btn-outline-info mode" onclick="darkMode()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
+                        <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" />
+                    </svg>
+                </a>
+            </form>
+        </nav>
     </header>
     <div class="container">
-       
-        <form class="form-inline my-2 my-lg-0" style="text-align: right;">
-            <a class="btn btn-outline-info out back" asp-action="Create_request" asp-controller="Patient">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h3 style="color: black;">Submit Information</h3>
+
+            <a class="btn btn-outline-info out back" asp-action="Patient_dashboard" asp-controller="Patient">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
             </a>
-        </form>
+        </div>
         <div class="content">
             <form asp-action="Create" asp-controller="PatientReq" method="post" id="Patient_req" enctype="multipart/form-data">
                 <div class="row g-2 first">
-                  
+
                     <p class="mt-4">Patient Information</p>
                     <div class="form-group form-floating mb-3">
-                        <textarea name="SymptomsDetails" class="form-control" id="symptoms" placeholder="Enter brief details of your symptoms" rows="3"></textarea>
-                        <label for="symptoms">Enter brief details of your symptoms</label>
+                        <textarea name="SymptomsDetails" class="form-control" id="symptoms" placeholder="Enter brief details of your symptoms (Optional)" rows="3"></textarea>
+                        <label for="symptoms">Enter brief details of your symptoms (Optional)</label>
                     </div>
                     <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12">
@@ -107,22 +102,13 @@
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="email" asp-for="Email" name="Email" id="Email" class="form-control" placeholder="Email" required>
                             <label for="Email">Email</label>
-                            <span id="email-msg"></span>
+                            
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="tel" asp-for="Mobile" name="Mobile" class="form-control" id="mobile" placeholder="123-45-67">
                             <label for="mobile">Mobile</label>
                         </div>
-                        <div class="form-group passwordField" style="display: none;">
-                            <div class="form-group form-floating col-md-6 col-sm-12" id="Password">
-                            <input type="password" asp-for="Password" id="Password" class="form-control" placeholder="Password" aria-label="Password">
-                                <label for="Password">Password</label>
-                        </div>
-                            <div class="form-group form-floating col-md-6 col-sm-12" id="ConfirmPassword">
-                            <input type="password" id="ConfirmPassword" class="form-control" placeholder="ConfirmPassword" aria-label="ConfirmPassword">
-                                <label for="ConfirmPassword">ConfirmPassword</label>
-                        </div>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -149,11 +135,29 @@
                             <input type="text" name="Optional" class="form-control" id="Room" placeholder="Room#/Suite (Optional)">
                             <label for="Room">Room#/Suite (Optional)</label>
                         </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <a class="btn btn-outline-info btn-lg out back">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                </svg> Map
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row g-2 first">
-                    <p class="mt-4">(Optional) Upload photo or Document</p>
+                    <p class="mt-4">Relation</p>
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="Relation" class="form-control" id="Relation" placeholder="Relation With Patient (Optional)">
+                            <label for="Relation">Relation With Patient (Optional)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-2 first">
+                    <p class="mt-4">Upload photo or Document (Optional)</p>
                     <div class="input-group mb-3">
                         <input type="file" asp-for="File" class="form-control" placeholder="Select file" aria-label="Select file">
                         <button class="btn btn-info text-white" type="button" for="button-addon2">
@@ -207,3 +211,5 @@
 </body>
 
 </html>
+{
+}

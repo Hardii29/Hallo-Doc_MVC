@@ -110,16 +110,22 @@
                 <div class="row g-2 first">
                     <p class="mt-4">Contact Information</p>
                     <div class="row g-2">
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <select class="form-select" name="Mobile" id="Type" disabled>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Phone">Phone</option>
+                            </select>
+                            <label for="Type">Type</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="tel" name="Mobile" class="form-control" value="7016398095" placeholder="123-45-67" disabled>
+                           
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
                             <input type="email" name="Email" id="Email" class="form-control" value="hardijayani29@gmail.com" placeholder="Email" disabled>
                             <label for="Email">Email</label>
                             <span id="email-msg"></span>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="tel" name="Mobile" id="FirstName" class="form-control" value="7016398095" placeholder="123-45-67" disabled>
-                            <label for="FirstName">FirstName</label>
-                        </div>
-                        
                     </div>
                 </div>
 
@@ -134,7 +140,7 @@
                             <input type="text" name="City" id="City" class="form-control" value="Amreli" placeholder="City" disabled>
                             <label for="City">City</label>
                         </div>
-                        <div>
+                        <div class="row g-2">
                             <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
                             <input type="text" name="State" id="State" class="form-control" value="Gujrat" placeholder="State" disabled>
                             <label for="State">State</label>
@@ -144,10 +150,11 @@
                             <label for="Zipcode">Zipcode</label>
                         </div>
                             <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
-                        <a class="btn btn-outline-info out back" asp-action="Patient_dashboard" asp-controller="Patient">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-                            </svg> Map
+                                <a class="btn btn-outline-info btn-lg out back">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                    </svg> Map
                         </a>
                         </div>
                         </div>
