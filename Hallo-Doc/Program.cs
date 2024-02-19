@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Hallo_Doc.Data;
 using Hallo_Doc.Models;
+using System.Configuration;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+//var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+//builder.Services.AddSingleton(emailConfig);
+//builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

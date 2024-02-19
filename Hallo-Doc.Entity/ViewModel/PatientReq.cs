@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-namespace Hallo_Doc.Models.ViewModel
+namespace Hallo_Doc.Entity.ViewModel
 {
     public class PatientReq
     {
-        public string? Id { get; set; }
-        public string? Aspnetuserid { get; set; }
-        public required string FirstName { get; set; }
+        public required string Id { get; set; }
+        public required string Aspnetuserid { get; set; }
+        public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? DOB { get; set; }
         public required string Email { get; set; }
@@ -19,6 +19,6 @@ namespace Hallo_Doc.Models.ViewModel
         public int RequestWiseFileId { get; set; }
         public IFormFile? File { get; set; }
         public int RequestId { get; set; }
-        public string? FileName { get; set; } = null!;
+        public string FileName { get; set; } = null!;
     }
 }

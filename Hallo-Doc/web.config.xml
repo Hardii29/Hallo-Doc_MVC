@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<appSetting>
+		<add key="SmtpServer" value="mail.etatvasoft.com" />
+		<add key="SmtpPort" value="587" />
+		<add key="SmtpUsername" value="hardi.jayani" />
+		<add key="SmtpPassword" value="LHV0@}YOA?)M" />
+		<add key="SenderEmail" value="hardi.jayani@etatvasoft.com" />
+	</appSetting>
+
+	<system.net>
+		<mailSettings>
+			<smtp from="hardi.jayani@etatvasoft.com">
+				<network host="mail.etatvasoft.com" port="587" userName="hardi.jayani@etatvasoft.com" password="LHV0@}YOA?)M" enableSsl="true" />
+			</smtp>
+		</mailSettings>
+	</system.net>
+</configuration>

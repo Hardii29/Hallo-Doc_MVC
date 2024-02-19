@@ -27,15 +27,8 @@ namespace Hallo_Doc.Controllers
    
         public async Task<IActionResult> Create(PatientReq PatientReq)
         {
-            //if (ModelState.IsValid)
-            //{
-                //var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == PatientReq.Email);
-                //if (existingUser != null)
-                //{
-                //    ModelState.AddModelError(string.Empty, "Email already exists");
-                //    return View("../Patient/Create_patient_req", PatientReq);
-                //}
-
+            var existUser = await _context.AspnetUsers.FirstOrDefaultAsync(u => u.Email == PatientReq.Email);
+            if (existUser == null) { 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(PatientReq.Password);
 
                 var Aspnetuser = new AspnetUser();
@@ -43,7 +36,6 @@ namespace Hallo_Doc.Controllers
             var Request = new Request();
             var Requestclient = new Requestclient();
             var RequestType = new RequestType();
-
 
                 Aspnetuser.Id = Guid.NewGuid().ToString();
             Aspnetuser.Username = PatientReq.FirstName;
@@ -120,10 +112,84 @@ namespace Hallo_Doc.Controllers
                 _context.RequestWiseFiles.Add(requestWiseFile);
                 await _context.SaveChangesAsync();
             }
-
-            //}
             return RedirectToAction("Index", "Home");
-    }
+            }
+            else
+            {
+                var User = new User();
+                var Request = new Request();
+                var Requestclient = new Requestclient();
+                var RequestType = new RequestType();
+
+                User.Aspnetuserid = existUser.Id;
+                User.Firstname = PatientReq.FirstName;
+                User.Lastname = PatientReq.LastName;
+                User.Email = PatientReq.Email;
+                User.Mobile = PatientReq.Mobile;
+                User.Street = PatientReq.Street;
+                User.City = PatientReq.City;
+                User.State = PatientReq.State;
+                User.Zipcode = PatientReq.ZipCode;
+                User.Createdby = "123";
+                User.Createddate = DateTime.Now;
+                _context.Users.Add(User);
+                await _context.SaveChangesAsync();
+
+                RequestType.Name = "Patient";
+                _context.RequestTypes.Add(RequestType);
+                await _context.SaveChangesAsync();
+
+                Request.RequestTypeId = 2;
+                Request.UserId = User.Userid;
+                Request.FirstName = PatientReq.FirstName;
+                Request.LastName = PatientReq.LastName;
+                Request.Email = PatientReq.Email;
+                Request.PhoneNumber = PatientReq.Mobile;
+                Request.Status = 4;
+                Request.CreatedDate = DateTime.Now;
+                _context.Requests.Add(Request);
+                await _context.SaveChangesAsync();
+
+                Requestclient.RequestId = Request.RequestId;
+                Requestclient.FirstName = PatientReq.FirstName;
+                Requestclient.LastName = PatientReq.LastName;
+                Requestclient.Address = PatientReq.Street;
+                Requestclient.Email = PatientReq.Email;
+                Requestclient.PhoneNumber = PatientReq.Mobile;
+                _context.Requestclients.Add(Requestclient);
+                await _context.SaveChangesAsync();
+
+                if (PatientReq.File != null && PatientReq.File.Length > 0)
+                {
+                    var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
+
+                    if (!Directory.Exists(uploadsDirectory))
+                    {
+                        Directory.CreateDirectory(uploadsDirectory);
+                    }
+
+                    var fileName = Path.GetFileName(PatientReq.File.FileName);
+                    var filePath = Path.Combine(uploadsDirectory, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await PatientReq.File.CopyToAsync(stream)
+    ;
+                    }
+
+                    var requestWiseFile = new RequestWiseFile
+                    {
+                        RequestId = Request.RequestId,
+                        FileName = fileName,
+                        CreatedDate = DateTime.Now,
+                    };
+                    //PatientReq.FileName = filePath;
+                    _context.RequestWiseFiles.Add(requestWiseFile);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction("Index", "Home");
+            }
+        }
    
     }
 }
