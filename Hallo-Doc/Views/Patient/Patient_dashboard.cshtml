@@ -1,10 +1,4 @@
-﻿@* @using Microsoft.AspNetCore.Http
-@using Hallo_Doc.Models;
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-@{
-    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
-} *@
+﻿
 @model Hallo_Doc.Models.ViewModel.DashboardList;
 @{
     ViewData["Title"] = "Patient_dashboard";
@@ -53,7 +47,7 @@
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item d-inline">
-                    <p class="navbar-text">Welcome <span style="font-weight: bold;">Hardi</span></p>
+                    <p class="navbar-text">Welcome <span style="font-weight: bold;">@Model.UserName</span></p>
                 </li>
                 <li class="nav-item d-inline">
                     <form class="form-inline my-2 my-lg-0 ">
@@ -134,15 +128,20 @@
                 </thead>
                 <tbody >
                     
-                        @foreach (var item in Model.Requests)
+                        @foreach (var item in Model.RequestWithFiles)
                         {
                             <tr class="row">
-                                <td class="col"> @item.CreatedDate</td>
-                                <td class="col-6">@item.Status</td>
+                                <td class="col"> @item.Request.CreatedDate</td>
+                                <td class="col-6">@item.Request.Status</td>
                                 <td class="col">
-                                    
-                                    <a class="btn btn-outline-info out back" asp-controller="Patient" asp-action="View_document">Document(1)</a>
-                                    
+                                    @if (item.HasFiles)
+                                    {
+                                        <a class="btn btn-outline-info out back" asp-controller="Patient" asp-action="View_document" asp-route-fileId="@item.Request.fileId">Document(1)</a>
+                                    }
+                                    else
+                                    {
+                                        <p> - </p>
+                                    }
                                 </td>
                             </tr>
                     }

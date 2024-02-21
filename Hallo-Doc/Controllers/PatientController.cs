@@ -4,6 +4,7 @@ using Hallo_Doc.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -47,23 +48,64 @@ namespace Hallo_Doc.Controllers
         {
             return View("Create_concierge_req");
         }
-        public async Task<IActionResult> Patient_dashboard()
+   
+        public IActionResult Patient_dashboard()
         {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            string username = HttpContext.Session.GetString("UserName");
+            var userRequests = _context.Requests.Where(r => r.UserId == userId).ToList();
+            var requestWithFiles = new List<RequestWithFile>();
+            foreach (var request in userRequests)
+            {
+                bool HasFiles = _context.RequestWiseFiles.Any(rwf => rwf.RequestId == request.RequestId);
+                var fileId = 0;
+                if(HasFiles)
+                {
+                    fileId = _context.RequestWiseFiles.FirstOrDefault(rwf => rwf.RequestId == request.RequestId)?.RequestWiseFileId ?? 0;
+                }
+                requestWithFiles.Add(new RequestWithFile
+                { 
+                    Request = new Models.ViewModel.Request
+                    {
+                        RequestId = request.RequestId,
+                        CreatedDate= (DateTime)request.CreatedDate,
+                        Status = request.Status,
+                        fileId = fileId,
+                    },
+                    HasFiles = HasFiles 
+                });
+            }
             var model = new DashboardList
             {
-                Requests = _context.Requests.ToList()
+                RequestWithFiles = requestWithFiles,
+                Requests = userRequests.Select(r => new Models.ViewModel.Request
+                {
+                    RequestId = r.RequestId,
+                    CreatedDate = (DateTime)r.CreatedDate,
+                    Status = r.Status,
+                   
+                }).ToList(),
+                UserName = username,
             };
 
             return View(model);
         }
-        public IActionResult View_document()
+        public IActionResult View_document(int fileId)
         {
-            var files = new DashboardList
+            var files = _context.RequestWiseFiles.FirstOrDefault(rwf => rwf.RequestWiseFileId == fileId);
+            if (files == null)
             {
-                RequestWiseFiles = _context.RequestWiseFiles.ToList()
-        };
+                return NotFound();
+            }
+            var model = new ViewDocument 
+                { 
+                    RequestWiseFileID = files.RequestWiseFileId,
+                    CreatedDate = files.CreatedDate,
+                    FileName = files.FileName,
+                
+            };
             
-            return View(files);
+            return View(model);
         }
         [HttpGet]
         public IActionResult DownloadFile(int fileID)
@@ -122,6 +164,8 @@ namespace Hallo_Doc.Controllers
             var smtpUsername = "hardi.jayani";
             var smtpPassword = "LHV0@}YOA?)M";
             var senderEmail = "hardi.jayani@etatvasoft.com";
+
+
 
             var client = new SmtpClient(smtpServer, smtpPort)
             {
@@ -210,6 +254,65 @@ namespace Hallo_Doc.Controllers
         public IActionResult Patient_profile()
         {
             return View("Patient_profile");
+        }
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string email, [Bind("Model")] PatientReq patientReq)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await _context.Users.FirstOrDefaultAsync(u =>u.Email == email);
+                    if (user == null)
+                    {
+                        return NotFound();
+                    }
+
+                    user.Email = patientReq.Email;
+                    user.Firstname = patientReq.FirstName;
+                    user.Lastname = patientReq.LastName;
+                    user.Mobile = patientReq.Mobile;
+                    user.Street = patientReq.Street;
+                    user.City = patientReq.City;
+                    user.State = patientReq.State;
+                    user.Zipcode = patientReq.ZipCode;
+                    user.Dob = patientReq.DOB;
+                        
+                        _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Patient_profile");
+                    
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    
+                        throw;
+                    
+                }
+            }
+            return View(patientReq);
+        }
+        private bool UserExists(string email)
+        {
+            return (_context.Users?.Any(e => e.Email == email)).GetValueOrDefault();
         }
         public IActionResult Submit_req_Me()
         {

@@ -19,14 +19,14 @@ namespace Hallo_Doc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Create(ConciergeReq ConciergeReq)
+        public async Task<IActionResult> Create(Models.ViewModel.ConciergeReq ConciergeReq)
         {
 
-            var Request = new Request();
-            var Requestclient = new Requestclient();
-            var RequestType = new RequestType();
-            var Concierge = new Concierge();
-            var RequestConcierge = new RequestConcierge();
+            var Request = new Models.Request();
+            var Requestclient = new Models.Requestclient();
+            var RequestType = new Models.RequestType();
+            var Concierge = new Models.Concierge();
+            var RequestConcierge = new Models.RequestConcierge();
 
             //if (ModelState.IsValid)
             //{

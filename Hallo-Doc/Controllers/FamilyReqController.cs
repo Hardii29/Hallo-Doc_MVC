@@ -19,12 +19,12 @@ namespace Hallo_Doc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Create(FamilyReq familyReq)
+        public async Task<IActionResult> Create(Models.ViewModel.FamilyReq familyReq)
         {
           
-            var Request = new Request();
-            var Requestclient = new Requestclient();
-            var RequestType = new RequestType();
+            var Request = new Models.Request();
+            var Requestclient = new Models.Requestclient();
+            var RequestType = new Models.RequestType();
 
             //if (ModelState.IsValid)
             //{

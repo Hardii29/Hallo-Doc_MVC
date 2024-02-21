@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Hallo_Doc.Models.ViewModel.PatientReq;
 @{
     ViewData["Title"] = "Patient Profile";
 }
@@ -87,21 +85,21 @@
             </a>
         </div>
         <div class="content">
-            <form>
+            <form asp-controller="Patient" asp-action="Edit" method="post">
                 <div class="row g-2 first">
                     <p class="mt-4">General Information</p>
                    
                     <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="text" name="Firstname" id="FirstName" class="form-control" placeholder="First name" value="Hardi" aria-label="First name" disabled>
+                            <input type="text" name="Firstname" id="FirstName" asp-for="FirstName" class="form-control" placeholder="First name" value="Hardi" aria-label="First name" disabled>
                             <label for="FirstName">FirstName</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="text" name="Lastname" id="Lastname" class="form-control" placeholder="Last name" value="Jayani" aria-label="Last name" disabled>
+                            <input type="text" name="Lastname" id="Lastname" asp-for="LastName" class="form-control" placeholder="Last name" value="Jayani" aria-label="Last name" disabled>
                             <label for="Lastname">Lastname</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="date" name="Date Of Birth" id="Date Of Birth" class="form-control" value="29/10/2002" placeholder="Date of Birth" disabled>
+                            <input type="date" name="Date Of Birth" id="Date Of Birth" asp-for="DOB" class="form-control" value="29/10/2002" placeholder="Date of Birth" disabled>
                             <label for="Date Of Birth">Date Of Birth</label>
                         </div>
                     </div>
@@ -118,11 +116,11 @@
                             <label for="Type">Type</label>
                         </div>
                         <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
-                            <input type="tel" name="Mobile" class="form-control" value="7016398095" placeholder="123-45-67" disabled>
+                            <input type="tel" name="Mobile" class="form-control" asp-for="Mobile" value="7016398095" placeholder="123-45-67" disabled>
                            
                         </div>
                         <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
-                            <input type="email" name="Email" id="Email" class="form-control" value="hardijayani29@gmail.com" placeholder="Email" disabled>
+                            <input type="email" name="Email" id="Email" asp-for="Email" class="form-control" value="hardijayani29@gmail.com" placeholder="Email" disabled>
                             <label for="Email">Email</label>
                             <span id="email-msg"></span>
                         </div>
@@ -133,20 +131,20 @@
                     <p class="mt-4">Location Information</p>
                     <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="text" name="Street" id="Street" class="form-control" value="Diamond Park" placeholder="Street" disabled>
+                            <input type="text" name="Street" id="Street" asp-for="Street" class="form-control" value="Diamond Park" placeholder="Street" disabled>
                             <label for="Street">Street</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="text" name="City" id="City" class="form-control" value="Amreli" placeholder="City" disabled>
+                            <input type="text" name="City" id="City" asp-for="City" class="form-control" value="Amreli" placeholder="City" disabled>
                             <label for="City">City</label>
                         </div>
                         <div class="row g-2">
                             <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" name="State" id="State" class="form-control" value="Gujrat" placeholder="State" disabled>
+                            <input type="text" name="State" id="State" asp-for="State" class="form-control" value="Gujrat" placeholder="State" disabled>
                             <label for="State">State</label>
                         </div>
                         <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
-                            <input type="number" name="Zipcode" id="Zipcode" class="form-control" value="364515" placeholder="Zip" disabled>
+                            <input type="number" name="Zipcode" id="Zipcode" asp-for="ZipCode" class="form-control" value="364515" placeholder="Zip" disabled>
                             <label for="Zipcode">Zipcode</label>
                         </div>
                             <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
@@ -161,7 +159,8 @@
                     </div>
                 </div>
                 <div class="g-2 mt-4 first" style="text-align: right;">
-                    <button type="submit" class="btn btn-info text-white">Edit</button>
+                    <button type="button" id="editbutton" class="btn btn-info text-white" onclick="editMode()">Edit</button>
+                    <button type="submit" class="btn btn-info text-white" style="display:none;">Save</button>
                 </div>
 </form>
 </div>
@@ -170,6 +169,19 @@
         function darkMode() {
             var element = document.body;
             element.classList.toggle("darkMode");
+        }
+        function editMode() {
+            var formFields = document.querySelectorAll('input, select');
+            formFields.forEach(function (field) {
+                field.disabled = !field.disabled;
+            });
+            var editButton = document.getElementById('editbutton');
+            if (editButton.innerHTML === 'Edit') {
+                editButton.innerHTML = 'Save';
+            }
+            else {
+                editButton.innerHTML = 'Edit';
+            }
         }
     </script>
 </body>

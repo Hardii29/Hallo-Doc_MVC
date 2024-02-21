@@ -1,6 +1,6 @@
 ﻿using Hallo_Doc.Data;
-using Hallo_Doc.Models;
 using Hallo_Doc.Models.ViewModel;
+using Hallo_Doc.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hallo_Doc.Controllers
@@ -19,12 +19,12 @@ namespace Hallo_Doc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Create(BusinessReq BusinessReq)
+        public async Task<IActionResult> Create(Models.ViewModel.BusinessReq BusinessReq)
         {
 
-            var Request = new Request();
-            var Requestclient = new Requestclient();
-            var RequestType = new RequestType();
+            var Request = new Models.Request();
+            var Requestclient = new Models.Requestclient();
+            var RequestType = new Models.RequestType();
 
             //if (ModelState.IsValid)
             //{

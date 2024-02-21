@@ -25,17 +25,18 @@ namespace Hallo_Doc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
    
-        public async Task<IActionResult> Create(PatientReq PatientReq)
+        public async Task<IActionResult> Create(Models.ViewModel.PatientReq PatientReq)
         {
             var existUser = await _context.AspnetUsers.FirstOrDefaultAsync(u => u.Email == PatientReq.Email);
+            var UserExist = await _context.Users.FirstOrDefaultAsync(m => m.Email == PatientReq.Email);
             if (existUser == null) { 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(PatientReq.Password);
 
-                var Aspnetuser = new AspnetUser();
-            var User = new User();
-            var Request = new Request();
-            var Requestclient = new Requestclient();
-            var RequestType = new RequestType();
+                var Aspnetuser = new Models.AspnetUser();
+            var User = new Models.User();
+            var Request = new Models.Request();
+            var Requestclient = new Models.Requestclient();
+            var RequestType = new Models.RequestType();
 
                 Aspnetuser.Id = Guid.NewGuid().ToString();
             Aspnetuser.Username = PatientReq.FirstName;
@@ -102,7 +103,7 @@ namespace Hallo_Doc.Controllers
 ;
                 }
 
-                var requestWiseFile = new RequestWiseFile
+                var requestWiseFile = new Models.RequestWiseFile
                 {
                     RequestId = Request.RequestId,
                     FileName = fileName,
@@ -116,31 +117,19 @@ namespace Hallo_Doc.Controllers
             }
             else
             {
-                var User = new User();
-                var Request = new Request();
-                var Requestclient = new Requestclient();
-                var RequestType = new RequestType();
+               
+                var Request = new Models.Request();
+                var Requestclient = new Models.Requestclient();
+                var RequestType = new Models.RequestType();
 
-                User.Aspnetuserid = existUser.Id;
-                User.Firstname = PatientReq.FirstName;
-                User.Lastname = PatientReq.LastName;
-                User.Email = PatientReq.Email;
-                User.Mobile = PatientReq.Mobile;
-                User.Street = PatientReq.Street;
-                User.City = PatientReq.City;
-                User.State = PatientReq.State;
-                User.Zipcode = PatientReq.ZipCode;
-                User.Createdby = "123";
-                User.Createddate = DateTime.Now;
-                _context.Users.Add(User);
-                await _context.SaveChangesAsync();
+              
 
                 RequestType.Name = "Patient";
                 _context.RequestTypes.Add(RequestType);
                 await _context.SaveChangesAsync();
 
                 Request.RequestTypeId = 2;
-                Request.UserId = User.Userid;
+                Request.UserId = UserExist.Userid;
                 Request.FirstName = PatientReq.FirstName;
                 Request.LastName = PatientReq.LastName;
                 Request.Email = PatientReq.Email;
@@ -177,7 +166,7 @@ namespace Hallo_Doc.Controllers
     ;
                     }
 
-                    var requestWiseFile = new RequestWiseFile
+                    var requestWiseFile = new Models.RequestWiseFile
                     {
                         RequestId = Request.RequestId,
                         FileName = fileName,

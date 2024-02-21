@@ -20,13 +20,11 @@
 
   <ItemGroup>
     <Compile Remove="Views\Home\patient_login.cshtml.cs" />
-    <Compile Remove="Views\NewFolder1\patient_login.cshtml.cs" />
     <Compile Remove="Views\Patient\patient_login.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Views\Home\patient_login.cshtml" />
-    <Content Remove="Views\NewFolder1\patient_login.cshtml" />
     <Content Remove="Views\Patient\patient_login.cshtml" />
   </ItemGroup>
 
