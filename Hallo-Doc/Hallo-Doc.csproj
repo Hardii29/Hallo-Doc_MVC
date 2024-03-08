@@ -10,33 +10,32 @@
   <ItemGroup>
     <Compile Remove="Views\Home\NewFolder\**" />
     <Compile Remove="Views\NewFolder\**" />
+    <Compile Remove="wwwroot\NewFolder1\**" />
+    <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="Views\Home\NewFolder\**" />
     <Content Remove="Views\NewFolder\**" />
+    <Content Remove="wwwroot\NewFolder1\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="Views\Home\NewFolder\**" />
     <EmbeddedResource Remove="Views\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder1\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="Views\Home\NewFolder\**" />
     <None Remove="Views\NewFolder\**" />
+    <None Remove="wwwroot\NewFolder1\**" />
+    <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Views\Home\patient_login.cshtml.cs" />
-    <Compile Remove="Views\Patient\patient_login.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Views\Home\patient_login.cshtml" />
-    <Content Remove="Views\Patient\patient_login.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\Home\login.html" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Documents\" />
-    <Folder Include="Services\" />
-    <Folder Include="wwwroot\NewFolder1\" />
-    <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,7 +51,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
   </ItemGroup>
 

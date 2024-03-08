@@ -9,162 +9,131 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
+using System.Net;
+using System.Security.Policy;
+using System.Web;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
 {
     public class LoginRepo : ILogin
     {
         private readonly ApplicationDbContext _context;
-
+        private readonly IDictionary<string, string> _reset;
         public LoginRepo(ApplicationDbContext context)
         {
             _context = context;
+            _reset = new Dictionary<string, string>();
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
 
-        public async Task<string> Check(Login login)
+        public async Task<AspnetUser?> Check(Login login, HttpContext httpContext)
         {
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(login.Password);
-
-            var User = await _context.AspnetUsers
-                .FirstOrDefaultAsync(m => m.Email == login.Email);
+          
+            var User = await _context.AspnetUsers.Include(x => x.AspNetUserRoles)
+                .FirstOrDefaultAsync(m => m.Email == login.Email); 
             if (User == null)
             {
-                return "/Patient/Login";
+                return null;
             }
-            bool pass = BCrypt.Net.BCrypt.Verify(login.Password, hashedPassword);
+            bool pass = BCrypt.Net.BCrypt.Verify(login.Password, User.Passwordhash);
             if (!pass)
             {
-                return "/Patient/Login";
-
+                return null;
             }
-            return "/Patient/Patient_dashboard";
-            //return RedirectToAction("Patient_dashboard", "Patient");
+            var userDetails = await _context.Users.FirstOrDefaultAsync(m => m.Aspnetuserid == User.Id);
+            if (userDetails == null)
+            {
+                return null;
+            }
+        //    var aspNetUser = new AspnetUser {
+        //        Id = User.Id,
+        //    Username = User.Username,
+        //    Email = User.Email,
+        //    Passwordhash = User.Passwordhash,
+        //    //AspNetUserRoles = User.AspNetUserRoles,
+        //};
+        httpContext.Session.SetInt32("UserId", userDetails.Userid);
+            httpContext.Session.SetString("UserName", $"{userDetails.Firstname} {userDetails.Lastname}");
+            return User;
 
-
-            //NpgsqlConnection connection = new NpgsqlConnection("Server=localhost;Database=Hallo-Doc;Username=postgres;Password=&^54UYtr;Include Error Detail=True");
-            //string Query = "SELECT * FROM \"ASPNetUsers\" where \"email\"=@Email and \"passwordhash \"=@PasswordHash";
-            //connection.Open();
-            //NpgsqlCommand command = new NpgsqlCommand(Query, connection);
-            //command.Parameters.AddWithValue("@Email", Email);
-            //command.Parameters.AddWithValue("@PasswordHash", PasswordHash);
-            //NpgsqlDataReader reader = command.ExecuteReader();
-            //DataTable dataTable = new DataTable();
-            //dataTable.Load(reader);
-            //int numRows = dataTable.Rows.Count;
-            //if (numRows > 0)
-            //{
-            //    foreach (DataRow row in dataTable.Rows)
-            //    {
-            //        HttpContext.Session.SetString("UserName", row["username"].ToString());
-            //        HttpContext.Session.SetString("UserID", row["Id"].ToString());
-            //    }
-            //    return RedirectToAction("Patient_dashboard", "Patient");
-            //}
-            //else
-            //{
-            //    ViewData["Error"] = " Your Username or password is incorrect. ";
-            //    return View("../Patient/Login");
-            //}
         }
+        public async Task<bool> ForgotPassword(string email, string Action, string controller, string baseUrl)
+        {
+            var UserExist = await _context.AspnetUsers
+                .FirstOrDefaultAsync(m => m.Email == email);
+            if (UserExist == null)
+            {
+                return false;
+            }
+            else
+            {
+                var token = Guid.NewGuid().ToString();
+                SavePasswordResetToken(email, token);
+                var resetLink = $"{baseUrl}/{controller}/{Action}?email={HttpUtility.UrlEncode(email)}&token={HttpUtility.UrlEncode(token)}";
+                SendEmail(email, resetLink);
+                return true;
+            }
+        }
+        private void SavePasswordResetToken(string email, string token)
+        {
+            _reset[email] = token;
+        }
+        private void SendEmail(string email, string resetLink)
+        {
+            var smtpServer = "mail.etatvasoft.com";
+            var smtpPort = 587;
+            var smtpUsername = "hardi.jayani";
+            var smtpPassword = "LHV0@}YOA?)M";
+            var senderEmail = "hardi.jayani@etatvasoft.com";
 
-      
-        //[HttpPost]
-        //public IActionResult ForgotPassword(Reset_password model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
+            using (var client = new SmtpClient(smtpServer, smtpPort))
+            {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+                client.EnableSsl = true;
 
-        //    var user = _context.AspnetUsers.FirstOrDefault(u => u.Email == model.Email);
-        //    if (user != null)
-        //    {
-        //        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
-        //        user.Passwordhash = hashedPassword;
-        //        _context.SaveChanges();
-
-        //        return RedirectToAction("Login", "Patient");
-        //    }
-
-        //    ModelState.AddModelError(string.Empty, "Email not found.");
-        //    return View(model);
-        //}
-        // GET: /Login/ForgotPassword
-        //        public IActionResult ForgotPassword()
-        //        {
-        //            return View();
-        //        }
-
-        //        [HttpPost]
-        //        [ValidateAntiForgeryToken]
-        //        public async Task<IActionResult> ForgotPassword(ResetPassword model)
-        //        {
-        //            if (ModelState.IsValid)
-        //            {
-        //                var user = await _context.AspnetUsers.FindByEmailAsync(model.Email);
-        //                if (user != null)
-        //                {
-        //                    var token = await _context.GeneratePasswordResetTokenAsync(user);
-        //                    var callbackUrl = Url.Action("ResetPassword", "Login", new { userId = user.Id, token = token }, protocol: HttpContext.Request.Scheme);
-
-        //                    SendResetPasswordEmail(model.Email, callbackUrl);
-
-        //                    ViewBag.EmailSent = true; 
-        //                    return View();
-        //                }
-
-        //            }
-        //            return View(model);
-        //        }
-
-        //        public IActionResult ResetPassword(string userId, string token)
-        //        {
-        //            var model = new ResetPassword { AspnetuserId = userId, Token = token };
-        //            return View(model);
-        //        }
-
-        //        [HttpPost]
-        //        [ValidateAntiForgeryToken]
-        //        public async Task<IActionResult> ResetPassword(ResetPassword model)
-        //        {
-        //            if (ModelState.IsValid)
-        //            {
-        //                var user = await _context.FindByIdAsync(model.UserId);
-        //                if (user != null)
-        //                {
-        //                    var result = await _context.ResetPasswordAsync(user, model.Token, model.Password);
-        //                    if (result.Succeeded)
-        //                    {
-        //                        TempData["PasswordUpdated"] = true; 
-        //                        return RedirectToAction("Login", "Account");
-        //                    }
-
-        //                }
-
-        //            }
-        //            return View(model);
-        //        }
-
-        //        private void SendResetPasswordEmail(string email, string callbackUrl)
-        //        {
-
-        //            var mailMessage = new MailMessage();
-        //            mailMessage.To.Add(email)
-        //;
-        //            mailMessage.Subject = "Reset Your Password";
-        //            mailMessage.Body = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>.";
-        //            mailMessage.IsBodyHtml = true;
-
-        //            using (var smtpClient = new SmtpClient("your.smtp.server"))
-        //            {
-        //                smtpClient.Send(mailMessage);
-        //            }
-        //        }
+                var mail = new MailMessage
+                {
+                    From = new MailAddress(senderEmail),
+                    Subject = "Password Reset",
+                    Body = $"Please reset your password by clicking the following link: <a href=\"{resetLink}\">{resetLink}</a>",
+                    IsBodyHtml = true
+                };
+                mail.To.Add(email);
+                client.Send(mail);
+            }
+        }
+        public bool ValidateResetToken(string email, string token)
+        {
+            var savedToken = _reset.TryGetValue(email, out string storedToken) ? storedToken : null;
+            
+                return savedToken != null && HttpUtility.UrlDecode(token).Equals(savedToken);
+          
+        }
+        public async Task<bool> Reset_password(string email, string token, string newPassword)
+        {
+            try
+            {
+                if (!ValidateResetToken(email, token))
+                    return false;
+                var user = _context.AspnetUsers.FirstOrDefault(x => x.Email == email);
+                if (user == null)
+                    return false;
+                
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                    user.Passwordhash = hashedPassword;
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                    return true;
+         
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating password: {ex.Message}");
+                return false;
+            }
+        
+        }
     }
 }

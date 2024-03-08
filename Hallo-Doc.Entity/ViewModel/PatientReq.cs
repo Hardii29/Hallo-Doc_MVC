@@ -3,11 +3,13 @@ namespace Hallo_Doc.Entity.ViewModel
 {
     public class PatientReq
     {
+        public bool Success;
         public required string Id { get; set; }
         public required string Aspnetuserid { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string? DOB { get; set; }
+        public DateOnly DOB { get; set; }
+        
         public required string Email { get; set; }
         public string? Password { get; set; }
         public DateTime? CreatedDate { get; set; }

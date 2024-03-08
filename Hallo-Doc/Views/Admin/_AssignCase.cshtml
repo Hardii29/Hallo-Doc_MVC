@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Assign Case";
+
+}
+<div class="modal fade" id="assignCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Assign Request</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="cancelCaseForm" asp-action="AssignCase" asp-controller="Admin" method="post">
+                <input type="hidden" value=" " id="RequestID_ModelAssignCase" name="RequestId" />
+            <div class="modal-body">
+                
+                    <p>To assign this request, search and select another physician</p>
+                    
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="region" name="Region" >
+                            <option value="">Select Region</option>
+                          @foreach (var region in ViewBag.Regions)
+                            {
+                                <option value="@region.RegionId">@region.Name</option>
+                            }
+                        </select>
+                        <label for="region">Narrow search by region</label>
+                    </div>
+
+                    <input type="hidden" id="physician" name="physician">
+                    <div class="form-floating mb-3"> 
+                        <select class="form-select" id="physician">
+                            <option value="">Select Physician</option>
+                        </select>
+                        <label for="physician">Select Physician</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="discription" style="height: 100px" name="Notes" placeholder="Discription"></textarea>
+                        <label for="discription">Discription</label>
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                    <button type="submit" class="btn btn-info text-white">Submit</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
+                    </div>
+            
+                </form>
+           
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("region").addEventListener("change", function () {
+        var regionId = this.value;
+        if (regionId) {
+            fetch('/Admin/PhysicianList?regionId=${regionId}')
+                .then(response => response.json())
+                .then(data => {
+                    var physicianDropdown = document.getElementById("physician");
+                    physicianDropdown.innerHTML = "<option value=''>Select Physician</option>";
+                    data.forEach(function (physician) {
+                        var option = document.createElement("option");
+                        option.value = physician.PhysicianId;
+                        option.text = physician.FirstName + " " + physician.LastName;
+                        physicianDropdown.appendChild(option);
+                    });
+                }).catch(error => console.error('Error:', error));
+        } else {
+            var physicianDropdown = document.getElementById("physician");
+            physicianDropdown.innerHTML = "<option value=''>Select Physician</option>";
+        }
+    });
+</script>

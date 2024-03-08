@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Hallo_Doc.Entity.ViewModel.AdminDash>;
+@{
+    ViewData["Title"] = "_ConcludeTable";
+}
+
+<div class="card" id="conclude-table">
+    <div class="card-head">
+        <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
+            <form>
+                <div style="display: inline-block;">
+                    <input type="text" class="form-control" placeholder="Search Patients" name="search">
+                </div>
+                <div style="display: inline-block;">
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>All Regions</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </form>
+            <ul>
+                <button type="button" class="btn btn-outline-dark">All</button>
+                <li class="d-inline">
+                    <div class="circle" style="background-color: green;"></div> Patient
+                </li>
+                <li class="d-inline">
+                    <div class="circle" style="background-color: orange;"></div> Family/Friend
+                </li>
+                <li class="d-inline">
+                    <div class="circle" style="background-color: firebrick;"></div> Business
+                </li>
+                <li class="d-inline">
+                    <div class="circle" style="background-color: #0dcaf0"></div> Concierge
+                </li>
+                <li class="d-inline">
+                    <div class="circle" style="background-color: rgba(139, 5, 216, 0.822);"></div> VIP
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead class="table-light">
+                <tr class="row">
+                    <th class="col-2">Name</th>
+                    <th class="col">Date Of Birth</th>
+                    <th class="col">Requestor</th>
+                    <th class="col">Requested Date</th>
+                    <th class="col">Phone</th>
+                    <th class="col-2">Address</th>
+                    <th class="col">Notes</th>
+                    <th class="col">Chat With</th>
+                    <th class="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var request in Model)
+                {
+                    string rows = "";
+                    switch (request.RequestTypeId)
+                    {
+                        case 1:
+                            rows = "bg-danger";
+                            break;
+                        case 2:
+                            rows = "bg-success";
+                            break;
+                        case 3:
+                            rows = "bg-warning";
+                            break;
+                        case 4:
+                            rows = "bg-info";
+                            break;
+                        default:
+                            rows = "";
+                            break;
+                    }
+                    <tr class="row">
+                        <td class="col-2 @rows text-white">@request.PatientName<button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
+                        <td class="col @rows text-white">@request.DOB</td>
+                        <td class="col @rows text-white">@request.Requestor</td>
+                        <td class="col @rows text-white">@request.RequestedDate</td>
+                        <td class="col @rows text-white"><button type="button" class="btn btn-outline-light"><i class="fa fa-phone" aria-hidden="true"></i>@request.PatientMobile</button>(Patient)</td>
+                        <td class="col-2 @rows text-white">@request.Address</td>
+                        <td class="col @rows text-white">@request.Notes</td>
+                        <td class="col @rows text-white"><button type="button" class="btn btn-outline-light"><i class="fa fa-user-md" aria-hidden="true"></i>Provider</button></td>
+                        <td class="col @rows text-white">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="action">
+                                    <a class="dropdown-item" href="#"><i class="fa fa-file-text-o" aria-hidden="true"></i> Assign Case</a>
+                                    <a class="dropdown-item" href="#"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Cancel Case</a>
+                                    <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-file-text" aria-hidden="true"></i> View Case</a>
+                                    <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
+                                    <a class="dropdown-item" href="#"><i class="fa fa-ban" aria-hidden="true"></i> Block patient</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "Cancel Case";
+    
+}
+<div class="modal fade" id="cancelCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm Cancellation</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="cancelCaseForm" asp-action="CancelCase" asp-controller="Admin" method="post">
+                <input type="hidden" value=" " id="RequestID_ModelCancelCase" name="RequestId" />
+
+            <div class="modal-body">
+                
+        <input type="hidden" id="caseTag" name="caseTag">
+                    <p>Patient name : <span class="text-info" id="PatientName_ModelCancelCase"> </span></p>
+                    <div class="form-floating mb-3">
+                        <select class="form-select input-outline input-outline-select w-100" name="Name" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReason,"CaseTagId","Name"))" data-control="select2" data-placeholder="Cancel Reason">
+                     
+                            <option>Cancel Reason</option>
+                        </select>
+                        <input type="hidden" name="CaseTag" value=" " />
+                        <label for="region2">Reason For Cancelation</label>
+        </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" style="height: 100px" name="Notes" placeholder="Provide Additional Notes"></textarea>
+                        <label for="reason">Provide Additional Notes</label>
+        </div>
+                </div>
+                <div class="modal-footer">
+                     <button type="submit" class="btn btn-info text-white">Continue</button>
+                     <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
+               
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Hallo_Doc.Data;
-using Hallo_Doc.Models;
+using Hallo_Doc.Entity.Data;
+using Hallo_Doc.Entity.Models;
 using System.Configuration;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Hallo_Doc.Repository.Repository.Interface;
+using Hallo_Doc.Repository.Repository.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,19 +15,20 @@ builder.Services.AddSession();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("ApplicationDbContext")));
+builder.Services.AddScoped<IAdminDashboard, AdminDashboardRepo>();
+builder.Services.AddScoped<ILogin, LoginRepo>();
+builder.Services.AddScoped<IPatientUser, PatientUserRepo>();
+builder.Services.AddScoped<IPatientReq, PatientReqRepo>();
+builder.Services.AddScoped<IJWTService, JWTService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-//var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
-//builder.Services.AddSingleton(emailConfig);
-//builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

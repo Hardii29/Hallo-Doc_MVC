@@ -1,6 +1,7 @@
-﻿using Hallo_Doc.Data;
+﻿using Hallo_Doc.Entity.Data;
+using Hallo_Doc.Entity.Models;
+using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Models;
-using Hallo_Doc.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -22,32 +23,7 @@ namespace Hallo_Doc.Controllers
         {
             _context = context;
         }
-        public IActionResult Login()
-        {
-            return View();
-        }
-       
-     
-        public IActionResult Create_request()
-        {
-            return View("Create_request");
-        }
-        public IActionResult Create_patient_req()
-        {
-            return View("Create_patient_req");
-        }
-        public IActionResult Create_family_req()
-        {
-            return View("Create_family_req");
-        }
-        public IActionResult Create_business_req()
-        {
-            return View("Create_business_req");
-        }
-        public IActionResult Create_concierge_req()
-        {
-            return View("Create_concierge_req");
-        }
+        
    
         public IActionResult Patient_dashboard()
         {
@@ -65,7 +41,7 @@ namespace Hallo_Doc.Controllers
                 }
                 requestWithFiles.Add(new RequestWithFile
                 { 
-                    Request = new Models.ViewModel.Request
+                    Request = new Entity.ViewModel.Request
                     {
                         RequestId = request.RequestId,
                         CreatedDate= (DateTime)request.CreatedDate,
@@ -78,7 +54,7 @@ namespace Hallo_Doc.Controllers
             var model = new DashboardList
             {
                 RequestWithFiles = requestWithFiles,
-                Requests = userRequests.Select(r => new Models.ViewModel.Request
+                Requests = userRequests.Select(r => new Entity.ViewModel.Request
                 {
                     RequestId = r.RequestId,
                     CreatedDate = (DateTime)r.CreatedDate,
@@ -246,7 +222,7 @@ namespace Hallo_Doc.Controllers
             }
         }
 
-        private bool ValidateResetToken(string email, string token)
+        private static bool ValidateResetToken(string email, string token)
         {
             var savedToken = ResetTokens[email];
             return token.Equals(savedToken);
@@ -294,7 +270,7 @@ namespace Hallo_Doc.Controllers
                     user.City = patientReq.City;
                     user.State = patientReq.State;
                     user.Zipcode = patientReq.ZipCode;
-                    user.Dob = patientReq.DOB;
+                    //user.Dob = patientReq.DOB;
                         
                         _context.Users.Update(user);
                     await _context.SaveChangesAsync();

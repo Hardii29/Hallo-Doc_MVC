@@ -1,0 +1,124 @@
+﻿@model Hallo_Doc.Entity.ViewModel.PatientProfile;
+@{
+    ViewData["Title"] = "Patient Profile";
+    Layout = "~/Views/Shared/_patientDashboardLayout.cshtml";
+}
+
+<body class="bg-light">
+    
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h3>User Profile</h3>
+
+            <a class="btn btn-outline-info out back" asp-action="Patient_dashboard" asp-controller="PatientUser">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <form asp-action="Patient_profile" asp-controller="PatientUser" asp-route-userid="@Model?.UserId" method="post">
+                <div class="row g-2 first">
+                    <p class="mt-4">General Information</p>
+                   
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="FirstName" id="FirstName" asp-for="FirstName" class="form-control" placeholder="First name" value="@Model?.FirstName" aria-label="First name" disabled>
+                            <label for="FirstName">FirstName</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="LastName" id="Lastname" asp-for="LastName" class="form-control" placeholder="Last name" value="@Model?.LastName" aria-label="Last name" disabled>
+                            <label for="Lastname">Lastname</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="date" name="DOB" id="Date Of Birth" asp-for="DOB" class="form-control" value="@Model?.DOB" placeholder="Date of Birth" disabled>
+                            <label for="Date Of Birth">Date Of Birth</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-2 first">
+                    <p class="mt-4">Contact Information</p>
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <select class="form-select" name="Mobile" id="Type" disabled>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Phone">Phone</option>
+                            </select>
+                            <label for="Type">Type</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="tel" name="Mobile" class="form-control" asp-for="Mobile" value="@Model?.Mobile" placeholder="123-45-67" disabled>
+                           
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="email" name="Email" id="Email" asp-for="Email" class="form-control" value="@Model?.Email" placeholder="Email" disabled>
+                            <label for="Email">Email</label>
+                            <span id="email-msg"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-2 first">
+                    <p class="mt-4">Location Information</p>
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="Street" id="Street" asp-for="Street" class="form-control" value="@Model?.Street" placeholder="Street" disabled>
+                            <label for="Street">Street</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="City" id="City" asp-for="City" class="form-control" value="@Model?.City" placeholder="City" disabled>
+                            <label for="City">City</label>
+                        </div>
+                        <div class="row g-2">
+                            <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="text" name="State" id="State" asp-for="State" class="form-control" value="@Model?.State" placeholder="State" disabled>
+                            <label for="State">State</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="number" name="Zipcode" id="Zipcode" asp-for="ZipCode" class="form-control" value="@Model?.ZipCode" placeholder="Zip" disabled>
+                            <label for="Zipcode">Zipcode</label>
+                        </div>
+                            <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                                <a class="btn btn-outline-info btn-lg out back">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                    </svg> Map
+                        </a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="g-2 mt-4 first" style="text-align: right;">
+                    <a id="editButton" class="btn btn-info text-white" onclick="editMode()">Edit</a>
+                  
+                    <button type="submit" id="submitButton" class="btn btn-info text-white" style="display: none;">save</button>
+                </div>
+</form>
+</div>
+        </div>
+    <script>
+        function darkMode() {
+            var element = document.body;
+            element.classList.toggle("darkMode");
+        }
+        function editMode() {
+            var formFields = document.querySelectorAll('input, select');
+            formFields.forEach(function (field) {
+                field.disabled = !field.disabled;
+            });
+            var submitButton = document.getElementById('submitButton');
+            submitButton.style.display = submitButton.style.display === 'none' ? 'block' : 'none';
+            // var editButton = document.getElementById('editbutton');
+            // if (editButton.innerHTML === 'Edit') {
+
+            // }
+            // else {
+            //     editButton.innerHTML = 'Edit';
+            // }
+        }
+    </script>
+</body>
+
+

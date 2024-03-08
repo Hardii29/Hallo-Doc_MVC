@@ -93,7 +93,16 @@ public partial class Request
     public virtual ICollection<RequestBusiness> RequestBusinesses { get; set; } = new List<RequestBusiness>();
 
     [InverseProperty("Request")]
+    public virtual ICollection<RequestClosed> RequestCloseds { get; set; } = new List<RequestClosed>();
+
+    [InverseProperty("Request")]
     public virtual ICollection<RequestConcierge> RequestConcierges { get; set; } = new List<RequestConcierge>();
+
+    [InverseProperty("Request")]
+    public virtual ICollection<RequestNote> RequestNotes { get; set; } = new List<RequestNote>();
+
+    [InverseProperty("Request")]
+    public virtual ICollection<RequestStatusLog> RequestStatusLogs { get; set; } = new List<RequestStatusLog>();
 
     [InverseProperty("Request")]
     public virtual ICollection<RequestWiseFile> RequestWiseFiles { get; set; } = new List<RequestWiseFile>();

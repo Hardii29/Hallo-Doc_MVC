@@ -1,0 +1,90 @@
+﻿
+@model Hallo_Doc.Entity.ViewModel.DashboardList;
+@{
+    ViewData["Title"] = "Patient_dashboard";
+    Layout = "~/Views/Shared/_patientDashboardLayout.cshtml";
+}
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h3>Medical History</h3>
+        <form asp-action="Patient_dashboard" asp-controller="PatientUser">
+        <div class="content">
+          
+            <div class="form-inline my-2 my-lg-0" style="text-align: right;">
+                    <button type="button" class="btn btn-outline-info out back" data-toggle="modal" data-target="#exampleModalCenter">Create new Request</button>
+            </div>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Create New Request</h5>
+                                <a class="btn btn-info text-white close" data-dismiss="modal" aria-label="Close" style="text-decoration:none;">
+                                    <span aria-hidden="true">&times;</span>
+                                </a>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                Here, I want to create a new request for..
+                                    </div>
+                                    <div class="row">
+                                        <div class="col" style="text-align:right;">
+                                            <a class="btn btn-info text-white" asp-controller="PatientUser" asp-action="Submit_req_Me">Me</a>
+                                        </div>
+                                        <div class="col" style="text-align:left;">
+                                            <a class="btn btn-outline-info" asp-controller="PatientUser" asp-action="Submit_req_Someone">Some One Else</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-info text-white" data-dismiss="modal">Continue</button>
+                                <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <table class="table-responsive" style="width:100%">
+                <thead class="thead-dark bg-light">
+                    <tr class="row" style="padding:5px">
+                        <th class="col">Created Date</th>
+                        <th class="col-6">Current status</th>
+                        <th class="col">Document</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    
+                        @foreach (var item in Model.RequestWithFiles)
+                        {
+                            <tr class="row">
+                                <td class="col"> @item.Request.CreatedDate</td>
+                                <td class="col-6">@item.Request.Status</td>
+                                <td class="col">
+                                    @if (item.HasFiles)
+                                    {
+                                        <a class="btn btn-outline-info out back" asp-controller="PatientUser" asp-action="View_document" asp-route-fileId="@item.Request.fileId">Document(1)</a>
+                                    }
+                                    else
+                                    {
+                                        <p> - </p>
+                                    }
+                                </td>
+                            </tr>
+                    }
+                </tbody>
+            </table>
+           
+        </div>
+        </form>
+    </div>
+    <script>
+        function darkMode() {
+            var element = document.body;
+            element.classList.toggle("darkMode");
+        }
+    </script>
+</body>
+

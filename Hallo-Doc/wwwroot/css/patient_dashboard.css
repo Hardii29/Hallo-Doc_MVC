@@ -1,6 +1,4 @@
-body{
-    font-family: sans-serif;
-}
+
 .container{
     position: relative;
     display: block;
@@ -31,7 +29,26 @@ h3{
 p{
     font-weight:bold;
 }
+.darkMode .content {
+    background-color: black;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(256, 256, 256, 0.2), 0 6px 20px 0 rgba(256, 256, 256, 0.19);
+}
 
+.darkMode .container {
+    background-color: black;
+    color: white;
+}
+
+.darkMode th {
+    background-color: black;
+    color: white;
+}
+
+.darkMode td {
+    background-color: black;
+    color: white;
+}
 footer{
     background-color: rgb(39, 38, 38);
     text-align: right;

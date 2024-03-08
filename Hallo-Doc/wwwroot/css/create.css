@@ -23,15 +23,20 @@
 a{
     text-decoration: none;
 }
+.darkMode {
+    background-color: black;
+    color: white;
+}
 .back{
     position: absolute;
     top: 0;
     right: 0;
 }
 footer {
-    bottom: 0;
-    text-align: center;
-    margin: 2rem auto 0 auto;
+    background-color: rgb(39, 38, 38);
+    text-align: right;
+    padding: 20px;
+    margin-top: 60px;
 }
 @media screen and (max-width:400px){
     .container{

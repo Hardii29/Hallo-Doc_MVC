@@ -30,6 +30,30 @@ h1{
     display: flex;
     justify-content: space-between;
 }
+p {
+    color: black;
+}
+
+.darkMode, body {
+    background-color: black;
+    color: white;
+}
+
+    .darkMode .content {
+        background-color: black;
+        color: white;
+        box-shadow: 0 4px 8px 0 rgba(256, 256, 256, 0.2), 0 6px 20px 0 rgba(256, 256, 256, 0.19);
+    }
+
+    .darkMode p {
+        color: white;
+    }
+
+    .darkMode .container {
+        background-color: black;
+        color: white;
+    }
+
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
@@ -39,8 +63,12 @@ input[type="email"]:focus,
 input[type="tel"]:focus,
 .uneditable-input:focus {
     border-color: #0dcaf0;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(13, 202, 240, 0.6);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(13, 202, 240, 0.6);
     outline: 0 none;
+}
+
+label {
+    color: gray;
 }
 footer{
     background-color: rgb(39, 38, 38);

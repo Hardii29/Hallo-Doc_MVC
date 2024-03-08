@@ -36,6 +36,15 @@ public partial class AspnetUser
     [Column(TypeName = "timestamp without time zone")]
     public DateTime Createddate { get; set; }
 
+    [InverseProperty("AspNetUser")]
+    public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; } = new List<AspNetUserRole>();
+
+    [InverseProperty("AspNetUser")]
+    public virtual ICollection<Physician> Physicians { get; set; } = new List<Physician>();
+
     [InverseProperty("Aspnetuser")]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
