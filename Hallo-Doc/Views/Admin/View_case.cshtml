@@ -46,12 +46,6 @@
 
             <ul class="navbar-nav w-100 flex-row justify-content-between">
 
-                <button class="navbar-toggler navbar-light nav-tog-btn px-0 mb-2" type="button"
-                        data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-
-
                 <li class="nav-item">
                     <img class="img-fluid m-2" src="./../images/logo.png" alt="" width="150" height="70">
                 </li>
@@ -121,7 +115,7 @@
         </div>
         <div class="content">
             <form asp-controller="Admin" asp-action="View_case" asp-route-requestId="@Model?.RequestId" method="post">
-                @* <input type="hidden" name="RequestId" asp-for="RequestId" value="@Model.RequestId"> *@
+            
                 <div class="row g-2 first">
                     <p class="mt-4">Patient Information</p>
                     <p style="font-size:smaller; margin-bottom: 1px;">Confirmation Number</p>

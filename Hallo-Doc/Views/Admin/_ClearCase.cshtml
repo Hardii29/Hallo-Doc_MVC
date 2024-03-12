@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "Clear Case";
+}
+
+<div class="modal fade" id="clearCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content justify-content-center" style="text-align:center;">
+            
+            <form id="clearCaseForm" asp-action="ClearCase" asp-controller="Admin" method="post">
+                <input type="hidden" value=" " id="RequestID_ModelClearCase" name="RequestId" />
+                <div class="modal-body m-3">
+                    <img class="img-fluid m-2" src="./../images/Confirmation.png" alt="" width="120" height="60">
+
+                    <div class="mb-3">
+                        <h3>Confirmation for clear case</h3>
+                       <p>Are sure you want to clear this request? Once clear this request then you are not able to see this request.</p>
+
+                    </div>
+                    <button type="submit" class="btn btn-info text-white">Clear</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
+                </div>
+               
+            </form>
+
+        </div>
+    </div>
+</div>

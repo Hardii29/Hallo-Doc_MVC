@@ -6,6 +6,8 @@ using Hallo_Doc.Entity.Data;
 using Hallo_Doc.Entity.Models;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
@@ -13,9 +15,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
     public class AdminDashboardRepo : IAdminDashboard
     {
         private readonly ApplicationDbContext _context;
-        public AdminDashboardRepo(ApplicationDbContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public AdminDashboardRepo(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {  
-            _context = context; 
+            _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
         public CountStatusWiseRequest CountRequestData()
         {
@@ -126,14 +130,15 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             var physicians = _context.Physicians.Where(p => p.RegionId == regionId).ToList();
             return physicians;
         }
-        public bool CancleCaseInfo(int? requestId, string caseTag, string Notes)
+        public bool CancleCaseInfo(int? requestId, int CaseTagId, string Notes)
         {
             try
             {
                 var requestData = _context.Requests.FirstOrDefault(e => e.RequestId == requestId);
+                var casetag = _context.CaseTags.FirstOrDefault(c =>  c.CaseTagId == CaseTagId);
                 if (requestData != null)
                 {
-                    requestData.CaseTag = caseTag;
+                    requestData.CaseTag = casetag?.Name;
                     requestData.Status = 3;
                     _context.Requests.Update(requestData);
                     _context.SaveChanges();
@@ -166,6 +171,183 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 rsl.Notes = Notes;
                 rsl.CreatedDate = DateTime.Now;
                 rsl.Status = 3;
+                _context.RequestStatusLogs.Add(rsl);
+                _context.SaveChanges();
+                return true;
+            }
+            else { return false; }
+        }
+        public bool AssignCaseReq(int RequestId, int PhysicianId, string Notes)
+        {
+            var req = _context.Requests.FirstOrDefault(r =>r.RequestId == RequestId);
+            if (req != null)
+            {
+                req.Status = 2;
+                req.PhysicianId = PhysicianId;
+                _context.Requests.Update(req);
+                _context.SaveChanges();
+                RequestStatusLog rsl = new RequestStatusLog
+                {
+                    RequestId = RequestId,
+                    Status = 2,
+                    PhysicianId = req.PhysicianId,
+                    //AdminId = 1,
+                    Notes = Notes,
+                    CreatedDate = DateTime.Now
+                };
+                _context.RequestStatusLogs.Add(rsl);
+                _context.SaveChanges();
+                RequestNote note = new RequestNote
+                {
+                    RequestId = RequestId,
+                    AdminNotes = Notes,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "Admin"
+                };
+                _context.RequestNotes.Add(note);
+                _context.SaveChanges();
+                return true;
+                
+            }
+            else { return false; }
+        }
+        public List<ViewDocument> GetFiles(int requestId)
+        {
+            var files = _context.RequestWiseFiles
+                                .Where(f => f.RequestId == requestId)
+                                .Select(f => new ViewDocument
+                                {
+                                    RequestId = f.RequestId,
+                                    RequestWiseFileID = f.RequestWiseFileId,
+                                    CreatedDate = f.CreatedDate,
+                                    FileName = f.FileName
+                                })
+                                .ToList();
+
+            return files;
+        }
+        public void UploadFiles(int requestId, ViewDocument viewDocument)
+        {
+            var request = _context.Requests.FirstOrDefault(f => f.RequestId == requestId);
+            if (request != null && viewDocument.File != null && viewDocument.File.Length > 0)
+            {
+                var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
+
+                if (!Directory.Exists(uploadsDirectory))
+                {
+                    Directory.CreateDirectory(uploadsDirectory);
+                }
+
+                var fileName = Path.GetFileName(viewDocument.File.FileName);
+                var filePath = Path.Combine(uploadsDirectory, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    viewDocument.File.CopyTo(stream);
+                }
+
+                var requestWiseFile = new Entity.Models.RequestWiseFile
+                {
+                    RequestId = requestId,
+                    FileName = fileName,
+                    CreatedDate = DateTime.Now,
+                };
+                _context.RequestWiseFiles.Add(requestWiseFile);
+                _context.SaveChanges();
+            }
+        }
+        public IActionResult? DownloadFile(int fileID)
+        {
+            var file = _context.RequestWiseFiles.FirstOrDefault(f => f.RequestWiseFileId == fileID);
+            if (file == null)
+            {
+                return null;
+            }
+            var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents", file.FileName);
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+            return new FileStreamResult(memory, "application/octet-stream")
+            {
+                FileDownloadName = file.FileName
+            };
+        }
+        public void DeleteFile(int fileID)
+        {
+            var file = _context.RequestWiseFiles.Find(fileID);
+            if (file != null)
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(),"Documents" , file.FileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                _context.RequestWiseFiles.Remove(file);
+                _context.SaveChanges();
+            }
+        }
+        public void DeleteAllFiles(int RequestId)
+        {
+            var files = _context.RequestWiseFiles.Where(f => f.RequestId == RequestId).ToList();
+            foreach (var file in files)
+            {
+                _context.RequestWiseFiles.Remove(file);
+            }
+            _context.SaveChanges();
+        }
+        public bool TransferCaseReq(int RequestId, int PhysicianId, string Notes)
+        {
+            var req = _context.Requests.FirstOrDefault(r => r.RequestId == RequestId);
+            if (req != null)
+            {
+                //req.Status = 2;
+                req.PhysicianId = PhysicianId;
+                _context.Requests.Update(req);
+                var rsl = _context.RequestStatusLogs.FirstOrDefault(r => r.RequestId == RequestId && r.Status == 2 && r.PhysicianId != PhysicianId);
+                if (rsl != null)
+                {
+                    rsl.TransToPhysicianId = PhysicianId;
+                    rsl.Notes = Notes;
+                    rsl.CreatedDate = DateTime.Now;
+                    _context.RequestStatusLogs.Update(rsl);
+                }
+                
+                RequestNote note = new RequestNote
+                {
+                    RequestId = RequestId,
+                    AdminNotes = Notes,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "Admin"
+                };
+                _context.RequestNotes.Add(note);
+                _context.SaveChanges();
+                return true;
+            }
+            else 
+            { 
+                return false; 
+            }
+        }
+        public bool ClearCaseReq(int RequestId)
+        {
+            var requestData = _context.Requests.FirstOrDefault(r => r.RequestId == RequestId);
+            if (requestData != null)
+            {
+                requestData.Status = 10;
+                _context.Requests.Update(requestData);
+                _context.SaveChanges();
+                RequestStatusLog rsl = new RequestStatusLog();
+                rsl.RequestId = (int)RequestId;
+                rsl.Notes = "Cleared by Admin";
+                rsl.CreatedDate = DateTime.Now;
+                rsl.Status = 10;
                 _context.RequestStatusLogs.Add(rsl);
                 _context.SaveChanges();
                 return true;

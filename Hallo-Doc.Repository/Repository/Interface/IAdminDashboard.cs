@@ -1,6 +1,7 @@
 ﻿using Hallo_Doc.Entity.Models;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Implementation;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,15 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<CaseTag> GetReasons();
         List<Region> GetRegions();
         List<Physician> GetPhysician(int regionId);
-        bool CancleCaseInfo(int? RequestId, string Notes, string caseTag);
+        bool CancleCaseInfo(int? RequestId, int CaseTagId, string Notes);
         bool BlockCaseReq(int RequestId, string Notes);
-
+        bool AssignCaseReq(int RequestId, int PhysicianId, string Notes);
+        List<ViewDocument> GetFiles(int requestId);
+        void UploadFiles(int requestId, ViewDocument viewDocument);
+        IActionResult? DownloadFile(int fileID);
+        void DeleteFile(int fileID);
+        void DeleteAllFiles(int RequestId);
+        bool TransferCaseReq(int RequestId, int PhysicianId, string Notes);
+        bool ClearCaseReq(int RequestId);
     }
 }

@@ -1,34 +1,33 @@
-﻿
-@{
-    ViewData["Title"] = "Assign Case";
+﻿@{
+    ViewData["Title"] = "Transfer Case";
 
 }
-<div class="modal fade" id="assignCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="transferCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header text-white" style="background-color:#0dcaf0">
-                <h5 class="modal-title" id="exampleModalLabel">Assign Request</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Transfer Request</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="cancelCaseForm" asp-action="AssignCase" asp-controller="Admin" method="post">
-                <input type="hidden" value=" " id="RequestID_ModelAssignCase" name="RequestId" />
-            <div class="modal-body">
-                
+            <form id="cancelCaseForm" asp-action="TransferCase" asp-controller="Admin" method="post">
+                <input type="hidden" value=" " id="RequestID_ModelTransferCase" name="RequestId" />
+                <div class="modal-body">
+
                     <p>To assign this request, search and select another physician</p>
-                    
+
                     <div class="form-floating mb-3">
-                        <select class="form-select" id="region" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))" onchange="AssignPhysician()">
+                        <select class="form-select" id="region" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))" onchange="TransferPhysician(this.value)">
                             <option value="">Select Region</option>
-                         
+
                         </select>
                         <label for="region">Narrow search by region</label>
                     </div>
 
                     <input type="hidden" id="physician" name="physician">
-                    <div class="form-floating mb-3"> 
-                        <select class="form-select" name="PhysicianId" id="provider">
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="PhysicianId" id="providers">
                             <option value="">Select Physician</option>
                         </select>
                         <label for="physician">Select Physician</label>
@@ -38,13 +37,13 @@
                         <label for="discription">Discription</label>
                     </div>
                 </div>
-                    <div class="modal-footer">
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-info text-white">Submit</button>
                     <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
-                    </div>
-            
-                </form>
-           
+                </div>
+
+            </form>
+
         </div>
     </div>
 </div>
@@ -52,12 +51,13 @@
 
 
 <script type="text/javascript">
-    function AssignPhysician() {
-        var region = $("#region").val();
-        console.log(region);
+    function TransferPhysician(RegionId) {
+        // var region = $("#region").val();
+        console.log(RegionId);
+        console.log("Region fetched");
         $.ajax({
             type: "POST",
-            url: '@Url.Action("PhysicianList", "Admin")?RegionId=' + region,
+            url: '@Url.Action("PhysicianList", "Admin")?RegionId=' + RegionId,
             cache: false,
             success: function (response) {
                 console.log(response);
@@ -66,7 +66,7 @@
                     select += '<option value="' + response[i].physicianId + '">' + response[i].firstName + " " + response[i].lastName + '</option>';
                 }
 
-                $("#provider").html(select);
+                $("#providers").html(select);
             },
             error: function () {
                 alert("Error");

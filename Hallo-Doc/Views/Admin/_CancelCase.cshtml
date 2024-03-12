@@ -20,7 +20,7 @@
         <input type="hidden" id="caseTag" name="caseTag">
                     <p>Patient name : <span class="text-info" id="PatientName_ModelCancelCase"> </span></p>
                     <div class="form-floating mb-3">
-                        <select class="form-select input-outline input-outline-select w-100" name="Name" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReason,"CaseTagId","Name"))" data-control="select2" data-placeholder="Cancel Reason">
+                        <select class="form-select input-outline input-outline-select w-100" name="CaseTagId" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReason,"CaseTagId","Name"))" data-control="select2" data-placeholder="Cancel Reason">
                      
                             <option>Cancel Reason</option>
                         </select>

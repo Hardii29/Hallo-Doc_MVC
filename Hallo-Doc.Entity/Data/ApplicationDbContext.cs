@@ -175,8 +175,6 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasKey(e => e.RequestNotesId).HasName("RequestNotes_pkey");
 
-            entity.Property(e => e.RequestNotesId).ValueGeneratedNever();
-
             entity.HasOne(d => d.Request).WithMany(p => p.RequestNotes)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("RequestNotes_RequestId_fkey");

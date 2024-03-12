@@ -24,8 +24,8 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult Admin_dashboard()
         {
-            var caseTags = _adminDashboard.GetReasons();
-            ViewBag.CaseReason = caseTags;
+            ViewBag.CaseReason = _adminDashboard.GetReasons();
+            ViewBag.Region = _adminDashboard.GetRegions();
             
             var count = _adminDashboard.CountRequestData();
             return View(count);
@@ -53,9 +53,9 @@ namespace Hallo_Doc.Controllers
         {
             return View();
         }
-        public IActionResult PhysicianList(int regionId) 
+        public IActionResult PhysicianList(int RegionId) 
         { 
-            var physicians = _adminDashboard.GetPhysician(regionId);
+            var physicians = _adminDashboard.GetPhysician(RegionId);
             return Json(physicians);
         }
         public IActionResult CancelCase()
@@ -64,16 +64,21 @@ namespace Hallo_Doc.Controllers
             return PartialView("_CancelCase");
         }
         [HttpPost]
-        public IActionResult CancelCase(int requestId, string caseTag, string Notes)
+        public IActionResult CancelCase(int requestId, int CaseTagId, string Notes)
         {
-            _adminDashboard.CancleCaseInfo(requestId, caseTag, Notes);
+            _adminDashboard.CancleCaseInfo(requestId, CaseTagId, Notes);
             return RedirectToAction("Admin_dashboard");
         }
         public IActionResult AssignCase()
         {
-            var regionList = _adminDashboard.GetRegions();
-            ViewBag.Regions = regionList;
+            
             return PartialView("_AssignCase");
+        }
+        [HttpPost]
+        public IActionResult AssignCase(int RequestId, int PhysicianId, string Notes)
+        {
+            _adminDashboard.AssignCaseReq(RequestId, PhysicianId, Notes);
+            return RedirectToAction("Admin_dashboard");
         }
         public IActionResult BlockCase()
         {
@@ -83,6 +88,55 @@ namespace Hallo_Doc.Controllers
         public IActionResult BlockCase(int RequestId, string Notes)
         {
             _adminDashboard.BlockCaseReq(RequestId, Notes);
+            return RedirectToAction("Admin_dashboard");
+        }
+        public IActionResult View_upload(int RequestId)
+        {
+            var files = _adminDashboard.GetFiles(RequestId);
+            return View(files);
+        }
+        [HttpPost]
+        public IActionResult View_upload(int RequestId, ViewDocument viewDocument)
+        {
+            _adminDashboard.UploadFiles(RequestId, viewDocument);
+            return RedirectToAction("View_upload");
+        }
+        [HttpGet]
+        public IActionResult? Download_file(int fileID)
+        {
+            return _adminDashboard.DownloadFile(fileID);
+        }
+        [HttpPost]
+        public IActionResult Delete_file(int fileID)
+        {
+            _adminDashboard.DeleteFile(fileID);
+            return RedirectToAction("View_upload");
+        }
+        [HttpPost]
+        public IActionResult DeleteAll(int RequestId)
+        {
+            _adminDashboard.DeleteAllFiles(RequestId);
+            return RedirectToAction("View_upload");
+        }
+        public IActionResult TransferCase()
+        {
+
+            return PartialView("_TransferCase");
+        }
+        [HttpPost]
+        public IActionResult TransferCase(int RequestId, int PhysicianId, string Notes)
+        {
+            _adminDashboard.TransferCaseReq(RequestId, PhysicianId, Notes);
+            return RedirectToAction("Admin_dashboard");
+        }
+        public IActionResult ClearCase()
+        {
+            return PartialView("_ClearCase");
+        }
+        [HttpPost]
+        public IActionResult ClearCase(int RequestId)
+        {
+            _adminDashboard.ClearCaseReq(RequestId);
             return RedirectToAction("Admin_dashboard");
         }
     }
