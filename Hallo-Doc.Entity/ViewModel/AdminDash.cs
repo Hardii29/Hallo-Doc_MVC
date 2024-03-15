@@ -21,6 +21,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string?  Address { get; set; }
         public string? Notes { get; set; }
         public int? RegionId { get; set; }
+        public int? RequestClientId { get; set; }
         public int? PhysicianId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -28,6 +29,15 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Name { get; set; }
         public int? CaseTagId { get; set; }
         public short? Status { get; set; }
-        
+        public string? searchValue { get; set; }
+    }
+    public class CountStatusWiseRequest
+    {
+        public int NewRequest { get; set; }
+        public int PendingRequest { get; set; }
+        public int ActiveRequest { get; set; }
+        public int ConcludeRequest { get; set; }
+        public int ToCloseRequest { get; set; }
+        public int UnpaidRequest { get; set; }
     }
 }

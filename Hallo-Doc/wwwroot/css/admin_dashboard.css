@@ -20,10 +20,10 @@ body{
     padding: 1rem;
 }
 
-    .dropdown-item:hover {
+.dropdown-item:hover {
         color: #54B4D3;
         background-color: #e9f4f7;
-    }
+}
 
 .ptxt {
     font-size: smaller;
@@ -43,14 +43,7 @@ body{
     display: none;
 }
 
-.offcanvas-backdrop {
-    top: 0;
-    left: 0;
-    position: fixed;
-    z-index: 1040;
-    background-color: #000 !important;
-    opacity: 0.3 !important;
-}
+
 h3{
     font-weight: bolder;
 }
@@ -94,4 +87,25 @@ button[data-btn="Unpaid"]:focus {
     border-radius: 50%; 
     margin: auto; 
     display: inline-block;
-} 
+}
+
+@media screen and (min-width: 768px) {
+    .mobile-view
+{
+    display: none;
+}
+
+}
+
+@media screen and (max-width: 767px) {
+    .desktop-view
+{
+    display: none;
+}
+    .dash-btn {
+        display:none;
+    }
+    .search-nav {
+        display:block;
+    }
+}

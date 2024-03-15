@@ -1,107 +1,16 @@
 ﻿@model Hallo_Doc.Entity.ViewModel.CountStatusWiseRequest;
 @{
     ViewData["Title"] = "Admin Dasboard";
-    
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css\bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://kit.fontawesome.com/a07e852713.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <link href="~/css/admin_dashboard.css" rel="stylesheet">
-    <title>Admin Dashboard</title>
-
-</head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-toggler shadow pb-3 mb-2 bg-body">
-
-        <div class="container-fluid flex-column">
-
-            <ul class="navbar-nav w-100 flex-row justify-content-between">
-
-                <li class="nav-item">
-                    <img class="img-fluid m-2" src="./../images/logo.png" alt="" width="150" height="70">
-                </li>
-
-                <li class="nav-item navbar-right d-flex flex-row ml-auto mt-5 h-25">
-
-                    <span class="dblock mt-2">Welcome <span class="fw-bold">Admin admin2</span></span>
-
-                    <a href="index.html" type="button" class="btn btn-outline-info mx-2 h-25 dblock">Logout</a>
-
-                    <a href="index.html" type="button" class="btn btn-outline-info mx-2 dnone">
-                        <i class="fa fa-right-from-bracket"></i>
-                    </a>
-
-                    <button type="button" class="btn btn-outline-info moon-img" onclick="myFunctions()">
-                        <i class="fa fa-moon"></i>
-                    </button>
-
-                </li>
-            </ul>
-
-            <hr class="border border-dark border-1 w-100 m-0">
-
-            <div class="w-50 dash-nav offcanvas offcanvas-start" id="navbarSupportedContent">
-                <ul class="navbar-nav nav-underline offcanvas-body">
-                    
-                    <li class="nav-item mx-2 d-flex justify-content-between">
-                        <a href="ad-dash-new.html" class="nav-link text-info active">Dashboard</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a href="provider-location.html" class="nav-link">Provider Location</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a href="my-profile.html" class="nav-link">My Profile</a>
-                    </li>
-                    <li class="nav-item dropdown mx-2">
-
-                        <button type="button" class="nav-link dropdown-toggle" id="dropdownMenuButton"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            Providers
-                        </button>
-                        <div class="dropdown-menu drp-nav  fs-6 fw-bold" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="provider-menu.html">• Provider</a>
-                            <a class="dropdown-item" href="#">• Schedulling</a>
-                            <a class="dropdown-item" href="#">• Invoicing</a>
-
-                        </div>
-
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a href="profession-menu-vendors.html" class="nav-link">Partners</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a href="account-access.html" class="nav-link">Access</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a href="patient-history.html" class="nav-link">Records</a>
-                    </li>
-                </ul>
-            </div>
-
-
-        </div>
-
-    </nav>
     <div>
         @Html.Partial("_CancelCase")
         @Html.Partial("_AssignCase")
         @Html.Partial("_BlockCase")
         @Html.Partial("_TransferCase")
         @Html.Partial("_ClearCase")
+        @Html.Partial("_SendAgreement")
     </div>
     <div class="container-fluid mt-3" style="width: 100%;">
        
@@ -137,36 +46,75 @@
                 <ul>
                     <li class="d-inline">
                         <a class="btn btn-info text-white">
-                            <i class="fa fa-paper-plane" aria-hidden="true"></i> Send Link
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i><span class="dash-btn"> Send Link</span>
                         </a>
                     </li>
                     <li class="d-inline">
                         <a class="btn btn-info text-white">
-                            <i class="fa fa-edit" aria-hidden="true"></i> Create Requests
+                        <i class="fa fa-edit" aria-hidden="true"></i><span class="dash-btn"> Create Requests</span>
                         </a>
                     </li>
                     <li class="d-inline">
                         <a class="btn btn-info text-white">
-                            <i class="fa fa-mail-forward" aria-hidden="true"></i> Export
+                        <i class="fa fa-mail-forward" aria-hidden="true"></i><span class="dash-btn"> Export</span>
                         </a>
                     </li>
                     <li class="d-inline">
                         <a class="btn btn-info text-white">
-                            <i class="fa fa-share-square-o" aria-hidden="true"></i> Export All
+                        <i class="fa fa-share-square-o" aria-hidden="true"></i><span class="dash-btn"> Export All</span>
                         </a>
                     </li>
                     <li class="d-inline">
                         <a class="btn btn-info text-white">
-                            <i class="fa fa-heartbeat" aria-hidden="true"></i> Request DIY Support
+                        <i class="fa fa-heartbeat" aria-hidden="true"></i><span class="dash-btn"> Request DIY Support</span>
                         </a>
                     </li>
                 </ul>
             </div>
-       </div>
+        <div>
+            <div class="search-nav">
+            <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
+                <div>
+                    <div style="display: inline-block;">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search Patients" name="searchValue">
+                    </div>
+                    <div style="display: inline-block;">
+                    <select class="form-select" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
+                            <option value="">All Regions</option>
+                           
+                        </select>
+                    </div>
+                </div>
+                <ul>
+                    <li class="d-inline">
+                        <button type="button" class="btn btn-outline-dark">All</button>
+                    </li>
+                    <li class="d-inline">
+                        <div class="circle" style="background-color: green;"></div> Patient
+                    </li>
+                    <li class="d-inline">
+                        <div class="circle" style="background-color: orange;"></div> Family/Friend
+                    </li>
+                    <li class="d-inline">
+                        <div class="circle" style="background-color: firebrick;"></div> Business
+                    </li>
+                    <li class="d-inline">
+                        <div class="circle" style="background-color: #0dcaf0"></div> Concierge
+                    </li>
+                    <li class="d-inline">
+                        <div class="circle" style="background-color: rgba(139, 5, 216, 0.822);"></div> VIP
+                    </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+    </div>
 
     <div id="btnContent">  </div>
 
     <script>
+        var statusidglobal = $(this).data("id");
+        var btnnameglobal = $(this).data("btn");
         $(document).ready(function () {
             console.log("Document ready");
 
@@ -184,16 +132,16 @@
             });
                     
                     $(document).on("click", ".btn", function () {
-                        var btnName = $(this).data("btn");
-                        console.log("Button clicked: " + btnName);
+                btnnameglobal = $(this).data("btn");
+                console.log("Button clicked: " + btnnameglobal);
 
-                        var statusid = $(this).data("id");
+                statusidglobal = $(this).data("id");
                         
                         $.ajax({
                             url: '@Url.Action("GetPartialView", "Admin")',
                             
                             method: 'GET',
-                            data: { btnName: btnName, statusid: statusid },
+                    data: { btnName: btnnameglobal, statusid:statusidglobal },
                             success: function (data) {
                                 console.log("AJAX success");
                                 
@@ -206,8 +154,33 @@
                         });
                     });
             });
-       
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('searchInput').addEventListener('keyup', function (evt) {
+                if (evt.key === 'Enter') {
+                    evt.preventDefault();
+                    handleSearchClick();
+                }
+            });
+        });
+        function handleSearchClick() {
+            var searchValue = document.getElementById('searchInput').value;
+            console.log(searchValue);
+            console.log(statusidglobal);
+            console.log(btnnameglobal);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetPartialView", "Admin")',
+                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal },
+                success: function (data) {
+                    console.log("AJAX success");
+                    $("#btnContent").html(data);
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                }
+            });
+        }
     </script>
 
 </body>
-</html>

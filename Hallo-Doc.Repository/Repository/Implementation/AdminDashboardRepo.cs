@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Hallo_Doc.Entity.Data;
 using Hallo_Doc.Entity.Models;
@@ -34,7 +35,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             };
         }
-        public List<AdminDash> GetRequestData(int statusid)
+        public List<AdminDash> GetRequestData(int statusid, string searchValue)
         {
             List<int> id = new List<int>();
             if (statusid == 1) { id.Add(1); }
@@ -45,7 +46,6 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             if (statusid == 4) { id.Add(6); }
             if (statusid == 5) id.AddRange(new int[] { 3, 7, 8 });
             if (statusid == 6) { id.Add(9); }
-
             var list = (from req in _context.Requests
                         join reqClient in _context.Requestclients
                         on req.RequestId equals reqClient.RequestId into reqClientGroup
@@ -56,26 +56,32 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                         join reg in _context.Regions
                         on rc.RegionId equals reg.RegionId into RegGroup
                         from rg in RegGroup.DefaultIfEmpty()
-                        where id.Contains(req.Status)
+                        where id.Contains(req.Status) && (searchValue == null ||
+                               rc.FirstName.Contains(searchValue) || rc.LastName.Contains(searchValue) ||
+                               req.FirstName.Contains(searchValue) || req.LastName.Contains(searchValue) ||
+                               rc.Email.Contains(searchValue) || rc.PhoneNumber.Contains(searchValue) ||
+                               rc.Address.Contains(searchValue) || rc.Notes.Contains(searchValue) ||
+                               p.FirstName.Contains(searchValue) || p.LastName.Contains(searchValue) ||
+                               rg.Name.Contains(searchValue))
                         orderby req.CreatedDate descending
                         select new AdminDash
                         {
-
                             RequestId = req.RequestId,
                             RequestTypeId = req.RequestTypeId,
                             Requestor = req != null ? req.FirstName + " " + req.LastName : "",
                             PatientName = rc != null ? rc.FirstName + " " + rc.LastName : "",
                             DOB = rc != null && rc.IntYear != null && rc.StrMonth != null && rc.IntDate != null ?
-                            new DateOnly((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate) : DateOnly.MinValue,
+                                            new DateOnly((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate) : DateOnly.MinValue,
                             RequestedDate = req.CreatedDate,
                             Email = rc != null ? rc.Email : "",
                             Region = rg != null ? rg.Name : "",
-                            ProviderName = p != null ? p.FirstName + " " + p.LastName: "",
+                            ProviderName = p != null ? p.FirstName + " " + p.LastName : "",
                             PatientMobile = rc != null ? rc.PhoneNumber : "",
                             Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
-                            Notes = rc != null ? rc.Notes: "",
+                            Notes = rc != null ? rc.Notes : "",
                             // ProviderID = req.Physicianid,
-                            RequestorPhoneNumber = req != null ? req.PhoneNumber : ""
+                            RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
+                            RequestClientId = rc != null ? rc.RequestclientId : null
                         }).ToList();
 
             return list;
@@ -129,6 +135,27 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         {
             var physicians = _context.Physicians.Where(p => p.RegionId == regionId).ToList();
             return physicians;
+        }
+        public List<HealthProfessionalType> GetProfession() 
+        {
+            return _context.HealthProfessionalTypes.ToList();
+        }
+        public List<HealthProffessional> GetBusiness(int businessId)
+        {
+            var business = _context.HealthProffessionals.Where(b => b.Profession ==  businessId).ToList();
+            return business;
+        }
+        public Order GetBusinessDetails(int VendorId)
+        {
+            var data = (from v in _context.HealthProffessionals where v.VendorId == VendorId select new Order
+            {
+                Email = v.Email,
+                FaxNumber = v.FaxNumber,
+                BusinessContact = v.BusinessContact
+            })
+            .FirstOrDefault();
+            
+            return data;
         }
         public bool CancleCaseInfo(int? requestId, int CaseTagId, string Notes)
         {
@@ -353,6 +380,76 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 return true;
             }
             else { return false; }
+        }
+        public void SendAgreementEmail(string email)
+        {
+            var baseUrl = "http://localhost:5203";
+            var Action = "Agreement";
+            var controller = "Admin";
+            // Retrieve agreement page link based on requestId
+            string agreementPageLink = $"{baseUrl}/{controller}/{Action}";
+
+            // Create and send email
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("hardi.jayani@etatvasoft.com");
+                mail.To.Add(email);
+                mail.Subject = "Agreement for your request";
+                mail.Body = $"Dear user,\n\nPlease review and agree the agreement using the following link: \n{agreementPageLink}";
+
+                using (SmtpClient smtp = new SmtpClient("mail.etatvasoft.com", 587))
+                {
+                    smtp.Credentials = new System.Net.NetworkCredential("hardi.jayani@etatvasoft.com", "LHV0@}YOA?)M");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+            }
+        }
+        public Order GetOrderView(int requestId)
+        {
+            var order = new Order();
+            order.RequestId = requestId;
+            return order;
+        }
+        public void SendOrder(Order order)
+        {
+            var details = new OrderDetail();
+            details.RequestId = order.RequestId;
+            details.VendorId = order.VendorId;
+            details.BusinessContact = order.BusinessContact;
+            details.FaxNumber = order.FaxNumber;
+            details.Email = order.Email;
+            details.CreatedDate = DateTime.Now;
+            details.Prescription = order.Prescription;
+            details.NoOfRefill = order.NoOfRefill;
+            details.CreatedBy = "Admin";
+            _context.OrderDetails.Add(details);
+            _context.SaveChanges();
+        }
+        public ViewCase GetClearCaseView(int requestId)
+        {
+            var data = (from req in _context.Requests
+                        join reqClient in _context.Requestclients
+                        on req.RequestId equals reqClient.RequestId into reqClientGroup
+                        from rc in reqClientGroup.DefaultIfEmpty()
+                        join rwf in _context.RequestWiseFiles
+                        on req.RequestId equals rwf.RequestId into RwfGroup
+                        from rf in RwfGroup.DefaultIfEmpty()
+                        where req.RequestId == requestId
+                        select new ViewCase
+                        {
+                            RequestId = req != null ? req.RequestId : 0,
+                            FirstName = rc != null ? rc.FirstName : "",
+                            LastName = rc != null ? rc.LastName : "",
+                            DOB = rc != null && rc.IntYear != null && rc.StrMonth != null && rc.IntDate != null ?
+                            new DateOnly((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate) : DateOnly.MinValue,
+                            Mobile = rc != null ? rc.PhoneNumber : "",
+                            Email = rc != null ? rc.Email : "",
+                            RequestWiseFileID = rf != null ? rf.RequestWiseFileId : 0,
+                            CreatedDate = rf != null ? rf.CreatedDate : DateTime.MinValue,
+                            FileName = rf != null ? rf.FileName : ""
+                        }).FirstOrDefault();
+            return data;
         }
     }
 }

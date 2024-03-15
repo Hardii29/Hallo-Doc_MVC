@@ -30,6 +30,14 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Concierge> Concierges { get; set; }
 
+    public virtual DbSet<HealthProfessionalType> HealthProfessionalTypes { get; set; }
+
+    public virtual DbSet<HealthProffessional> HealthProffessionals { get; set; }
+
+    public virtual DbSet<Menu> Menus { get; set; }
+
+    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+
     public virtual DbSet<Physician> Physicians { get; set; }
 
     public virtual DbSet<Region> Regions { get; set; }
@@ -105,6 +113,28 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<Concierge>(entity =>
         {
             entity.HasKey(e => e.ConciergeId).HasName("Concierge_pkey");
+        });
+
+        modelBuilder.Entity<HealthProfessionalType>(entity =>
+        {
+            entity.HasKey(e => e.HealthProfessionalTypeId).HasName("HealthProfessionalType_pkey");
+        });
+
+        modelBuilder.Entity<HealthProffessional>(entity =>
+        {
+            entity.HasKey(e => e.VendorId).HasName("HealthProffessionals_pkey");
+
+            entity.HasOne(d => d.ProfessionNavigation).WithMany(p => p.HealthProffessionals).HasConstraintName("HealthProffessionals_Profession_fkey");
+        });
+
+        modelBuilder.Entity<Menu>(entity =>
+        {
+            entity.HasKey(e => e.MenuId).HasName("Menu_pkey");
+        });
+
+        modelBuilder.Entity<OrderDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("OrderDetails_pkey");
         });
 
         modelBuilder.Entity<Physician>(entity =>

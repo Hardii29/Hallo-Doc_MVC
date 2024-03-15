@@ -22,19 +22,18 @@ namespace Hallo_Doc.Controllers
         {
             return View();
         }
-        public IActionResult Admin_dashboard()
+        public IActionResult Admin_dashboard(string search)
         {
             ViewBag.CaseReason = _adminDashboard.GetReasons();
             ViewBag.Region = _adminDashboard.GetRegions();
-            
             var count = _adminDashboard.CountRequestData();
             return View(count);
         }
         
-        public IActionResult GetPartialView(string btnName, int statusId)
+        public IActionResult GetPartialView(string btnName, int statusId, string searchValue)
         {
             string partialView = "_" + btnName + "Table";
-            var request = _adminDashboard.GetRequestData(statusId);
+            var request = _adminDashboard.GetRequestData(statusId, searchValue);
             return PartialView(partialView, request);
         }
        
@@ -58,32 +57,21 @@ namespace Hallo_Doc.Controllers
             var physicians = _adminDashboard.GetPhysician(RegionId);
             return Json(physicians);
         }
-        public IActionResult CancelCase()
-        {
-            
-            return PartialView("_CancelCase");
-        }
+      
         [HttpPost]
         public IActionResult CancelCase(int requestId, int CaseTagId, string Notes)
         {
             _adminDashboard.CancleCaseInfo(requestId, CaseTagId, Notes);
             return RedirectToAction("Admin_dashboard");
         }
-        public IActionResult AssignCase()
-        {
-            
-            return PartialView("_AssignCase");
-        }
+      
         [HttpPost]
         public IActionResult AssignCase(int RequestId, int PhysicianId, string Notes)
         {
             _adminDashboard.AssignCaseReq(RequestId, PhysicianId, Notes);
             return RedirectToAction("Admin_dashboard");
         }
-        public IActionResult BlockCase()
-        {
-            return PartialView("_BlockCase");
-        }
+        
         [HttpPost]
         public IActionResult BlockCase(int RequestId, string Notes)
         {
@@ -118,26 +106,57 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.DeleteAllFiles(RequestId);
             return RedirectToAction("View_upload");
         }
-        public IActionResult TransferCase()
-        {
-
-            return PartialView("_TransferCase");
-        }
+       
         [HttpPost]
         public IActionResult TransferCase(int RequestId, int PhysicianId, string Notes)
         {
             _adminDashboard.TransferCaseReq(RequestId, PhysicianId, Notes);
             return RedirectToAction("Admin_dashboard");
         }
-        public IActionResult ClearCase()
-        {
-            return PartialView("_ClearCase");
-        }
+  
         [HttpPost]
         public IActionResult ClearCase(int RequestId)
         {
             _adminDashboard.ClearCaseReq(RequestId);
             return RedirectToAction("Admin_dashboard");
+        }
+        public IActionResult Agreement()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult SendAgreement(string email)
+        {
+            
+            _adminDashboard.SendAgreementEmail(email);
+            return RedirectToAction("Admin_dashboard");
+        }
+        public IActionResult Order(int RequestId)
+        {
+            ViewBag.Profession = _adminDashboard.GetProfession();
+            var order = _adminDashboard.GetOrderView(RequestId);
+            return View(order);
+        }
+        public IActionResult BusinessList(int businessId)
+        {
+            var business = _adminDashboard.GetBusiness(businessId);
+            return Json(business);
+        }
+        public IActionResult BusinessDetails(int VendorId)
+        {
+            var detail = _adminDashboard.GetBusinessDetails(VendorId);
+            return Json(detail);
+        }
+        [HttpPost]
+        public IActionResult Order(Order order)
+        {
+            _adminDashboard.SendOrder(order);
+            return RedirectToAction("Admin_dashboard");
+        }
+        public IActionResult Close_case(int RequestId)
+        {
+            var model = _adminDashboard.GetClearCaseView(RequestId);
+            return View(model);
         }
     }
 }

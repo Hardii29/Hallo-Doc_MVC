@@ -4,45 +4,9 @@
 }
 
 <div class="card" id="pending-table">
-    <div class="card-head">
-        <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
-            <form>
-                <div style="display: inline-block;">
-                    <input type="text" class="form-control" placeholder="Search Patients" name="search">
-                </div>
-                <div style="display: inline-block;">
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>All Regions</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-            </form>
-            <ul>
-                <li class="d-inline">
-                <button type="button" class="btn btn-outline-dark">All</button>
-                </li>
-                <li class="d-inline">
-                    <div class="circle" style="background-color: green;"></div> Patient
-                </li>
-                <li class="d-inline">
-                    <div class="circle" style="background-color: orange;"></div> Family/Friend
-                </li>
-                <li class="d-inline">
-                    <div class="circle" style="background-color: firebrick;"></div> Business
-                </li>
-                <li class="d-inline">
-                    <div class="circle" style="background-color: #0dcaf0"></div> Concierge
-                </li>
-                <li class="d-inline">
-                    <div class="circle" style="background-color: rgba(139, 5, 216, 0.822);"></div> VIP
-                </li>
-            </ul>
-        </div>
-    </div>
+    
     <div class="card-body">
-        <table class="table">
+        <table class="table desktop-view">
             <thead class="table-light">
                 <tr class="row">
                     <th class="col-2">Name</th>
@@ -98,7 +62,7 @@
                                     <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
                                     <button type="button" class="dropdown-item transfer-case" data-bs-toggle="modal" data-bs-target="#transferCaseModel" onclick="Transfercaseid('@request.RequestId')"><i class="fa fa-right-left" aria-hidden="true"></i> Transfer</button>
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#clearCaseModel" onclick="Clearcaseid('@request.RequestId')"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Clear Case</button>
-                                    <a class="dropdown-item"><i class="fa fa-file-text-o" aria-hidden="true"></i> Send Agreement</a>
+                                    <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#sendAgreementModel" onclick="SendAgreementid('@request.RequestId','@request.PatientMobile', '@request.Email')"><i class="fa fa-file-text-o" aria-hidden="true"></i> Send Agreement</button>
                                 </div>
                             </div>
                         </td>
@@ -106,6 +70,99 @@
                 }
             </tbody>
         </table>
+    </div>
+    <div class="accordion accordion-flush mobile-view lo-btn">
+        @foreach (var request in Model)
+        {
+        <div class="accordion-item">
+            <button style="padding-right: 0;" class="accordion-button collapsed bg-info-subtle"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive"
+                    aria-expanded="false" aria-controls="flush-collapseFive">
+
+                <div style="font-size: small;" class="row w-100">
+
+                    <div class="col-4 p-0">
+                            <p>@request.PatientName</p>
+                    </div>
+                    <div class="col-4"></div>
+                    <div style="text-align: right;" class="col-4">
+                            <div class="circle" style="background-color: green;"></div> Patient
+                    </div>
+                    <div class="col-6 p-0">
+                            <p>@request.Address</p>
+                    </div>
+                    <div style="text-align: right;" class="col-6">
+                        <span style="font-size: small;" type="button"
+                              class="btn btn-outline-info rounded-4">
+                            Map
+                            Location
+                        </span>
+                    </div>
+             </div>
+
+            </button>
+
+            <div id="flush-collapseFive" class="accordion-collapse collapse bg-info-subtle"
+                 aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+
+                    <div style="text-align: right;" class="col-11">
+                        <a style="font-size: small;" asp-action="View_case" asp-controller="Admin" asp-route-requestId="@request.RequestId" class="btn btn-outline-dark rounded-4">View Case</a>
+                    </div>
+
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-12 px-0 pb-1">
+                            <i class="fa-solid fa-calendar-days border border-info rounded-circle p-1"></i>
+                                Date of Birth: @request.DOB
+                        </div>
+                        <div class="col-12 px-0 pb-1">
+                            <i class="fa-solid fa-envelope border border-info rounded-circle p-1"></i>
+                            Email: @request.Email
+                        </div>
+                        <div class="col-12 px-0 pb-1">
+                            <i class="fa-solid fa-phone border border-info rounded-circle p-1"></i>
+                                Patient: @request.PatientMobile
+                        </div>
+                            <div class="col-12 px-0 pb-1">
+                                <i class= "fa-regular fa-file-lines border border-info rounded-circle p-1"></i>
+                                Transfer Notes: @request.Notes
+                            </div>
+                            <div class="col-12 px-0 pb-1">
+                                <i class="fa-solid fa-calendar-days border border-info rounded-circle p-1"></i>
+                                Date of Service: -
+                            </div>
+                            <div class="col-12 px-0 pb-1">
+                                <i class="fa-solid fa-user-doctor border border-info rounded-circle p-1"></i>
+                                Physician: @request.ProviderName
+                            </div>
+                        <div class="col-12 px-0 pb-1">
+                            <i class="fa-regular fa-user border border-info rounded-circle p-1"></i>
+                                Requestor: @request.Requestor
+                        </div>
+                            <div class="col-6 px-0 my-1">
+                                <button style="font-size: x-small;" data-bs-toggle="modal" data-bs-target="#sendAgreementModel" onclick="SendAgreementid('@request.RequestId','@request.PatientMobile', '@request.Email')" type="button" class="btn btn-warning text-white ml-1 py-1 border rounded-4 w-75">Send Agreement</button>
+                            </div>
+                            <div class="col-6 px-0 my-1">
+                                <a style="font-size: x-small;" asp-action="View_notes" asp-controller="Admin" class="btn btn-success ml-1 py-1 border rounded-4 w-75">View Notes</a>
+                            </div>
+                            <div class="col-6 px-0 pb-1 my-1">
+                                <button style="font-size: x-small;" data-bs-toggle="modal" data-bs-target="#transferCaseModel" onclick="Transfercaseid('@request.RequestId')" type="button" class="btn btn-info text-white ml-1 py-1 border rounded-4 w-75">Transfer</button>
+                            </div>
+                            <div class="col-6 px-0 pb-1 my-1">
+                                <a style="font-size: x-small;" asp-action="View_upload" asp-controller="Admin" asp-route-requestId="@request.RequestId" class="btn btn-success ml-1 py-1 border rounded-4 w-75">View Uploads</a>
+                            </div>
+                            <div class="col-6 px-0 my-1">
+                                <button style="font-size: x-small;" data-bs-toggle="modal" data-bs-target="#clearCaseModel" onclick="Clearcaseid('@request.RequestId')" type="button" class="btn btn-warning text-white ml-1 py-1 border rounded-4 w-75">Clear Case</button>
+                            </div>
+                        <div class="col-6 px-0 my-1">
+                            <a style="font-size: x-small;" href="" type="button" class="btn btn-success ml-1 py-1 border rounded-4 w-75">Email</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        }
     </div>
 </div>
 <script>
@@ -118,5 +175,19 @@
         var RequestId = id;
         console.log(RequestId);
         document.getElementById('RequestID_ModelClearCase').value = RequestId;
+    }
+    function SendAgreementid(id, patientmobile, email) {
+        var RequestId = id;
+        var PatientMobile = patientmobile;
+        var Email = email;
+        var Email_model = email;
+        console.log(RequestId);
+        console.log(PatientMobile);
+        console.log(Email);
+        console.log(Email_model);
+        document.getElementById('RequestID_ModelSendAgreement').value = RequestId;
+        document.getElementById('Email_ModelSendAgreement').value = Email_model;
+        document.getElementById('phone').value = PatientMobile;
+        document.getElementById('email').value = Email;
     }
 </script>

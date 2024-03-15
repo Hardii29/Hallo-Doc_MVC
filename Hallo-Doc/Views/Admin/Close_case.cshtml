@@ -1,0 +1,133 @@
+﻿@model Hallo_Doc.Entity.ViewModel.ViewCase;
+@{
+    ViewData["Title"] = "Close Case";
+    Layout = "~/Views/Shared/_AdminActionLayout.cshtml";
+}
+
+<body class="bg-light">
+    
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Close Case</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <form asp-controller="Admin" asp-action="View_case" asp-route-requestId="@Model?.RequestId" method="post">
+
+                <div class="row g-2">
+                    <div class="flex-row d-flex justify-content-between">
+                        <div>
+                    <p class="mb-0" style="font-weight:normal;">Patient name</p>
+                    <h4 class="text-info">@Model.FirstName @Model.LastName <span style="font-weight:normal; color:black; font-size:smaller;">(MD092723TETE0002)</span></h4>
+                        </div>
+                    <a class="btn btn-outline-info" style="font-size:larger;"> Create Invoice Through Quickbooks </a>
+                </div>
+                   <h4>Documents</h4>
+                      
+                    <div class="table-responsive mx-0 px-0">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <td scope="col" class="col-6">Files</td>
+                                    <td scope="col" class="col">Upload Date</td>
+                                    <td scope="col" class="col">Actions</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                       <td scope="row">
+                                            @Model?.FileName
+                                        </td>
+                                        <td>@Model?.CreatedDate</td>
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="File Actions">
+                                                <a class="btn btn-outline-info ml-auto dwnld-btn-mobile" href="@Url.Action("Download_file", "Admin", new {fileId = Model?.RequestWiseFileID})">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-down" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M7.646 10.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 9.293V5.5a.5.5 0 0 0-1 0v3.793L6.354 8.146a.5.5 0 1 0-.708.708z" />
+                                                        <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383m.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+                                                    </svg>
+                                                </a>
+                                             
+                                            </div>
+                                        </td>
+                                        
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row g-2">
+                        <h4 class="mt-4">Patient Information</h4>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="FirstName" id="FirstName" class="form-control" placeholder="First name" value="@Model?.FirstName" aria-label="First name" disabled>
+                            <label for="FirstName">FirstName</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="LastName" id="Lastname" class="form-control" placeholder="Last name" value="@Model?.LastName" aria-label="Last name" disabled>
+                            <label for="Lastname">Lastname</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="date" name="DOB" id="Date Of Birth" class="form-control" value="@Model?.DOB" placeholder="Date of Birth" disabled>
+                            <label for="Date Of Birth">Date Of Birth</label>
+                        </div>
+                        <div class="form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67" disabled>
+                            <label for="mobile">Mobile</label>
+                        </div>
+
+                        <div class="form-group form-floating col-lg-2 col-md-4 col-sm-6">
+                            <a class="btn btn-outline-info btn-lg">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12">
+                        <input type="email" name="Email" id="email" asp-for="Email" class="form-control" value="@Model?.Email" placeholder="Email" disabled>
+                        <label for="Email">Email</label>
+                        <span id="email-msg"></span>
+                    </div>
+                    
+                </div>
+
+                <div class="g-2 mt-4 first" id="editButton" style="text-align: right;">
+                   
+                    <a class="btn btn-info text-white btn-lg" onclick="editMode()">Edit</a>
+                    <button type="button" class="btn btn-outline-info btn-lg">Close Case</button>
+                </div>
+                <div class="g-2 mt-4 first" id="submitButton" style="text-align: right; display:none;">
+
+                    <button type="submit" class="btn btn-info text-white btn-lg">save</button>
+                    <button type="button" class="btn btn-outline-info btn-lg">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+            function formatDate(dateString) {
+                const parts = dateString.split('-');
+                const formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+                return formattedDate;
+            }
+        const dobElement = document.getElementById('Date Of Birth');
+        dobElement.value = formatDate('@Model?.DOB');
+
+        function darkMode() {
+            var element = document.body;
+            element.classList.toggle("darkMode");
+        }
+        function editMode() {
+            var email = document.getElementById('email');
+            var mobile = document.getElementById('mobile');
+            email.disabled = !email.disabled;
+            mobile.disabled = !mobile.disabled;
+            var submitButton = document.getElementById('submitButton');
+            var editBtn = document.getElementById('editButton');
+            submitButton.style.display = (email.disabled || mobile.disabled) ? 'none' : 'block';
+            editBtn.style.display = (email.disabled || mobile.disabled) ? 'block' : 'none';
+        }
+    </script>
+</body>
