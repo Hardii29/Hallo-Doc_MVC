@@ -102,7 +102,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             {
                 if (_role == "1")
                 {
-                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Admin", action = "Login" }));
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "AdminLogin", action = "Login" }));
                 }
                 else if (_role == "3")
                 {
@@ -118,7 +118,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             {
                 if (_role == "1")
                 {
-                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Admin", action = "Login" }));
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "AdminLogin", action = "Login" }));
                 }
                 else if (_role == "3")
                 {
@@ -133,7 +133,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             {
                 if (_role == "1")
                 {
-                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Admin", action = "Login" }));
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "AdminLogin", action = "Login" }));
                 }
                 else if (_role == "3")
                 {

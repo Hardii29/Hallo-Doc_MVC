@@ -16,6 +16,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Email { get; set; }
         public string? Mobile { get; set; }
         public string? Region { get; set; }
+        public string? Address { get; set; }
         public int RequestWiseFileID { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? FileName { get; set; }

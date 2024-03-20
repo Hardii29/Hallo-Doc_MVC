@@ -29,31 +29,28 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
         public async Task<AspnetUser?> Check(Login login, HttpContext httpContext)
         {
-          
             var User = await _context.AspnetUsers.Include(x => x.AspNetUserRoles)
-                .FirstOrDefaultAsync(m => m.Email == login.Email); 
-            if (User == null)
-            {
-                return null;
-            }
+                .FirstOrDefaultAsync(m => m.Email == login.Email);
             bool pass = BCrypt.Net.BCrypt.Verify(login.Password, User.Passwordhash);
-            if (!pass)
+            if (User == null && !pass )
             {
                 return null;
             }
+
+
             var userDetails = await _context.Users.FirstOrDefaultAsync(m => m.Aspnetuserid == User.Id);
             if (userDetails == null)
             {
                 return null;
             }
-        //    var aspNetUser = new AspnetUser {
-        //        Id = User.Id,
-        //    Username = User.Username,
-        //    Email = User.Email,
-        //    Passwordhash = User.Passwordhash,
-        //    //AspNetUserRoles = User.AspNetUserRoles,
-        //};
-        httpContext.Session.SetInt32("UserId", userDetails.Userid);
+            //    var aspNetUser = new AspnetUser {
+            //        Id = User.Id,
+            //    Username = User.Username,
+            //    Email = User.Email,
+            //    Passwordhash = User.Passwordhash,
+            //    //AspNetUserRoles = User.AspNetUserRoles,
+            //};
+            httpContext.Session.SetInt32("UserId", userDetails.Userid);
             httpContext.Session.SetString("UserName", $"{userDetails.Firstname} {userDetails.Lastname}");
             return User;
 

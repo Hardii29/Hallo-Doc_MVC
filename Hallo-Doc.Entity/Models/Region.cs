@@ -20,4 +20,7 @@ public partial class Region
 
     [InverseProperty("Region")]
     public virtual ICollection<Physician> Physicians { get; set; } = new List<Physician>();
+
+    [InverseProperty("Region")]
+    public virtual ICollection<Requestclient> Requestclients { get; set; } = new List<Requestclient>();
 }

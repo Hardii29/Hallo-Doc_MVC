@@ -6,9 +6,11 @@ using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Hallo_Doc.Repository.Repository.Implementation;
 
 namespace Hallo_Doc.Controllers
 {
+    [CustomAuthorize("1")]
     public class AdminController : Controller
     {
         private readonly IAdminDashboard _adminDashboard;
@@ -18,11 +20,8 @@ namespace Hallo_Doc.Controllers
             _logger = logger;
             _adminDashboard = adminDashboard;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult Admin_dashboard(string search)
+        
+        public IActionResult Admin_dashboard()
         {
             ViewBag.CaseReason = _adminDashboard.GetReasons();
             ViewBag.Region = _adminDashboard.GetRegions();
@@ -43,10 +42,15 @@ namespace Hallo_Doc.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult View_case(int requestId, [Bind("FirstName", "LastName", "Mobile", "Email")]ViewCase viewCase)
+        public IActionResult View_case(int requestId, [Bind("FirstName", "LastName", "Mobile", "Email", "Address")]ViewCase viewCase)
         {
             _adminDashboard.UpdateViewCase(requestId, viewCase);
             return RedirectToAction("View_case", new {requestId = requestId});
+        }
+        public IActionResult CancelViewCase(int RequestId)
+        {
+            _adminDashboard.CancelViewCase(RequestId);
+            return RedirectToAction("Admin_dashboard");
         }
         public IActionResult View_notes()
         {
@@ -157,6 +161,26 @@ namespace Hallo_Doc.Controllers
         {
             var model = _adminDashboard.GetClearCaseView(RequestId);
             return View(model);
+        }
+        [HttpPost]
+        public IActionResult Close_case(int RequestId, [Bind("Mobile", "Email")] ViewCase viewCase)
+        {
+            _adminDashboard.UpdateCloseCase(RequestId, viewCase);
+            return RedirectToAction("Close_case", new { requestId = RequestId });
+        }
+        public IActionResult CloseCaseInfo(int RequestId)
+        {
+            _adminDashboard.CloseCaseReq(RequestId);
+            return RedirectToAction("Admin_dashboard");
+        }
+        public IActionResult Encounter(int requestId)
+        {
+            var model = _adminDashboard.GetView(requestId);
+            return View(model);
+        }
+        public IActionResult AdminProfile() 
+        { 
+            return View(); 
         }
     }
 }

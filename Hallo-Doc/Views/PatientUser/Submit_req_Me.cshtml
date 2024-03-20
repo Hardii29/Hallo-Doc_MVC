@@ -17,7 +17,7 @@
         <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
             <h3 style="color: black;">Submit Information</h3>
 
-            <a class="btn btn-outline-info out back" asp-action="Patient_dashboard" asp-controller="Patient">
+            <a class="btn btn-outline-info out back" asp-action="Patient_dashboard" asp-controller="PatientUser">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
@@ -28,20 +28,20 @@
                 <div class="row g-2 first">
 
                     <p class="mt-4">Patient Information</p>
-                    <div class="form-group form-floating mb-3">
-                        <textarea name="SymptomsDetails" class="form-control" id="symptoms" placeholder="Enter brief details of your symptoms (Optional)" rows="3"></textarea>
+                    <div class="form-group form-floating mb-2">
+                        <textarea name="SymptomsDetails" class="form-control" id="symptoms" placeholder="Enter brief details of your symptoms (Optional)" style="height:100px"></textarea>
                         <label for="symptoms">Enter brief details of your symptoms (Optional)</label>
                     </div>
                     <div class="row g-2">
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="FirstName" name="Firstname" class="form-control" id="First name" placeholder="First name" aria-label="First name">
                             <label for="First name">First name</label>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="LastName" name="Lastname" class="form-control" id="Last name" placeholder="Last name" aria-label="Last name">
                             <label for="Last name">Last name</label>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="DOB" name="Createddate" class="form-control" placeholder="Date of Birth" id="Date of Birth" onfocus="(this.type='date')">
                             <label for="Date of Birth">Date of Birth</label>
                         </div>
@@ -51,12 +51,12 @@
                 <div class="row g-2 first">
                     <p class="mt-4">Patient Contact Information</p>
                     <div class="row g-2">
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="email" asp-for="Email" name="Email" id="Email" class="form-control" placeholder="Email" required>
                             <label for="Email">Email</label>
                             
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="tel" asp-for="Mobile" name="Mobile" class="form-control" id="mobile" placeholder="123-45-67">
                             <label for="mobile">Mobile</label>
                         </div>
@@ -66,27 +66,27 @@
                 <div class="row g-2 first">
                     <p class="mt-4">Patient Location</p>
                     <div class="row g-2">
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="Street" name="Street" class="form-control" id="Street" placeholder="Street">
                             <label for="Street">Street</label>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="City" name="City" class="form-control" id="City" placeholder="City">
                             <label for="City">City</label>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="State" name="State" class="form-control" id="State" placeholder="State">
                             <label for="State">State</label>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="number" asp-for="ZipCode" name="Zipcode" class="form-control" id="Zip" placeholder="ZipCode">
                             <label for="Zip">ZipCode</label>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" name="Optional" class="form-control" id="Room" placeholder="Room#/Suite (Optional)">
                             <label for="Room">Room#/Suite (Optional)</label>
                         </div>
-                        <div class="form-group form-floating col-md-6 col-sm-12">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <a class="btn btn-outline-info btn-lg out back">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
                                     <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />

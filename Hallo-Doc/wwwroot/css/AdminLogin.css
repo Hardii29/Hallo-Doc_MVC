@@ -1,23 +1,6 @@
-﻿.container {
-    position: relative;
-    height: 90vh;
+﻿.container{
+    height: 60vh;
 }
-
-    .container::before {
-        content: '';
-        background-image: url("./../images/plateform_login_img.jpg");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0.1;
-        z-index: -1;
-    }
-
 .content {
     text-align: center;
     position: relative;
@@ -28,10 +11,6 @@
     position: absolute;
     right: 0;
     margin-right: 20px;
-}
-
-.back {
-    left: 0;
 }
 
 .fontuser {
@@ -55,13 +34,14 @@
         top: 1rem;
         color: gray;
     }
+
 .darkMode {
     background-color: black;
     color: white;
 }
 
 input[type=email], input[type=password] {
-    width: 100%;
+   
     margin: 5px 0 22px 0;
     background: transparent;
 }
@@ -69,6 +49,7 @@ input[type=email], input[type=password] {
     input[type=email]:focus, input[type=password]:focus {
         outline: none;
     }
+
 .form-control:focus {
     border-color: rgb(81, 188, 230);
     box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075), 0 0 0px rgba(67, 215, 252, 0.6);
@@ -76,9 +57,6 @@ input[type=email], input[type=password] {
 
 .form-floating > .form-control:focus ~ label {
     color: rgb(19, 183, 224);
-}
-.logo {
-    margin-bottom: 200px;
 }
 
 .btn:hover {
@@ -119,9 +97,11 @@ footer {
     .logo {
         display: none;
     }
-    input{
+
+    input {
         width: 360px !important;
     }
+
     .login-form {
         margin-top: 200px;
     }

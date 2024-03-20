@@ -45,5 +45,13 @@ namespace Hallo_Doc.Controllers
             _user.EditProfile(userId, patientProfile);
             return RedirectToAction("Patient_profile", new {userId=userId});
         }
+        public IActionResult Submit_req_Me()
+        {
+            return View();
+        }
+        public IActionResult Submit_req_Someone()
+        {
+            return View();
+        }
     }
 }

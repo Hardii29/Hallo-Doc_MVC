@@ -103,6 +103,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             LastName = rc != null ? rc.LastName : "",
                             DOB = rc != null && rc.IntYear != null && rc.StrMonth != null && rc.IntDate != null ?
                             new DateOnly((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate) : DateOnly.MinValue,
+                            Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                             Mobile = rc != null ? rc.PhoneNumber : "",
                             Email = rc != null ? rc.Email : "",
                             Region = rg != null ? rg.Name : ""
@@ -119,9 +120,28 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 client.LastName = viewCase.LastName;
                 client.Email = viewCase.Email;
                 client.PhoneNumber = viewCase.Mobile;
+                client.Address = viewCase.Address;
                 //client.RequestId = viewCase.RequestId;
                 _context.SaveChanges();
             }
+        }
+        public bool CancelViewCase(int RequestId)
+        {
+            var requestData = _context.Requests.FirstOrDefault(r => r.RequestId == RequestId);
+            if (requestData != null)
+            {
+                requestData.Status = 3;
+                _context.Requests.Update(requestData);
+                _context.SaveChanges();
+                RequestStatusLog rsl = new RequestStatusLog();
+                rsl.RequestId = (int)RequestId;
+                rsl.CreatedDate = DateTime.Now;
+                rsl.Status = 3;
+                _context.RequestStatusLogs.Add(rsl);
+                _context.SaveChanges();
+                return true;
+            }
+            else { return false; }
         }
         public List<CaseTag> GetReasons()
         {
@@ -450,6 +470,36 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             FileName = rf != null ? rf.FileName : ""
                         }).FirstOrDefault();
             return data;
+        }
+        public void UpdateCloseCase(int requestId, ViewCase viewCase)
+        {
+            viewCase.RequestId = requestId;
+            var client = _context.Requestclients.FirstOrDefault(rc => rc.RequestId == requestId);
+            if (client != null)
+            {
+                client.Email = viewCase.Email;
+                client.PhoneNumber = viewCase.Mobile;
+                _context.SaveChanges();
+            }
+        }
+        public bool CloseCaseReq(int RequestId)
+        {
+            var requestData = _context.Requests.FirstOrDefault(r => r.RequestId == RequestId);
+            if (requestData != null)
+            {
+                requestData.Status = 9;
+                _context.Requests.Update(requestData);
+                _context.SaveChanges();
+                RequestStatusLog rsl = new RequestStatusLog();
+                rsl.RequestId = (int)RequestId;
+                rsl.Notes = "Admin has closed the request";
+                rsl.CreatedDate = DateTime.Now;
+                rsl.Status = 9;
+                _context.RequestStatusLogs.Add(rsl);
+                _context.SaveChanges();
+                return true;
+            }
+            else { return false; }
         }
     }
 }

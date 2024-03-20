@@ -16,6 +16,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<AdminDash> GetRequestData(int statusid, string searchValue);
         ViewCase GetView(int requestId);
         void UpdateViewCase(int requestId, ViewCase viewCase);
+        bool CancelViewCase(int RequestId);
         List<CaseTag> GetReasons();
         List<Region> GetRegions();
         List<Physician> GetPhysician(int regionId);
@@ -36,7 +37,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         Order GetOrderView(int requestId);
         void SendOrder(Order order);
         ViewCase GetClearCaseView(int requestId);
-
+        void UpdateCloseCase(int requestId, ViewCase viewCase);
+        bool CloseCaseReq(int RequestId);
 
     }
 }

@@ -59,3 +59,16 @@ footer{
     padding: 20px;
     margin-top: 60px;
 }
+.dnone {
+    display: none;
+}
+@media screen and (max-width: 767px) {
+  
+    .dblock {
+        display: none;
+    }
+
+    .dnone {
+        display: inline;
+    }
+}

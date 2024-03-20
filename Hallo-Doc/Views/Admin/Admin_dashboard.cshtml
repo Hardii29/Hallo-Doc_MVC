@@ -3,6 +3,7 @@
     ViewData["Title"] = "Admin Dasboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<html>
 <body>
     <div>
         @Html.Partial("_CancelCase")
@@ -14,29 +15,29 @@
     </div>
     <div class="container-fluid mt-3" style="width: 100%;">
        
-            <div class="row">
+            <div class="row justify-content-between">
 
-            <button class="col-lg col-3 btn btn-p m-2 py-3 rounded text-start" data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
+            <button class="col-lg col-sm-3 col-3 btn btn-p m-2 py-3 rounded text-start" data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
                 <i class="fa fa-plus-circle me-2" aria-hidden="true"></i><b>New</b>
                 <p class="h4">@Model.NewRequest</p>
             </button>
-            <button class="col-lg col-3 btn m-2 py-3 rounded text-start" data-btn="Pending" data-id="2" style="background-color:#ddfaff; border-color:#0dcaf0; color:#0dcaf0;">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Pending" data-id="2" style="background-color:#ddfaff; border-color:#0dcaf0; color:#0dcaf0;">
                 <i class="fa fa-user me-2" aria-hidden="true"></i><b>Pending</b>
                 <p class="h4">@Model.PendingRequest</p>
             </button>
-            <button class="col-lg col-3 btn m-2 py-3 rounded text-start" data-btn="Active" data-id="3" style="background-color:#ccf7d6; border-color:#28a745; color:#28a745">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Active" data-id="3" style="background-color:#ccf7d6; border-color:#28a745; color:#28a745">
                 <i class="fa fa-check-square-o me-2" aria-hidden="true"></i><b>Active</b>
                 <p class="h4">@Model.ActiveRequest</p>
             </button>
-            <button class="col-lg col-3 btn m-2 py-3 rounded text-start" data-btn="Conclude" data-id="4" style="background-color:rgb(245, 210, 248); border-color:rgb(201, 56, 214); color:rgb(201, 56, 214);">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Conclude" data-id="4" style="background-color:rgb(245, 210, 248); border-color:rgb(201, 56, 214); color:rgb(201, 56, 214);">
                 <i class="fa fa-clock-o me-2" aria-hidden="true"></i><b>Conclude</b>
                 <p class="h4">@Model.ConcludeRequest</p>
             </button>
-            <button class="col-lg col-3 btn m-2 py-3 rounded text-start" data-btn="ToClose" data-id="5" style="background-color:rgb(229, 229, 252); border-color:rgba(14, 14, 252, 0.822); color:rgba(14, 14, 252, 0.822);">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="ToClose" data-id="5" style="background-color:rgb(229, 229, 252); border-color:rgba(14, 14, 252, 0.822); color:rgba(14, 14, 252, 0.822);">
                 <i class="fa fa-user-times me-2" aria-hidden="true"></i><b>ToClose</b>
                 <p class="h4">@Model.ToCloseRequest</p>
             </button>
-            <button class="col-lg col-3 btn m-2 py-3 rounded text-start" data-btn="Unpaid" data-id="6" style="background-color:rgba(242, 219, 255, 0.822); border-color:rgba(139, 5, 216, 0.822); color:rgba(139, 5, 216, 0.822);">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Unpaid" data-id="6" style="background-color:rgba(242, 219, 255, 0.822); border-color:rgba(139, 5, 216, 0.822); color:rgba(139, 5, 216, 0.822);">
                 <i class="fa fa-money me-2" aria-hidden="true"></i><b>Unpaid</b>
                 <p class="h4">@Model.UnpaidRequest</p>
             </button>
@@ -74,11 +75,11 @@
         <div>
             <div class="search-nav">
             <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
-                <div>
-                    <div style="display: inline-block;">
+                    <div class="row g-2">
+                        <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
                         <input type="text" class="form-control" id="searchInput" placeholder="Search Patients" name="searchValue">
                     </div>
-                    <div style="display: inline-block;">
+                        <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
                     <select class="form-select" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
                             <option value="">All Regions</option>
                            
@@ -99,7 +100,7 @@
                         <div class="circle" style="background-color: firebrick;"></div> Business
                     </li>
                     <li class="d-inline">
-                        <div class="circle" style="background-color: #0dcaf0"></div> Concierge
+                            <div class="circle" style="background-color: dodgerblue;"></div> Concierge
                     </li>
                     <li class="d-inline">
                         <div class="circle" style="background-color: rgba(139, 5, 216, 0.822);"></div> VIP
@@ -184,3 +185,4 @@
     </script>
 
 </body>
+</html>

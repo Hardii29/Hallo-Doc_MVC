@@ -1,6 +1,4 @@
-body{
-    font-family: sans-serif;
-}
+
 .container{
     position: relative;
     display: block;
@@ -28,6 +26,9 @@ body{
 .ptxt {
     font-size: smaller;
 }
+.nav-link:active {
+    color: #17a2b8;
+}
 
 .navbar-toggler {
     color: #17a2b8;
@@ -42,7 +43,6 @@ body{
 .dnone {
     display: none;
 }
-
 
 h3{
     font-weight: bolder;
@@ -107,5 +107,14 @@ button[data-btn="Unpaid"]:focus {
     }
     .search-nav {
         display:block;
+    }
+    body{
+        width: 100%;
+    }
+    .dblock{
+        display:none;
+    }
+    .dnone {
+        display: inline;
     }
 }

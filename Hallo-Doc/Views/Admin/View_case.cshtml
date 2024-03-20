@@ -57,7 +57,8 @@
                             <span id="email-msg"></span>
                         </div>
                     <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
-                        <a class="btn btn-outline-info btn-lg" id="editbutton" onclick="editMode()">Edit</a>
+                        <button type="button" class="btn btn-outline-info btn-lg" id="editbutton" onclick="editMode()">Edit</button>
+                        <button type="submit" id="submitButton" class="btn btn-info text-white btn-lg" style="display: none;">save</button>
                     </div>
                     </div>
              
@@ -70,7 +71,7 @@
                             <label for="Region">Region</label>
                         </div>
                         <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
-                            <input type="text" name="Business" id="Business" class="form-control" value="123, baltimare Maryland" placeholder="Business" disabled>
+                            <input type="text" name="Address" asp-for="Address" id="Business" class="form-control" value="@Model?.Address" placeholder="Business" disabled>
                             <label for="Business">Business Name/ Address</label>
                         </div>
                         <div class="form-group form-floating col-lg-2 col-md-4 col-sm-6">
@@ -90,20 +91,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="g-2 mt-4 first" style="text-align: right;">
+                <div class="g-2 mt-4 first"  style="text-align: right;">
                     <a type="button" id="viewNote" class="btn btn-info text-white" asp-action="View_notes" asp-controller="Admin">View Notes</a>
-                    <button type="button" class="btn btn-danger text-white" onclick="window.location.href='Admin_Dashboard'">Cancel</button>
-                    <button type ="submit" id="submitButton" class="btn btn-info text-white" style="display: none;">save</button>
+                    <a class="btn btn-danger text-white" asp-controller="Admin" asp-action="CancelViewCase" asp-route-requestId="@Model?.RequestId">Cancel</a>
+                    
                 </div>
             </form>
         </div>
     </div>
     <script>
-        const phoneInputField = document.querySelector("#mobile");
-        const phoneInput = window.intlTelInput(phoneInputField, {
-            utilsScript:
-                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-        });
+        function formatDate(dateString) {
+            const parts = dateString.split('-');
+            const formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+            return formattedDate;
+        }
+        const dobElement = document.getElementById('Date Of Birth');
+        dobElement.value = formatDate('@Model?.DOB');
+
         function darkMode() {
             var element = document.body;
             element.classList.toggle("darkMode");
@@ -114,8 +118,9 @@
                 field.disabled = !field.disabled;
             });
             var submitButton = document.getElementById('submitButton');
-            submitButton.style.display = submitButton.style.display === 'none' ? 'block' : 'none';
-         
+            var editButton = document.getElementById('editbutton');
+            submitButton.style.display = submitButton.style.display === 'none' ? 'inline' : 'none';
+            editButton.style.display = editButton.style.display === 'inline' ? 'none' : 'inline';
         }
     </script>
 </body>

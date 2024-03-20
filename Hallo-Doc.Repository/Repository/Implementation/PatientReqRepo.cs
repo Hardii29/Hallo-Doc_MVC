@@ -43,6 +43,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
                 var Aspnetuser = new AspnetUser();
                 var User = new User();
+                var Admin = new Admin();
                 var Request = new Entity.Models.Request();
                 var Requestclient = new Requestclient();
                 var RequestType = new RequestType();
@@ -56,6 +57,18 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 _context.AspnetUsers.Add(Aspnetuser);
                  _context.SaveChanges();
 
+                //Admin.AspNetUserId = Aspnetuser.Id;
+                //Admin.FirstName = patientReq.FirstName;
+                //Admin.LastName = patientReq.LastName;
+                //Admin.Email = patientReq.Email;
+                //Admin.Mobile = patientReq.Mobile;
+                //Admin.Address1 = patientReq.Street;
+                //Admin.City = patientReq.City;
+                //Admin.Zip = patientReq.ZipCode;
+                //Admin.CreatedBy = patientReq.FirstName;
+                //Admin.CreatedDate = DateTime.Now;
+                //_context.Admins.Add(Admin);
+                //_context.SaveChanges();
                 User.Aspnetuserid = Aspnetuser.Id;
                 User.Firstname = patientReq.FirstName;
                 User.Lastname = patientReq.LastName;
@@ -68,11 +81,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 User.Createdby = "123";
                 User.Createddate = DateTime.Now;
                 _context.Users.Add(User);
-                 _context.SaveChanges();
+                _context.SaveChanges();
 
                 RequestType.Name = "Patient";
                 _context.RequestTypes.Add(RequestType);
-                 _context.SaveChanges();
+                _context.SaveChanges();
 
                 Request.RequestTypeId = 2;
                 Request.UserId = User.Userid;
@@ -83,9 +96,9 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 Request.Status = 3;
                 Request.CreatedDate = DateTime.Now;
                 _context.Requests.Add(Request);
-                 _context.SaveChanges();
+                _context.SaveChanges();
 
-               
+
                 Requestclient.RequestId = Request.RequestId;
                 Requestclient.FirstName = patientReq.FirstName;
                 Requestclient.LastName = patientReq.LastName;
@@ -96,7 +109,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 Requestclient.IntDate = patientReq.DOB.Day;
                 Requestclient.PhoneNumber = patientReq.Mobile;
                 _context.Requestclients.Add(Requestclient);
-                 _context.SaveChanges();
+                _context.SaveChanges();
 
                 if (patientReq.File != null && patientReq.File.Length > 0)
                 {
@@ -112,8 +125,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                         patientReq.File.CopyTo(stream)
-    ;
+                         patientReq.File.CopyTo(stream);
                     }
 
                     var requestWiseFile = new Entity.Models.RequestWiseFile

@@ -243,6 +243,8 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasKey(e => e.RequestclientId).HasName("Requestclient_pkey");
 
+            entity.HasOne(d => d.Region).WithMany(p => p.Requestclients).HasConstraintName("Requestclient_RegionId_fkey");
+
             entity.HasOne(d => d.Request).WithMany(p => p.Requestclients)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Requestclient_RequestId_fkey");

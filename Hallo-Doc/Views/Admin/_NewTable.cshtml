@@ -2,14 +2,11 @@
 @{
     ViewData["Title"] = "_NewTable";
 }
-
-<div class="card" id="new-table">
- 
-    <div class="card-body">
-        <table class="table desktop-view">
+  <table class="table desktop-view" id="new-table">
             <thead class="table-light">
                 <tr class="row">
-                    <th class="col-2">Name</th>
+                    <th class="col">Name</th>
+                    <th class="col"> </th>
                     <th class="col">Date Of Birth</th>
                     <th class="col">Requestor</th>
                     <th class="col">Requested Date</th>
@@ -24,34 +21,51 @@
                 @foreach (var request in Model)
                 {
                     string rows = "";
+                    var mobile = "";
                     switch (request.RequestTypeId)
                     {
                         case 1:
-                            rows = "bg-danger";
+                            rows = "#dc3545";
+                            mobile = $"(Business)";
                             break;
                         case 2:
-                            rows = "bg-success";
+                            rows = "#198754";
                             break;
                         case 3:
-                            rows = "bg-warning";
+                            rows = "orange;";
+                            mobile = $"(Family/Friend)";
                             break;
                         case 4:
-                            rows = "bg-info";
+                            rows = "dodgerblue;";
+                            mobile = $"(Concierge)";
                             break;
                         default:
                             rows = "";
+                            mobile = "";
                             break;
                     }
                     <tr class="row">
-                        <td class="col-2 @rows text-white">@request.PatientName<button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
-                        <td class="col @rows text-white">@request.DOB</td>
-                        <td class="col @rows text-white">@request.Requestor</td>
-                        <td class="col @rows text-white">@request.RequestedDate</td>
-                        <td class="col @rows text-white"><button type="button" class="btn btn-outline-light"><i class="fa fa-phone" aria-hidden="true"></i>@request.PatientMobile</button>(Patient)</td>
-                        <td class="col-2 @rows text-white">@request.Address</td>
-                        <td class="col @rows text-white">@request.Notes</td>
-                        <td class="col @rows text-white"><button type="button" class="btn btn-outline-light"><i class="fa fa-user-md" aria-hidden="true"></i>Provider</button></td>
-                        <td class="col @rows text-white">
+                        <td class="col text-white" style="background-color: @rows;">@request.PatientName</td>
+                        <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
+                        <td class="col text-white" style="background-color: @rows;">@request.DOB</td>
+                        <td class="col text-white" style="background-color: @rows;">@request.Requestor</td>
+                        <td class="col text-white" style="background-color: @rows;">@request.RequestedDate</td>
+                        <td class="col text-white" style="background-color: @rows;">
+                            <button type="button" class="btn btn-outline-light">
+                            <i class="fa fa-phone" aria-hidden="true"></i> @request.PatientMobile </button><span>(Patient)</span>
+                            @if (request.RequestTypeId == 1 || request.RequestTypeId == 3 || request.RequestTypeId == 4 )
+                            {
+                                <button type="button" class="btn btn-outline-light">
+                                    <i class="fa fa-phone" aria-hidden="true"></i> @request.RequestorPhoneNumber
+                                </button>
+
+                                <span>@mobile</span>
+                            }
+                        </td>
+                        <td class="col-2 text-white" style="background-color: @rows;">@request.Address</td>
+                        <td class="col text-white" style="background-color: @rows;">@request.Notes</td>
+                        <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-user-md" aria-hidden="true"></i>Provider</button></td>
+                        <td class="col text-white" style="background-color: @rows;">
                             <div class="dropdown">
                                 <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
@@ -72,8 +86,8 @@
             </tbody>
         </table>
 
-    </div>
-    <div class="accordion accordion-flush mobile-view lo-btn">
+   
+    <div class="accordion accordion-flush mobile-view lo-btn" style="width: 100%;">
         @foreach (var request in Model)
         {
             <div class="accordion-item">
@@ -158,7 +172,7 @@
             </div>
         }
     </div>
-</div>          
+         
 
 <script>
 

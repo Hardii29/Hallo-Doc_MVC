@@ -20,6 +20,7 @@ builder.Services.AddScoped<ILogin, LoginRepo>();
 builder.Services.AddScoped<IPatientUser, PatientUserRepo>();
 builder.Services.AddScoped<IPatientReq, PatientReqRepo>();
 builder.Services.AddScoped<IJWTService, JWTService>();
+builder.Services.AddScoped<IAdminLogin, AdminLoginRepo>();
 
 var app = builder.Build();
 

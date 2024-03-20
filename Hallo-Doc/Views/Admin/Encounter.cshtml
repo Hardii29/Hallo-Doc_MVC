@@ -1,0 +1,185 @@
+﻿@model Hallo_Doc.Entity.ViewModel.ViewCase;
+@{
+    ViewData["Title"] = "Encounter";
+    Layout = "~/Views/Shared/_AdminActionLayout.cshtml";
+}
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Encounter Form</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <form method="post">
+
+                <div class="row g-2 first">
+    
+                    <h3 class="text-info" style="margin-top:2px; text-align:center;">Medical Report - Confidential</h3>
+
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="FirstName" id="FirstName" asp-for="FirstName" class="form-control" placeholder="First name" value="@Model?.FirstName" aria-label="First name">
+                            <label for="FirstName">FirstName</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="LastName" id="Lastname" asp-for="LastName" class="form-control" placeholder="Last name" value="@Model?.LastName" aria-label="Last name">
+                            <label for="Lastname">Lastname</label>
+                        </div>
+                        <div class="form-group form-floating col-sm-12 mb-2">
+                            <input type="text" name="Address" asp-for="Address" id="Business" class="form-control" value="@Model?.Address" placeholder="Business">
+                            <label for="Business">Business Name/ Address</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="date" name="DOB" id="Date Of Birth" asp-for="DOB" class="form-control" value="@Model?.DOB" placeholder="Date of Birth">
+                            <label for="Date Of Birth">Date Of Birth</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="date" name="DOB" id="Date Of Birth" asp-for="DOB" class="form-control" value="@Model?.DOB" placeholder="Date of Birth">
+                            <label for="Date Of Birth">Date</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67">
+                            <label for="mobile">Mobile</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="email" name="Email" id="Email" asp-for="Email" class="form-control" value="@Model?.Email" placeholder="Email">
+                            <label for="Email">Email</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <textarea name="SymptomsDetails" class="form-control" id="symptoms" placeholder="Patient notes" style="height: 75px"></textarea>
+                            <label for="symptoms">History of Present illness Or Injury</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <textarea name="MedicalHistory" class="form-control" id="medicalHistory" placeholder="Patient notes" style="height: 75px"></textarea>
+                            <label for="medicalHistory">Medical History</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <textarea name="Medications" class="form-control" id="medications" placeholder="Patient notes" style="height: 75px"></textarea>
+                            <label for="medications">Medications</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <textarea name="Allergies" class="form-control" id="allergies" placeholder="Patient notes" style="height: 75px"></textarea>
+                            <label for="allergies">Allergies</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Temp" id="temp" class="form-control" placeholder="Temp">
+                            <label for="temp">Temp</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="HR" id="HR" class="form-control" placeholder="HR">
+                            <label for="HR">HR</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="RR" id="RR" class="form-control" placeholder="RR">
+                            <label for="RR">RR</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="BP" id="bp" class="form-control" placeholder="BP">
+                            <label for="bp">Blood Pressure</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="O2" id="O2" class="form-control" placeholder="O2">
+                            <label for="O2">O2</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Pain" id="pain" class="form-control" placeholder="Pain">
+                            <label for="pain">Pain</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Heent" id="Heent" class="form-control" placeholder="Heent" style="height: 75px">
+                            <label for="Heent">Heent</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="CV" id="CV" class="form-control" placeholder="CV" style="height: 75px">
+                            <label for="CV">CV</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Chest" id="Chest" class="form-control" placeholder="Chest" style="height: 75px">
+                            <label for="Chest">Chest</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="ABD" id="ABD" class="form-control" placeholder="ABD" style="height: 75px">
+                            <label for="ABD">ABD</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Extr" id="Extr" class="form-control" placeholder="Extr" style="height: 75px">
+                            <label for="Extr">Extr</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Skin" id="Skin" class="form-control" placeholder="Skin" style="height: 75px">
+                            <label for="Skin">Skin</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Neuro" id="Neuro" class="form-control" placeholder="Neuro" style="height: 75px">
+                            <label for="Neuro">Neuro</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Other" id="Other" class="form-control" placeholder="Other" style="height: 75px">
+                            <label for="Other">Other</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Diagnosis" id="Diagnosis" class="form-control" placeholder="Diagnosis" style="height: 75px">
+                            <label for="Diagnosis">Diagnosis</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Treatment" id="Treatment" class="form-control" placeholder="Treatment" style="height: 75px">
+                            <label for="Treatment">Treatment Plan</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="MediDispensed" id="MediDispensed" class="form-control" placeholder="MediDispensed" style="height: 75px">
+                            <label for="MediDispensed">Medications Dispensed</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Procedures" id="Procedures" class="form-control" placeholder="Procedures" style="height: 75px">
+                            <label for="Procedures">Procedures</label>
+                        </div>
+                        <div class="form-group form-floating col-sm-12 mb-2">
+                            <textarea name="Followup" class="form-control" id="Followup" placeholder="Followup" style="height: 75px"></textarea>
+                            <label for="Followup">Followup</label>
+                        </div>
+                    
+                    </div>
+                </div>
+
+
+                <div class="g-2 mt-4 first" style="text-align: right;">
+                    <button type="submit" class="btn btn-info text-white">Save Changes</button>
+                    <button type="button" class="btn text-white" style="background-color:purple">Finalize</button>
+                    <button type="button" class="btn btn-outline-info" onclick="window.location.href='Admin_Dashboard'">Cancel</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function formatDate(dateString) {
+            const parts = dateString.split('-');
+            const formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+            return formattedDate;
+        }
+        const dobElement = document.getElementById('Date Of Birth');
+        dobElement.value = formatDate('@Model?.DOB');
+
+        function darkMode() {
+            var element = document.body;
+            element.classList.toggle("darkMode");
+        }
+        function editMode() {
+            var formFields = document.querySelectorAll('input, select');
+            formFields.forEach(function (field) {
+                field.disabled = !field.disabled;
+            });
+            var submitButton = document.getElementById('submitButton');
+            var editButton = document.getElementById('editbutton');
+            submitButton.style.display = submitButton.style.display === 'none' ? 'inline' : 'none';
+            editButton.style.display = editButton.style.display === 'inline' ? 'none' : 'inline';
+        }
+    </script>
+</body>

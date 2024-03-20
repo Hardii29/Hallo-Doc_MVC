@@ -17,7 +17,7 @@
             </a>
         </div>
         <div class="content">
-            <form asp-controller="Admin" asp-action="View_case" asp-route-requestId="@Model?.RequestId" method="post">
+            <form asp-controller="Admin" asp-action="Close_case" asp-route-requestId="@Model?.RequestId" method="post">
 
                 <div class="row g-2">
                     <div class="flex-row d-flex justify-content-between">
@@ -96,7 +96,7 @@
                 <div class="g-2 mt-4 first" id="editButton" style="text-align: right;">
                    
                     <a class="btn btn-info text-white btn-lg" onclick="editMode()">Edit</a>
-                    <button type="button" class="btn btn-outline-info btn-lg">Close Case</button>
+                    <a class="btn btn-outline-info btn-lg" asp-controller="Admin" asp-action="CloseCaseInfo" asp-route-requestId="@Model?.RequestId">Close Case</a>
                 </div>
                 <div class="g-2 mt-4 first" id="submitButton" style="text-align: right; display:none;">
 

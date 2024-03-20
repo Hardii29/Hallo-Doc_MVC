@@ -1,0 +1,169 @@
+﻿@model Hallo_Doc.Entity.ViewModel.AdminProfile;
+@{
+    ViewData["Title"] = "Admin Profile";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">My Profile</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <form asp-controller="Admin" asp-action="AdminProfile" method="post">
+
+                <div class="row">
+                    <h6 class="mt-2">Account Information</h6>
+
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="UserName" id="UserName" asp-for="UserName" class="form-control" placeholder="UserName" value="@Model?.UserName" disabled>
+                            <label for="UserName">UserName</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="Password" id="Password" asp-for="Password" class="form-control" placeholder="Password" value="@Model?.Password">
+                            <label for="Password">Password</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <select class="form-select" name="Status" id="status" disabled>
+                                <option value="1">Active</option>
+                                <option value="2">Away</option>
+                                <option value="3">Do not Distrub</option>
+                            </select>
+                            <label for="status">Status</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <select class="form-select" id="role" name="Role" disabled>
+                                <option value="1">Admin</option>
+                                <option value="2">Master Admin</option>
+                            </select>
+                            <label for="role">Role</label>
+                        </div>      
+                    </div>
+                    <div class="g-2" style="text-align: right;">
+                        <button type="button" class="btn btn-outline-info" id="editbutton" onclick="editMode()">Reset Password</button>
+                        <button type="submit" id="submitButton" class="btn btn-info text-white" style="display: none;">save</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h6 class="mt-2">Administrator Information</h6>
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="FirstName" id="FirstName" asp-for="FirstName" class="form-control" placeholder="First name" value="@Model?.FirstName" aria-label="First name" disabled>
+                            <label for="FirstName">FirstName</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="LastName" id="Lastname" asp-for="LastName" class="form-control" placeholder="Last name" value="@Model?.LastName" aria-label="Last name" disabled>
+                            <label for="Lastname">Lastname</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="email" name="Email" id="email" asp-for="Email" class="form-control" value="@Model?.Email" placeholder="Email" disabled>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="email" name="Email" id="confirmEmail" asp-for="Email" class="form-control" value="@Model?.Email" placeholder="Email" disabled>
+                            <label for="confirmEmail">Confirm Email</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67" disabled>
+                            <label for="mobile">Mobile</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" value="" id="rg1">
+                            <label class="form-check-label" for="rg1">
+                                Ahmedabad
+                            </label>
+                            </div>
+                        <div class="form-check form-check-inline">
+                                <input class="form-check-input mt-1" type="checkbox" value="" id="rg2">
+                            <label class="form-check-label" for="rg2">
+                                New Delhi
+                            </label>
+                            </div>
+                        <div class="form-check form-check-inline">
+                                <input class="form-check-input mt-1" type="checkbox" value="" id="rg3">
+                            <label class="form-check-label" for="rg3">
+                                Mumbai
+                            </label>
+                            </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" value="" id="rg4">
+                            <label class="form-check-label" for="rg4">
+                                Kolkata
+                            </label>
+                        </div>
+                        </div>
+                        <div class="g-2 mt-4 first" style="text-align: right;">
+                            <button type="button" id="editbutton" onclick="editMode()" class="btn btn-info text-white">Edit</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h6 class="mt-2">Mailing & Billing Information</h6>
+                        <div class="row g-2">
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="Address1" id="Address1" asp-for="Address1" class="form-control" placeholder="Address1" value="@Model?.Address1" disabled>
+                                <label for="Address1">Address1</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="Address2" id="Address2" asp-for="Address2" class="form-control" placeholder="Address2" value="@Model?.Address2" disabled>
+                                <label for="Address2">Address2</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="City" id="City" asp-for="City" class="form-control" value="@Model?.City" placeholder="City" disabled>
+                                <label for="City">City</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="State" id="State" asp-for="State" class="form-control" value="@Model?.State" placeholder="State" disabled>
+                                <label for="State">State</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="number" name="ZipCode" id="ZipCode" asp-for="ZipCode" class="form-control" value="@Model?.ZipCode" placeholder="ZipCode" disabled>
+                                <label for="ZipCode">ZipCode</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67" disabled>
+                                <label for="mobile">Mobile</label>
+                            </div>
+                        </div>
+                        <div class="g-2 mt-4 first" style="text-align: right;">
+                            <button type="button" id="editbutton" onclick="editMode()" class="btn btn-info text-white">Edit</button>
+                        </div>
+                    </div>
+                </div>  
+            </form>
+        </div>
+    </div>
+    <script>
+        function formatDate(dateString) {
+            const parts = dateString.split('-');
+            const formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+            return formattedDate;
+        }
+        const dobElement = document.getElementById('Date Of Birth');
+        dobElement.value = formatDate('@Model?.DOB');
+
+        function darkMode() {
+            var element = document.body;
+            element.classList.toggle("darkMode");
+        }
+        function editMode() {
+            var formFields = document.querySelectorAll('input, select');
+            formFields.forEach(function (field) {
+                field.disabled = !field.disabled;
+            });
+            var submitButton = document.getElementById('submitButton');
+            var editButton = document.getElementById('editbutton');
+            submitButton.style.display = submitButton.style.display === 'none' ? 'inline' : 'none';
+            editButton.style.display = editButton.style.display === 'inline' ? 'none' : 'inline';
+        }
+    </script>
+</body>

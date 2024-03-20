@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="w-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,26 +16,24 @@
     <link href="~/css/admin_dashboard.css" rel="stylesheet">
     <link rel="stylesheet" href="~/Hallo_Doc.styles.css" asp-append-version="true" />
 
- <style>
-        .dash-nav {
-         text-align: left;
-     }
- </style>
 </head>
-<body>
+<body >
     <header>
         
     <nav class="navbar navbar-expand-lg navbar-toggler shadow pb-3 mb-2 bg-body">
             <div class="container-fluid flex-column">
-            <ul class="navbar-nav w-100 flex-row justify-content-between">
-
+            <ul class="navbar-nav flex-row w-100 justify-content-between">
+                    <button class="navbar-toggler navbar-light nav-tog-btn px-0 mb-2 mt-5" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
                 <li class="nav-item">
                     <img class="img-fluid m-2" src="./../images/logo.png" alt="" width="150" height="70">
                 </li>
 
                 <li class="nav-item navbar-right d-flex flex-row ml-auto mt-5 h-25">
 
-                    <span class="dblock mt-2">Welcome <span class="fw-bold">Admin admin2</span></span>
+                    <span class="dblock mt-2">Welcome <span class="fw-bold">Admin</span></span>
 
                     <a href="index.html" type="button" class="btn btn-outline-info mx-2 h-25 dblock">Logout</a>
 
@@ -50,18 +48,18 @@
                 </li>
             </ul>
 
-            <hr class="border border-dark border-1 w-100 m-0">
-
-                <ul class="navbar-nav flex-row nav-underline justify-content-between">
+                <hr class="border border-dark border-1 w-100 m-0 dblock">
+                <div class="w-50 dash-nav offcanvas offcanvas-start" id="navbarSupportedContent">
+                    <ul class="navbar-nav nav-underline offcanvas-body">
 
                     <li class="nav-item mx-2 d-flex">
-                        <a href="ad-dash-new.html" class="nav-link text-info active">Dashboard</a>
+                        <a class="nav-link text-info active">Dashboard</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a href="provider-location.html" class="nav-link">Provider Location</a>
+                        <a class="nav-link">Provider Location</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a href="my-profile.html" class="nav-link">My Profile</a>
+                            <a class="nav-link" asp-controller="Admin" asp-action="AdminProfile">My Profile</a>
                     </li>
                     <li class="nav-item dropdown mx-2">
 
@@ -86,7 +84,7 @@
                         <a href="patient-history.html" class="nav-link">Records</a>
                     </li>
                 </ul>
-          
+          </div>
             </div>
     </nav>
        
