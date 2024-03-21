@@ -1,4 +1,5 @@
-﻿@model List<Hallo_Doc.Entity.ViewModel.AdminDash>;
+﻿@using Hallo_Doc.Entity.ViewModel;
+@model PaginatedViewModel<AdminDash>;
 @{
     ViewData["Title"] = "_NewTable";
 }
@@ -18,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var request in Model)
+                @foreach (var request in Model.AdminDash)
                 {
                     string rows = "";
                     var mobile = "";
@@ -88,7 +89,7 @@
 
    
     <div class="accordion accordion-flush mobile-view lo-btn" style="width: 100%;">
-        @foreach (var request in Model)
+        @foreach (var request in Model.AdminDash)
         {
             <div class="accordion-item">
                 <button style="padding-right: 0;" class="accordion-button collapsed bg-info-subtle"
@@ -172,7 +173,35 @@
             </div>
         }
     </div>
-         
+<nav aria-label="Page navigation example">
+    <ul class="pagination pagination-container d-flex justify-content-center">
+        @{
+            int i;
+
+            if (Model.CurrentPage > 1)
+            {
+                <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage - 1)">&lt;</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">&lt;</a></li>
+            }
+            @for (i = 1; i <= Model.TotalPages; i++)
+            {
+
+                <li class="page-item"><a href="#" data-page="@i" class="@(i == Model.CurrentPage ? "active" : "") page-link">@i</a></li>
+            }
+            if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage + 1)">&gt;</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">&gt;</a></li>
+            }
+        }
+    </ul>
+</nav>
 
 <script>
 
@@ -197,5 +226,27 @@
         document.getElementById('RequestID_ModelBlockCase').value = RequestId;
         document.getElementById('PatientName_ModelBlockCase').innerText = patientname;
     }
+    $(".pagination-container a").on("click", function (e) {
+        e.preventDefault();
+        console.log("etfh");
+        var page = $(this).data('page');
 
+        var searchValue = document.getElementById('searchInput').value;
+        $.ajax({
+            url: "@Url.Action("GetPartialView", "Admin")",
+            type: "GET",
+            data: {
+                page: page,
+                searchValue: searchValue,
+                btnName: "New",
+                statusid: 1
+            },
+            success: function (data) {
+                $("#btnContent").html(data);
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
+    });
 </script>

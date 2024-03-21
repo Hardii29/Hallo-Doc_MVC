@@ -12,5 +12,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? LastName { get; set; }
         public string? ErrorMessage { get; set; }
         public string? UserName { get; set; }
+        public int AdminId { get; set;}
+        public string? AdminName { get; set;}
     }
 }

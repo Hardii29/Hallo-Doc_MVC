@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <html>
-<body>
+<body class="bg-light">
     <div>
         @Html.Partial("_CancelCase")
         @Html.Partial("_AssignCase")
@@ -12,38 +12,39 @@
         @Html.Partial("_TransferCase")
         @Html.Partial("_ClearCase")
         @Html.Partial("_SendAgreement")
+        @Html.Partial("_RequestSupport")
     </div>
     <div class="container-fluid mt-3" style="width: 100%;">
        
             <div class="row justify-content-between">
 
-            <button class="col-lg col-sm-3 col-3 btn btn-p m-2 py-3 rounded text-start" data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
+            <button class="col-lg col-sm-3 col-3 btn btn-p m-2 py-3 rounded text-start btn6 " data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
                 <i class="fa fa-plus-circle me-2" aria-hidden="true"></i><b>New</b>
                 <p class="h4">@Model.NewRequest</p>
             </button>
-            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Pending" data-id="2" style="background-color:#ddfaff; border-color:#0dcaf0; color:#0dcaf0;">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Pending" data-id="2" style="background-color:#ddfaff; border-color:#0dcaf0; color:#0dcaf0;">
                 <i class="fa fa-user me-2" aria-hidden="true"></i><b>Pending</b>
                 <p class="h4">@Model.PendingRequest</p>
             </button>
-            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Active" data-id="3" style="background-color:#ccf7d6; border-color:#28a745; color:#28a745">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Active" data-id="3" style="background-color:#ccf7d6; border-color:#28a745; color:#28a745">
                 <i class="fa fa-check-square-o me-2" aria-hidden="true"></i><b>Active</b>
                 <p class="h4">@Model.ActiveRequest</p>
             </button>
-            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Conclude" data-id="4" style="background-color:rgb(245, 210, 248); border-color:rgb(201, 56, 214); color:rgb(201, 56, 214);">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Conclude" data-id="4" style="background-color:rgb(245, 210, 248); border-color:rgb(201, 56, 214); color:rgb(201, 56, 214);">
                 <i class="fa fa-clock-o me-2" aria-hidden="true"></i><b>Conclude</b>
                 <p class="h4">@Model.ConcludeRequest</p>
             </button>
-            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="ToClose" data-id="5" style="background-color:rgb(229, 229, 252); border-color:rgba(14, 14, 252, 0.822); color:rgba(14, 14, 252, 0.822);">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="ToClose" data-id="5" style="background-color:rgb(229, 229, 252); border-color:rgba(14, 14, 252, 0.822); color:rgba(14, 14, 252, 0.822);">
                 <i class="fa fa-user-times me-2" aria-hidden="true"></i><b>ToClose</b>
                 <p class="h4">@Model.ToCloseRequest</p>
             </button>
-            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start" data-btn="Unpaid" data-id="6" style="background-color:rgba(242, 219, 255, 0.822); border-color:rgba(139, 5, 216, 0.822); color:rgba(139, 5, 216, 0.822);">
+            <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Unpaid" data-id="6" style="background-color:rgba(242, 219, 255, 0.822); border-color:rgba(139, 5, 216, 0.822); color:rgba(139, 5, 216, 0.822);">
                 <i class="fa fa-money me-2" aria-hidden="true"></i><b>Unpaid</b>
                 <p class="h4">@Model.UnpaidRequest</p>
             </button>
             </div>
             <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
-                <h3>Patients<span style="font-size:medium; color: navy;"> (New)</span></h3>
+                <h3>Patients<span style="font-size:medium; color: navy;" id="cardName"></span></h3>
                 <ul>
                     <li class="d-inline">
                         <a class="btn btn-info text-white">
@@ -66,47 +67,61 @@
                         </a>
                     </li>
                     <li class="d-inline">
-                        <a class="btn btn-info text-white">
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#requestSupportModel">
                         <i class="fa fa-heartbeat" aria-hidden="true"></i><span class="dash-btn"> Request DIY Support</span>
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </div>
         <div>
-            <div class="search-nav">
-            <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
+            <div class="search-nav bg-white">
+                <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
                     <div class="row g-2">
                         <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
-                        <input type="text" class="form-control" id="searchInput" placeholder="Search Patients" name="searchValue">
-                    </div>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search Patients" name="searchValue">
+                        </div>
                         <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
-                    <select class="form-select" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
-                            <option value="">All Regions</option>
-                           
+                            <select class="form-select" id="SelectedRegion" name="RegionId" onchange="handleSearchClick()" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
+                                <option value="">All Regions</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-2 col-md-6 col-sm-12" style="display: inline-block;">
+                        <select class="form-select pagesizeselect" onchange="handleSearchClick()" name="PageSize" id="pagesizedropdown">
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
                         </select>
+                        </div>
                     </div>
-                </div>
-                <ul>
-                    <li class="d-inline">
-                        <button type="button" class="btn btn-outline-dark">All</button>
-                    </li>
-                    <li class="d-inline">
-                        <div class="circle" style="background-color: green;"></div> Patient
-                    </li>
-                    <li class="d-inline">
-                        <div class="circle" style="background-color: orange;"></div> Family/Friend
-                    </li>
-                    <li class="d-inline">
-                        <div class="circle" style="background-color: firebrick;"></div> Business
-                    </li>
-                    <li class="d-inline">
+                    <ul class="text-secondary requestType">
+                        <li class="d-inline">
+                            <button type="button" class="btn btn-outline-dark reqtype" data-id="-1">All</button>
+                        </li>
+                        <li class="d-inline">
+                            <button class="me-2 bg-white border-0 reqtype" data-id="2">
+                            <div class="circle" style="background-color: green;"></div> Patient
+                            </button>
+                        </li>
+                        <li class="d-inline">
+                            <button class="me-2 bg-white border-0 reqtype" data-id="3">
+                            <div class="circle" style="background-color: orange;"></div> Family/Friend
+                            </button>
+                        </li>
+                        <li class="d-inline">
+                            <button class="me-2 bg-white border-0 reqtype" data-id="1">
+                            <div class="circle" style="background-color: firebrick;"></div> Business
+                            </button>
+                        </li>
+                        <li class="d-inline">
+                            <button class="me-2 bg-white border-0 reqtype" data-id="4">
                             <div class="circle" style="background-color: dodgerblue;"></div> Concierge
-                    </li>
-                    <li class="d-inline">
-                        <div class="circle" style="background-color: rgba(139, 5, 216, 0.822);"></div> VIP
-                    </li>
-                </ul>
-            </div>
+                            </button>
+                        </li>
+                     
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -124,7 +139,6 @@
                 method: 'GET',
                 data: { btnName: 'New', statusId: 1 },
                 success: function (data) {
-                 
                     $("#btnContent").html(data);
                 },
                 error: function () {
@@ -135,7 +149,7 @@
                     $(document).on("click", ".btn", function () {
                 btnnameglobal = $(this).data("btn");
                 console.log("Button clicked: " + btnnameglobal);
-
+                document.getElementById('cardName').innerText = "(" +btnnameglobal+ ")";
                 statusidglobal = $(this).data("id");
                         
                         $.ajax({
@@ -145,7 +159,7 @@
                     data: { btnName: btnnameglobal, statusid:statusidglobal },
                             success: function (data) {
                                 console.log("AJAX success");
-                                
+                        
                                 $("#btnContent").html(data);
                                 console.log("data added");
                             },
@@ -175,6 +189,7 @@
                 data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal },
                 success: function (data) {
                     console.log("AJAX success");
+
                     $("#btnContent").html(data);
                 },
                 error: function (error) {
@@ -183,6 +198,89 @@
             });
         }
     </script>
+    @* <script>
+   
 
+        var statusidglobal = 1;
+        var btnnameglobal = "New";
+        $(document).ready(function () {
+            console.log("Document ready");
+            var defaultPartial = '/Admin/_new';
+            var searchValue = document.getElementById('searchInput').value;
+            var region = -1;
+            var requesttype = -1;
+            console.log(statusidglobal + btnnameglobal);
+
+            $.ajax({
+                url: defaultPartial,
+                method: 'GET',
+                success: function (data) {
+                    $("#btnContent").html(data);
+                    $(document).on("click", ".btn6", function () {
+                        var btnName = $(this).data("btn");
+                        btnnameglobal = btnName;
+                        var statusid = $(this).data("id");
+                        statusidglobal = statusid;
+                        console.log("Button clicked: " + btnName);
+                        document.getElementById('cardName').innerText = "(" + btnnameglobal + ")";
+                        var statusid = $(this).data("id");
+                        var page = $(this).data('page');
+                        $.ajax({
+                            url: '@Url.Action("GetPartialView", "Admin")',
+                            method: 'GET',
+                            data: { searchValue: searchValue, btnName: btnName, statusid: statusid, Region: region, requesttype: requesttype },
+                            success: function (data) {
+                                $("#btnContent").html(data);
+                                console.log("data added");
+                            },
+                            error: function () {
+                                console.error('Error fetching partial view.');
+                            }
+                        });
+                    });
+                },
+                error: function () {
+                    console.error('Error fetching default partial view.');
+                }
+            });
+        });
+
+        document.getElementById('searchButton').addEventListener('click', handleSearchClick);
+        var reqtypeElements = document.getElementsByClassName('reqtype');
+        for (var i = 0; i < reqtypeElements.length; i++) {
+            reqtypeElements[i].addEventListener('click', handleSearchClick);
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('searchInput').addEventListener('keyup', function (evt) {
+                if (evt.key === 'Enter') {
+                    evt.preventDefault();
+                    handleSearchClick();
+                }
+            });
+        });
+        function handleSearchClick() {
+            var searchValue = document.getElementById('searchInput').value;
+            var region = $("#SelectedRegion").val();
+            var pagesize = $('#pagesizedropdown').val();
+            var requesttype = $(this).data("id");
+            console.log("Button: " + statusidglobal + " " + btnnameglobal);
+            console.log("Search value: " + searchValue);
+            console.log("Region id: " + region);
+            console.log("Request type id: " + requesttype);
+            console.log(pagesize)
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetPartialView", "Admin")',
+                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal, Region: region, requesttype: requesttype, pagesize: pagesize },
+                success: function (data) {
+                    console.log("AJAX success");
+                    $("#btnContent").html(data);
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                }
+            });
+        }
+    </script> *@
 </body>
 </html>

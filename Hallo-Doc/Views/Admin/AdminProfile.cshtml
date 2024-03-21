@@ -48,8 +48,8 @@
                         </div>      
                     </div>
                     <div class="g-2" style="text-align: right;">
-                        <button type="button" class="btn btn-outline-info" id="editbutton" onclick="editMode()">Reset Password</button>
-                        <button type="submit" id="submitButton" class="btn btn-info text-white" style="display: none;">save</button>
+                        <button type="button" class="btn btn-outline-info" onclick="editMode()">Reset Password</button>
+                        
                     </div>
                 </div>
 
@@ -57,12 +57,12 @@
                     <h6 class="mt-2">Administrator Information</h6>
                     <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="text" name="FirstName" id="FirstName" asp-for="FirstName" class="form-control" placeholder="First name" value="@Model?.FirstName" aria-label="First name" disabled>
-                            <label for="FirstName">FirstName</label>
+                            <input type="text" name="FirstName" id="firstName" asp-for="FirstName" class="form-control" placeholder="First name" value="@Model?.FirstName" aria-label="First name" disabled>
+                            <label for="firstName">FirstName</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="text" name="LastName" id="Lastname" asp-for="LastName" class="form-control" placeholder="Last name" value="@Model?.LastName" aria-label="Last name" disabled>
-                            <label for="Lastname">Lastname</label>
+                            <input type="text" name="LastName" id="lastName" asp-for="LastName" class="form-control" placeholder="Last name" value="@Model?.LastName" aria-label="Last name" disabled>
+                            <label for="lastName">Lastname</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="email" name="Email" id="email" asp-for="Email" class="form-control" value="@Model?.Email" placeholder="Email" disabled>
@@ -78,64 +78,66 @@
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <div class="form-check form-check-inline">
-                            <input class="form-check-input mt-1" type="checkbox" value="" id="rg1">
+                            <input class="form-check-input bg-info mt-1" type="checkbox" value="" id="rg1" checked>
                             <label class="form-check-label" for="rg1">
                                 Ahmedabad
                             </label>
                             </div>
                         <div class="form-check form-check-inline">
-                                <input class="form-check-input mt-1" type="checkbox" value="" id="rg2">
+                                <input class="form-check-input bg-info mt-1" type="checkbox" value="" id="rg2" checked>
                             <label class="form-check-label" for="rg2">
                                 New Delhi
                             </label>
                             </div>
                         <div class="form-check form-check-inline">
-                                <input class="form-check-input mt-1" type="checkbox" value="" id="rg3">
+                                <input class="form-check-input bg-info mt-1" type="checkbox" value="" id="rg3" checked>
                             <label class="form-check-label" for="rg3">
                                 Mumbai
                             </label>
                             </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input mt-1" type="checkbox" value="" id="rg4">
+                                <input class="form-check-input bg-info mt-1" type="checkbox" value="" id="rg4" checked>
                             <label class="form-check-label" for="rg4">
                                 Kolkata
                             </label>
                         </div>
                         </div>
                         <div class="g-2 mt-4 first" style="text-align: right;">
-                            <button type="button" id="editbutton" onclick="editMode()" class="btn btn-info text-white">Edit</button>
+                            <button type="button" id="editbutton" onclick="editModePersonal()" class="btn btn-info text-white">Edit</button>
+                            <button type="submit" id="submitbutton" class="btn btn-info text-white" style="display: none;">save</button>
                         </div>
                     </div>
                     <div class="row">
                         <h6 class="mt-2">Mailing & Billing Information</h6>
                         <div class="row g-2">
                             <div class="form-group form-floating col-md-6 col-sm-12">
-                                <input type="text" name="Address1" id="Address1" asp-for="Address1" class="form-control" placeholder="Address1" value="@Model?.Address1" disabled>
-                                <label for="Address1">Address1</label>
+                                <input type="text" name="Address1" id="address1" asp-for="Address1" class="form-control" placeholder="Address1" value="@Model?.Address1" disabled>
+                                <label for="address1">Address1</label>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
-                                <input type="text" name="Address2" id="Address2" asp-for="Address2" class="form-control" placeholder="Address2" value="@Model?.Address2" disabled>
-                                <label for="Address2">Address2</label>
+                                <input type="text" name="Address2" id="address2" asp-for="Address2" class="form-control" placeholder="Address2" value="@Model?.Address2" disabled>
+                                <label for="address2">Address2</label>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
-                                <input type="text" name="City" id="City" asp-for="City" class="form-control" value="@Model?.City" placeholder="City" disabled>
-                                <label for="City">City</label>
+                                <input type="text" name="City" id="city" asp-for="City" class="form-control" value="@Model?.City" placeholder="City" disabled>
+                                <label for="city">City</label>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
-                                <input type="text" name="State" id="State" asp-for="State" class="form-control" value="@Model?.State" placeholder="State" disabled>
-                                <label for="State">State</label>
+                                <input type="text" name="State" id="state" asp-for="State" class="form-control" value="@Model?.State" placeholder="State" disabled>
+                                <label for="state">State</label>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
-                                <input type="number" name="ZipCode" id="ZipCode" asp-for="ZipCode" class="form-control" value="@Model?.ZipCode" placeholder="ZipCode" disabled>
-                                <label for="ZipCode">ZipCode</label>
+                                <input type="number" name="ZipCode" id="zipCode" asp-for="ZipCode" class="form-control" value="@Model?.ZipCode" placeholder="ZipCode" disabled>
+                                <label for="zipCode">ZipCode</label>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
-                                <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67" disabled>
-                                <label for="mobile">Mobile</label>
+                                <input type="tel" name="Mobile" id="mobile2" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67" disabled>
+                                <label for="mobile2">Mobile</label>
                             </div>
                         </div>
                         <div class="g-2 mt-4 first" style="text-align: right;">
-                            <button type="button" id="editbutton" onclick="editMode()" class="btn btn-info text-white">Edit</button>
+                            <button type="button" id="editButton" onclick="editModebussiness()" class="btn btn-info text-white">Edit</button>
+                            <button type="submit" id="submitButton" class="btn btn-info text-white" style="display: none;">save</button>
                         </div>
                     </div>
                 </div>  
@@ -155,15 +157,39 @@
             var element = document.body;
             element.classList.toggle("darkMode");
         }
-        function editMode() {
-            var formFields = document.querySelectorAll('input, select');
-            formFields.forEach(function (field) {
-                field.disabled = !field.disabled;
-            });
-            var submitButton = document.getElementById('submitButton');
+        function editModePersonal() {
+            var fname = document.getElementById('firstName');
+            var lname = document.getElementById('lastName');
+            var email = document.getElementById('email');
+            var confirm = document.getElementById('confirmEmail');
+            var mobile = document.getElementById('mobile');
+            fname.disabled = !fname.disabled;
+            lname.disabled = !lname.disabled;
+            email.disabled = !email.disabled;
+            confirm.disabled = !confirm.disabled;
+            mobile.disabled = !mobile.disabled;
+            var submitButton = document.getElementById('submitbutton');
             var editButton = document.getElementById('editbutton');
-            submitButton.style.display = submitButton.style.display === 'none' ? 'inline' : 'none';
-            editButton.style.display = editButton.style.display === 'inline' ? 'none' : 'inline';
+            submitButton.style.display = (fname.disabled || lname.disabled || email.disabled || confirm.disabled || mobile.disabled) ? 'none' : 'inline';
+            editButton.style.display = 'none';
+        }
+        function editModebussiness() {
+            var a1 = document.getElementById('address1');
+            var a2 = document.getElementById('address2');
+            var c = document.getElementById('city');
+            var s = document.getElementById('state');
+            var z = document.getElementById('zipCode');
+            var m = document.getElementById('mobile2');
+            a1.disabled = !a1.disabled;
+            a2.disabled = !a2.disabled;
+            c.disabled = !c.disabled;
+            s.disabled = !s.disabled;
+            z.disabled = !z.disabled;
+            m.disabled = !m.disabled;
+            var submitButton = document.getElementById('submitButton');
+            var editButton = document.getElementById('editButton');
+            submitButton.style.display = (a1.disabled || a2.disabled || c.disabled || s.disabled || z.disabled || m.disabled) ? 'none' : 'inline';
+            editButton.style.display = 'none';
         }
     </script>
 </body>

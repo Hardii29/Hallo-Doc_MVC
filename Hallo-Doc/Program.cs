@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Hallo_Doc.Repository.Repository.Interface;
 using Hallo_Doc.Repository.Repository.Implementation;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,7 @@ builder.Services.AddScoped<IPatientUser, PatientUserRepo>();
 builder.Services.AddScoped<IPatientReq, PatientReqRepo>();
 builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IAdminLogin, AdminLoginRepo>();
-
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -35,7 +37,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseNotyf();
 app.UseAuthorization();
 app.UseSession();
 app.MapControllerRoute(

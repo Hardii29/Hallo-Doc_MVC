@@ -37,7 +37,16 @@ namespace Hallo_Doc.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid username or password.");
                 return View();
             }
-
         }
+        public IActionResult Logout()
+        {
+            if (Response.Cookies != null)
+            {
+                Response.Cookies.Delete("jwt");
+                return RedirectToAction("AdminLogin", "Login");
+            }
+            return View();
+        }
+      
     }
 }

@@ -30,6 +30,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public int? CaseTagId { get; set; }
         public short? Status { get; set; }
         public string? searchValue { get; set; }
+        public string? AdminName { get; set;}
+        public int AdminId { get; set;}
     }
     public class CountStatusWiseRequest
     {
@@ -39,5 +41,13 @@ namespace Hallo_Doc.Entity.ViewModel
         public int ConcludeRequest { get; set; }
         public int ToCloseRequest { get; set; }
         public int UnpaidRequest { get; set; }
+        public string? AdminName { get; set; }
+        public int AdminId { get; set; } = 0;
+    }
+    public class PaginatedViewModel<T>
+    {
+        public List<T> AdminDash { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
     }
 }

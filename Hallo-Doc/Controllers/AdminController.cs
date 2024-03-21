@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hallo_Doc.Repository.Repository.Implementation;
+using NuGet.Protocol.Plugins;
 
 namespace Hallo_Doc.Controllers
 {
@@ -29,13 +30,17 @@ namespace Hallo_Doc.Controllers
             return View(count);
         }
         
-        public IActionResult GetPartialView(string btnName, int statusId, string searchValue)
+        public IActionResult GetPartialView(string btnName, int statusId, string searchValue, string sortColumn, string sortOrder, int pagesize = 5, int requesttype = -1, int Region = -1, int page = 1)
         {
             string partialView = "_" + btnName + "Table";
-            var request = _adminDashboard.GetRequestData(statusId, searchValue);
+            var request = _adminDashboard.GetRequestData(statusId, searchValue, page, pagesize, Region, sortColumn, sortOrder, requesttype);
             return PartialView(partialView, request);
         }
-       
+        public IActionResult _new()
+        {
+            var result = _adminDashboard.GetRequestData(1, null, 1, 5, -1, null, null, -1);
+            return PartialView(result);
+        }
         public IActionResult View_case(int requestId)
         {
             var model = _adminDashboard.GetView(requestId);
@@ -178,9 +183,10 @@ namespace Hallo_Doc.Controllers
             var model = _adminDashboard.GetView(requestId);
             return View(model);
         }
-        public IActionResult AdminProfile() 
-        { 
-            return View(); 
+        public IActionResult AdminProfile(int adminId)
+        {
+            var data = _adminDashboard.Profile(adminId);
+            return View(data);
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,10 +26,13 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 .FirstOrDefaultAsync(m => m.Email == login.Email);
             if (User != null)
             {
+                
                 return User;
             }
+       
             return null;
-
+          
         }
+      
     }
 }

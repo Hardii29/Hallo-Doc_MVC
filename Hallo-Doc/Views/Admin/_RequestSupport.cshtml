@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Request Support";
+
+}
+<div class="modal fade" id="requestSupportModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Request Support</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="blockCaseForm" asp-action="RequestSupport" asp-controller="Admin" method="post">
+                <div class="modal-body">
+                    <p>To all unscheduled Physicians: We are short on coverage and needs additional support On Call to respond to Requests.</p>
+                    <div class="form-floating mb-3">
+
+                        <textarea class="form-control" id="msg" style="height: 100px" name="Notes" placeholder="Reason"></textarea>
+                        <label for="msg">Message</label>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info text-white">Send</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

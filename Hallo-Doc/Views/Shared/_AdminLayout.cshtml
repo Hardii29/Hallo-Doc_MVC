@@ -33,7 +33,7 @@
 
                 <li class="nav-item navbar-right d-flex flex-row ml-auto mt-5 h-25">
 
-                    <span class="dblock mt-2">Welcome <span class="fw-bold">Admin</span></span>
+                    <span class="dblock mt-2">Welcome <span class="fw-bold">@Model.AdminName</span></span>
 
                     <a href="index.html" type="button" class="btn btn-outline-info mx-2 h-25 dblock">Logout</a>
 
@@ -59,7 +59,7 @@
                         <a class="nav-link">Provider Location</a>
                     </li>
                     <li class="nav-item mx-2">
-                            <a class="nav-link" asp-controller="Admin" asp-action="AdminProfile">My Profile</a>
+                            <a class="nav-link" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model.AdminId">My Profile</a>
                     </li>
                     <li class="nav-item dropdown mx-2">
 

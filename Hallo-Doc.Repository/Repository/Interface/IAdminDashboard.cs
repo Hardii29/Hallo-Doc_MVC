@@ -1,6 +1,7 @@
 ﻿using Hallo_Doc.Entity.Models;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Implementation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
     public interface IAdminDashboard
     {
         CountStatusWiseRequest CountRequestData();
-        List<AdminDash> GetRequestData(int statusid, string searchValue);
+        PaginatedViewModel<AdminDash> GetRequestData(int statusid, string searchValue, int page, int pagesize, int? Region, string sortColumn, string sortOrder, int? requesttype);
         ViewCase GetView(int requestId);
         void UpdateViewCase(int requestId, ViewCase viewCase);
         bool CancelViewCase(int RequestId);
@@ -39,6 +40,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         ViewCase GetClearCaseView(int requestId);
         void UpdateCloseCase(int requestId, ViewCase viewCase);
         bool CloseCaseReq(int RequestId);
+        AdminProfile? Profile(int adminId);
 
     }
 }

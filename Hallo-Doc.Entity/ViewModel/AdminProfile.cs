@@ -23,5 +23,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Region { get; set; }
         public string? State { get; set; }
         public string? ZipCode { get; set; }
+        public string? AdminName { get; set; }
+        public int AdminId { get; set; } = 0;
     }
 }

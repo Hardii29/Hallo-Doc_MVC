@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Hallo_Doc.Entity.ViewModel.AdminDash>;
+﻿@using Hallo_Doc.Entity.ViewModel;
+@model PaginatedViewModel<AdminDash>;
 @{
     ViewData["Title"] = "_ToCloseTable";
 }
@@ -19,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-        @foreach (var request in Model)
+        @foreach (var request in Model.AdminDash)
         {
             string rows = "";
             var mobile = "";
@@ -66,7 +67,7 @@
                 </td>
                 <td class="col-2 text-white" style="background-color: @rows;">@request.Address</td>
                 <td class="col text-white" style="background-color: @rows;">@request.Notes</td>
-                <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-user-md" aria-hidden="true"></i>Provider</button></td>
+                <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-user" aria-hidden="true"></i>Patient</button><button type="button" class="btn btn-outline-light mt-1"><i class="fa fa-user-md" aria-hidden="true"></i>Provider</button></td>
                 <td class="col text-white" style="background-color: @rows;">
                             <div class="dropdown">
                                 <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,7 +90,7 @@
         </table>
 
     <div class="accordion accordion-flush mobile-view lo-btn">
-        @foreach (var request in Model)
+        @foreach (var request in Model.AdminDash)
         {
             <div class="accordion-item">
                 <button style="padding-right: 0;" class="accordion-button collapsed bg-info-subtle"
@@ -178,5 +179,56 @@
             </div>
         }
     </div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination pagination-container d-flex justify-content-center">
+        @{
+            int i;
 
+            if (Model.CurrentPage > 1)
+            {
+                <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage - 1)">&lt;</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">&lt;</a></li>
+            }
+            @for (i = 1; i <= Model.TotalPages; i++)
+            {
+
+                <li class="page-item"><a href="#" data-page="@i" class="@(i == Model.CurrentPage ? "active" : "") page-link">@i</a></li>
+            }
+            if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage + 1)">&gt;</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">&gt;</a></li>
+            }
+        }
+    </ul>
+</nav>
+<script>
+    $(".pagination-container a").on("click", function (e) {
+        //e.preventDefault();
+        console.log("etfh");
+        var page = $(this).data('page');
+        $.ajax({
+            url: "@Url.Action("GetPartialView", "Admin")",
+            type: "GET",
+            data: {
+                page: page,
+                //status: 1,
+                btnName: "ToClose",
+                statusid: 5
+            },
+            success: function (data) {
+                $("#btnContent").html(data);
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
+    });
+</script>
 

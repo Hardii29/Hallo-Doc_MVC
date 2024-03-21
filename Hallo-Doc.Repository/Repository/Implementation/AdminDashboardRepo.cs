@@ -8,6 +8,7 @@ using Hallo_Doc.Entity.Models;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public CountStatusWiseRequest CountRequestData()
         {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
             return new CountStatusWiseRequest
             {
                 NewRequest = _context.Requests.Where(r => r.Status == 1).Count(),
@@ -31,18 +33,18 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5)).Count(),
                 ConcludeRequest = _context.Requests.Where(r => r.Status == 6).Count(),
                 ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8)).Count(),
-                UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count()
+                UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}",
 
             };
         }
-        public List<AdminDash> GetRequestData(int statusid, string searchValue)
+        public PaginatedViewModel<AdminDash> GetRequestData(int statusid, string searchValue, int page, int pagesize, int? Region, string sortColumn, string sortOrder, int? requesttype)
         {
             List<int> id = new List<int>();
             if (statusid == 1) { id.Add(1); }
             if (statusid == 2) { id.Add(2); }
-            if (statusid == 3)
-                id.AddRange(new int[] { 4, 5 });
-
+            if (statusid == 3) id.AddRange(new int[] { 4, 5 });
             if (statusid == 4) { id.Add(6); }
             if (statusid == 5) id.AddRange(new int[] { 3, 7, 8 });
             if (statusid == 6) { id.Add(9); }
@@ -63,6 +65,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                rc.Address.Contains(searchValue) || rc.Notes.Contains(searchValue) ||
                                p.FirstName.Contains(searchValue) || p.LastName.Contains(searchValue) ||
                                rg.Name.Contains(searchValue))
+                               && (Region == -1 || rc.RegionId == Region)
+                               && (requesttype == -1 || req.RequestTypeId == requesttype)
                         orderby req.CreatedDate descending
                         select new AdminDash
                         {
@@ -83,8 +87,25 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
                             RequestClientId = rc != null ? rc.RequestclientId : null
                         }).ToList();
+            switch (sortColumn)
+            {
+                case "Name":
+                    list = sortOrder == "desc" ? list.OrderByDescending(x => x.PatientName).ToList() : list.OrderBy(x => x.PatientName).ToList();
+                    break;
+                    
+            }
+            int totalItemCount = list.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)pagesize);
+            List<AdminDash> list1 = list.Skip((page - 1) * pagesize).Take(pagesize).ToList();
 
-            return list;
+            PaginatedViewModel<AdminDash> viewModel = new PaginatedViewModel<AdminDash>()
+            {
+                AdminDash = list1,
+                CurrentPage = page,
+                TotalPages = totalPages,
+            };
+
+            return viewModel;
         }
         public ViewCase GetView(int requestId)
         {
@@ -500,6 +521,27 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 return true;
             }
             else { return false; }
+        }
+        public AdminProfile? Profile(int adminId)
+        {
+            var model = (from a in _context.Admins
+                         where a.AdminId == adminId
+                         select new AdminProfile
+                         {
+                             FirstName = a.FirstName,
+                             LastName = a.LastName,
+                             Mobile = a.Mobile,
+                             Email = a.Email,
+                             Address1 = a.Address1,
+                             City = a.City,
+                             ZipCode = a.Zip,
+                             AdminName = $"{a.FirstName} {a.LastName}",
+                             UserId = a.AdminId,
+                             UserName = $"{a.FirstName} {a.LastName}",
+                             State = "Gujrat"
+                         }).FirstOrDefault();
+
+            return model;
         }
     }
 }
