@@ -12,7 +12,8 @@
             <th class="col"> </th>
                     <th class="col">Date Of Birth</th>
                     <th class="col">Requestor</th>
-                    <th class="col">Requested Date</th>
+            <th class="col">Physician Name</th>
+                    <th class="col">Date Of Service</th>
                     <th class="col">Phone</th>
                     <th class="col-2">Address</th>
                     <th class="col">Notes</th>
@@ -52,6 +53,7 @@
                 <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
                 <td class="col text-white" style="background-color: @rows;">@request.DOB</td>
                 <td class="col text-white" style="background-color: @rows;">@request.Requestor</td>
+                <td class="col text-white" style="background-color: @rows;">@request.ProviderName</td>
                 <td class="col text-white" style="background-color: @rows;">@request.RequestedDate</td>
                 <td class="col text-white" style="background-color: @rows;">
                     <button type="button" class="btn btn-outline-light">

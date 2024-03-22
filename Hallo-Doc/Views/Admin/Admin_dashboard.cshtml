@@ -13,6 +13,7 @@
         @Html.Partial("_ClearCase")
         @Html.Partial("_SendAgreement")
         @Html.Partial("_RequestSupport")
+        @Html.Partial("_SendLink")
     </div>
     <div class="container-fluid mt-3" style="width: 100%;">
        
@@ -47,24 +48,24 @@
                 <h3>Patients<span style="font-size:medium; color: navy;" id="cardName"></span></h3>
                 <ul>
                     <li class="d-inline">
-                        <a class="btn btn-info text-white">
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#sendLinkModel">
                         <i class="fa fa-paper-plane" aria-hidden="true"></i><span class="dash-btn"> Send Link</span>
-                        </a>
+                        </button>
                     </li>
                     <li class="d-inline">
-                        <a class="btn btn-info text-white">
+                        <a class="btn btn-info text-white" asp-action="CreateRequest" asp-controller="Admin" >
                         <i class="fa fa-edit" aria-hidden="true"></i><span class="dash-btn"> Create Requests</span>
                         </a>
                     </li>
                     <li class="d-inline">
-                        <a class="btn btn-info text-white">
+                        <button type="button" class="btn btn-info text-white" onclick="Export('1')">
                         <i class="fa fa-mail-forward" aria-hidden="true"></i><span class="dash-btn"> Export</span>
-                        </a>
+                        </button>
                     </li>
                     <li class="d-inline">
-                        <a class="btn btn-info text-white">
+                    <button type="button" class="btn btn-info text-white" onclick="Export('1,2,3,4,5,6,7,8,9,10,11')">
                         <i class="fa fa-share-square-o" aria-hidden="true"></i><span class="dash-btn"> Export All</span>
-                        </a>
+                        </button>
                     </li>
                     <li class="d-inline">
                     <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#requestSupportModel">
@@ -74,7 +75,7 @@
                 </ul>
             </div>
         <div>
-            <div class="search-nav bg-white">
+            <div class="search-nav bg-white p-2">
                 <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
                     <div class="row g-2">
                         <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
@@ -86,7 +87,7 @@
 
                             </select>
                         </div>
-                        <div class="form-group col-lg-2 col-md-6 col-sm-12" style="display: inline-block;">
+                        <div class="form-group col-lg-2 col-md-6 col-sm-12" style="display: none;">
                         <select class="form-select pagesizeselect" onchange="handleSearchClick()" name="PageSize" id="pagesizedropdown">
                             <option value="5" selected>5</option>
                             <option value="10">10</option>
@@ -100,23 +101,23 @@
                             <button type="button" class="btn btn-outline-dark reqtype" data-id="-1">All</button>
                         </li>
                         <li class="d-inline">
-                            <button class="me-2 bg-white border-0 reqtype" data-id="2">
-                            <div class="circle" style="background-color: green;"></div> Patient
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="2">
+                            <i class="circle" style="background-color: green;"></i> Patient
                             </button>
                         </li>
                         <li class="d-inline">
-                            <button class="me-2 bg-white border-0 reqtype" data-id="3">
-                            <div class="circle" style="background-color: orange;"></div> Family/Friend
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="3">
+                            <i class="circle" style="background-color: orange;"></i> Family/Friend
                             </button>
                         </li>
                         <li class="d-inline">
-                            <button class="me-2 bg-white border-0 reqtype" data-id="1">
-                            <div class="circle" style="background-color: firebrick;"></div> Business
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="1">
+                            <i class="circle" style="background-color: firebrick;"></i> Business
                             </button>
                         </li>
                         <li class="d-inline">
-                            <button class="me-2 bg-white border-0 reqtype" data-id="4">
-                            <div class="circle" style="background-color: dodgerblue;"></div> Concierge
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="4">
+                            <i class="circle" style="background-color: dodgerblue;"></i> Concierge
                             </button>
                         </li>
                      
@@ -180,13 +181,17 @@
         });
         function handleSearchClick() {
             var searchValue = document.getElementById('searchInput').value;
+            var region = $("#SelectedRegion").val();
+            var requesttype = $(this).data("id");
             console.log(searchValue);
             console.log(statusidglobal);
             console.log(btnnameglobal);
+            console.log("Region id: " + region);
+            console.log("Request type id: " + requesttype);
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("GetPartialView", "Admin")',
-                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal },
+                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal, Region: region },
                 success: function (data) {
                     console.log("AJAX success");
 
@@ -194,6 +199,31 @@
                 },
                 error: function (error) {
                     console.log("Error:", error);
+                }
+            });
+        }
+
+        function Export(status) {
+            console.log(status);
+            $.ajax({
+                method: "POST",
+                url: "/Admin/Export",
+                data: { status: status },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (result) {
+                    var blob = new Blob([result], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'RequestData.xlsx';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                },
+                error: function () {
+                    console.log("error");
                 }
             });
         }

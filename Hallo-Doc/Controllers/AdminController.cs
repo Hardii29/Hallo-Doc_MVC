@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hallo_Doc.Repository.Repository.Implementation;
 using NuGet.Protocol.Plugins;
+using OfficeOpenXml;
+
 
 namespace Hallo_Doc.Controllers
 {
@@ -129,15 +131,28 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.ClearCaseReq(RequestId);
             return RedirectToAction("Admin_dashboard");
         }
-        public IActionResult Agreement()
+        public IActionResult Agreement(int RequestId)
         {
+            TempData["RequestID"] = " " + RequestId;
+            TempData["PatientName"] = "Hardi";
             return View();
         }
+        public IActionResult Accept(int RequestID)
+        {
+            _adminDashboard.SendAgreement_accept(RequestID);
+            return RedirectToAction("Admin_dashboard", "Admin");
+        }
+
+        public IActionResult Reject(int RequestID, string Notes)
+        {
+            _adminDashboard.SendAgreement_Reject(RequestID, Notes);
+            return RedirectToAction("Admin_dashboard", "Admin");
+        }
         [HttpPost]
-        public IActionResult SendAgreement(string email)
+        public IActionResult SendAgreement(string email, int RequestId)
         {
             
-            _adminDashboard.SendAgreementEmail(email);
+            _adminDashboard.SendAgreementEmail(email, RequestId);
             return RedirectToAction("Admin_dashboard");
         }
         public IActionResult Order(int RequestId)
@@ -187,6 +202,73 @@ namespace Hallo_Doc.Controllers
         {
             var data = _adminDashboard.Profile(adminId);
             return View(data);
+        }
+        [HttpPost]
+        public IActionResult AdminProfile(int adminId, [Bind("FirstName", "LastName", "Mobile", "Email", "Address1", "ZipCode", "City")] AdminProfile profile)
+        {
+            _adminDashboard.EditProfile(adminId, profile);
+            return RedirectToAction("AdminProfile", new { adminId = adminId });
+        }
+       public IActionResult CreateRequest()
+        {
+            var data = _adminDashboard.Admin();
+            return View(data);
+        }
+        [HttpPost]
+        public IActionResult CreateRequest(PatientReq req)
+        {
+            _adminDashboard.CreateReq(req);
+            return RedirectToAction("Admin_dashboard");
+
+        }
+        public IActionResult Export(string status)
+        {
+            var requestData = _adminDashboard.Export(status);
+
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("RequestData");
+
+                worksheet.Cells[1, 1].Value = "Name";
+                worksheet.Cells[1, 2].Value = "Requestor";
+                worksheet.Cells[1, 3].Value = "Request Date";
+                worksheet.Cells[1, 4].Value = "Phone";
+                worksheet.Cells[1, 5].Value = "Address";
+                worksheet.Cells[1, 6].Value = "Notes";
+                worksheet.Cells[1, 7].Value = "Physician";
+                worksheet.Cells[1, 8].Value = "Birth Date";
+                worksheet.Cells[1, 9].Value = "RequestTypeId";
+                worksheet.Cells[1, 10].Value = "Email";
+                worksheet.Cells[1, 11].Value = "RequestId";
+
+                for (int i = 0; i < requestData.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = requestData[i].PatientName;
+                    worksheet.Cells[i + 2, 2].Value = requestData[i].Requestor;
+                    worksheet.Cells[i + 2, 3].Value = requestData[i].RequestedDate;
+                    worksheet.Cells[i + 2, 4].Value = requestData[i].PatientMobile;
+                    worksheet.Cells[i + 2, 5].Value = requestData[i].Address;
+                    worksheet.Cells[i + 2, 6].Value = requestData[i].Notes;
+                    worksheet.Cells[i + 2, 7].Value = requestData[i].ProviderName;
+                    worksheet.Cells[i + 2, 8].Value = requestData[i].DOB;
+                    worksheet.Cells[i + 2, 9].Value = requestData[i].RequestTypeId;
+                    worksheet.Cells[i + 2, 10].Value = requestData[i].Email;
+                    worksheet.Cells[i + 2, 11].Value = requestData[i].RequestId;
+                }
+
+                byte[] excelBytes = package.GetAsByteArray();
+
+                return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
+        }
+        [HttpPost]
+        public IActionResult SendLink(string email, string FirstName, string LastName)
+        {
+
+            _adminDashboard.SendLink(email, FirstName, LastName);
+            return RedirectToAction("Admin_dashboard");
         }
     }
 }

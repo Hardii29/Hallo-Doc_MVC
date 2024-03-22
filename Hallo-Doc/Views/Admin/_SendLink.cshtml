@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Send Link";
+
+}
+<div class="modal fade" id="sendLinkModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Send mail to patient for submitting request</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="blockCaseForm" asp-action="SendLink" asp-controller="Admin" method="post">
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="FirstName" class="form-control" id="firstName" placeholder="FirstName">
+                        <label for="firstName">First Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="LastName" class="form-control" id="lastName" placeholder="LastName">
+                        <label for="lastName">Last Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="tel" name="Mobile" class="form-control" id="mobile">
+                       
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" name="Email" class="form-control" id="email" placeholder="Email">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info text-white btn-lg">Send</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info btn-lg">Cancel</button>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

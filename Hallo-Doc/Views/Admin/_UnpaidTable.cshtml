@@ -9,13 +9,11 @@
                 <tr class="row">
                     <th class="col">Name</th>
             <th class="col"> </th>
-                    <th class="col">Date Of Birth</th>
-                    <th class="col">Requestor</th>
-                    <th class="col">Requested Date</th>
+                    <th class="col">Physician Name</th>
+                    <th class="col">Date Of Service</th>
                     <th class="col">Phone</th>
                     <th class="col-2">Address</th>
-                    <th class="col">Notes</th>
-                    <th class="col">Chat With</th>
+                    <th class="col-2">Chat With</th>
                     <th class="col">Action</th>
                 </tr>
             </thead>
@@ -49,8 +47,8 @@
             <tr class="row">
                 <td class="col text-white" style="background-color: @rows;">@request.PatientName</td>
                 <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
-                <td class="col text-white" style="background-color: @rows;">@request.DOB</td>
-                <td class="col text-white" style="background-color: @rows;">@request.Requestor</td>
+              
+                <td class="col text-white" style="background-color: @rows;">@request.ProviderName</td>
                 <td class="col text-white" style="background-color: @rows;">@request.RequestedDate</td>
                 <td class="col text-white" style="background-color: @rows;">
                     <button type="button" class="btn btn-outline-light">
@@ -66,8 +64,7 @@
                     }
                 </td>
                 <td class="col-2 text-white" style="background-color: @rows;">@request.Address</td>
-                <td class="col text-white" style="background-color: @rows;">@request.Notes</td>
-                <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-user" aria-hidden="true"></i>Patient</button><button type="button" class="btn btn-outline-light mt-1"><i class="fa fa-user-md" aria-hidden="true"></i>Provider</button></td>
+                <td class="col-2 text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-user" aria-hidden="true"></i>Patient</button><button type="button" class="btn btn-outline-light"><i class="fa fa-user-md" aria-hidden="true"></i>Provider</button></td>
                 <td class="col text-white" style="background-color: @rows;">
                             <div class="dropdown">
                                 <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

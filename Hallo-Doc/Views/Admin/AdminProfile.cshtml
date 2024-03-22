@@ -17,7 +17,7 @@
             </a>
         </div>
         <div class="content">
-            <form asp-controller="Admin" asp-action="AdminProfile" method="post">
+            <form asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model?.AdminId" method="post">
 
                 <div class="row">
                     <h6 class="mt-2">Account Information</h6>
@@ -69,12 +69,12 @@
                             <label for="email">Email</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="email" name="Email" id="confirmEmail" asp-for="Email" class="form-control" value="@Model?.Email" placeholder="Email" disabled>
+                            <input type="email" name="Email" id="confirmEmail" class="form-control" value="@Model?.Email" placeholder="Email" disabled>
                             <label for="confirmEmail">Confirm Email</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67" disabled>
-                            <label for="mobile">Mobile</label>
+                         
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <div class="form-check form-check-inline">
@@ -132,7 +132,7 @@
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
                                 <input type="tel" name="Mobile" id="mobile2" asp-for="Mobile" class="form-control" value="@Model?.Mobile" placeholder="123-45-67" disabled>
-                                <label for="mobile2">Mobile</label>
+                             
                             </div>
                         </div>
                         <div class="g-2 mt-4 first" style="text-align: right;">

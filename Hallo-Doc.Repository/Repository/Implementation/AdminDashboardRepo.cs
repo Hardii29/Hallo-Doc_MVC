@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
 {
@@ -83,7 +86,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             PatientMobile = rc != null ? rc.PhoneNumber : "",
                             Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                             Notes = rc != null ? rc.Notes : "",
-                            // ProviderID = req.Physicianid,
+                            ProviderId = req.PhysicianId,
                             RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
                             RequestClientId = rc != null ? rc.RequestclientId : null
                         }).ToList();
@@ -422,15 +425,14 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             }
             else { return false; }
         }
-        public void SendAgreementEmail(string email)
+        public void SendAgreementEmail(string email, int RequestId)
         {
             var baseUrl = "http://localhost:5203";
             var Action = "Agreement";
             var controller = "Admin";
-            // Retrieve agreement page link based on requestId
-            string agreementPageLink = $"{baseUrl}/{controller}/{Action}";
+            
+            string agreementPageLink = $"{baseUrl}/{controller}/{Action}?requestId={RequestId}";
 
-            // Create and send email
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress("hardi.jayani@etatvasoft.com");
@@ -445,6 +447,41 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                     smtp.Send(mail);
                 }
             }
+        }
+        public bool SendAgreement_accept(int RequestID)
+        {
+            var request = _context.Requests.Find(RequestID);
+            if (request != null)
+            {
+                request.Status = 4;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+                RequestStatusLog rsl = new RequestStatusLog();
+                rsl.RequestId = RequestID;
+                rsl.Status = 4;
+                rsl.CreatedDate = DateTime.Now;
+                _context.RequestStatusLogs.Add(rsl);
+                _context.SaveChanges();
+            }
+            return true;
+        }
+        public bool SendAgreement_Reject(int RequestID, string Notes)
+        {
+            var request = _context.Requests.Find(RequestID);
+            if (request != null)
+            {
+                request.Status = 7;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+                RequestStatusLog rsl = new RequestStatusLog();
+                rsl.RequestId = RequestID;
+                rsl.Status = 7;
+                rsl.Notes = Notes;
+                rsl.CreatedDate = DateTime.Now;
+                _context.RequestStatusLogs.Add(rsl);
+                _context.SaveChanges();
+            }
+            return true;
         }
         public Order GetOrderView(int requestId)
         {
@@ -536,12 +573,160 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                              City = a.City,
                              ZipCode = a.Zip,
                              AdminName = $"{a.FirstName} {a.LastName}",
-                             UserId = a.AdminId,
+                             AdminId = a.AdminId,
                              UserName = $"{a.FirstName} {a.LastName}",
                              State = "Gujrat"
                          }).FirstOrDefault();
 
             return model;
+        }
+        public void EditProfile(int adminId, AdminProfile profile)
+        {
+            profile.AdminId = adminId;
+            profile.AdminName = $"{profile.FirstName} {profile.LastName}";
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == adminId);
+            if (admin != null) {
+                if(profile.FirstName != null) {
+                    admin.FirstName = profile.FirstName;
+                }
+                if (profile.LastName != null)
+                {
+                    admin.LastName = profile.LastName;
+                }
+                if (profile.Mobile != null)
+                {
+                    admin.Mobile = profile.Mobile;
+                }
+                if (profile.Email != null)
+                {
+                    admin.Email = profile.Email;
+                }
+                if (profile.Address1 != null)
+                {
+                    admin.Address1 = profile.Address1;
+                }
+                if (profile.City != null) { 
+                admin.City = profile.City;
+                }
+                if (profile.ZipCode != null) { 
+                admin.Zip = profile.ZipCode;
+                }
+                if (profile.Mobile !=null) { 
+                admin.AltPhone = profile.Mobile;
+                }
+                _context.Admins.Update(admin);
+                _context.SaveChanges();
+        }
+        }
+        public PatientReq? Admin()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            return new PatientReq
+            {
+                
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}",
+
+            };
+        }
+        public void CreateReq(PatientReq req)
+        {
+            var admin = _context.Admins.Where(x => x.AdminId == 1).FirstOrDefault();
+
+            var Request = new Entity.Models.Request();
+            var Requestclient = new Requestclient();
+            var RequestNotes = new RequestNote();
+            Request.RequestTypeId = 1;
+            Request.Status = 1;
+            //Request.UserId = Int32.Parse(UserId);
+            Request.FirstName = admin.FirstName;
+            Request.LastName = admin.LastName;
+            Request.Email = admin.Email;
+            Request.PhoneNumber = admin.Mobile;
+            Request.CreatedDate = DateTime.Now;
+            Request.IsUrgentEmailSent = new BitArray(1);
+            Request.ConfirmationNumber = req.City.Substring(0, 2) + DateTime.Now.ToString("yyyyMM") + req.LastName.Substring(0, 2) + req.FirstName.Substring(0, 2) + "002";
+            _context.Requests.Add(Request);
+            _context.SaveChanges();
+            Requestclient.RequestId = Request.RequestId;
+            Requestclient.FirstName = req.FirstName;
+            Requestclient.LastName = req.LastName;
+            Requestclient.Address = req.Street + "," + req.City + "," + req.State + "," + req.ZipCode;
+            Requestclient.Email = req.Email;
+            Requestclient.PhoneNumber = req.Mobile;
+            Requestclient.Notes = req.Symptoms;
+            Requestclient.IntDate = req.DOB.Day;
+            Requestclient.IntYear = req.DOB.Year;
+            Requestclient.StrMonth = (req.DOB.Month).ToString();
+            _context.Requestclients.Add(Requestclient);
+            _context.SaveChanges();
+            RequestNotes.RequestId = Request.RequestId;
+            RequestNotes.AdminNotes = req.Symptoms;
+            RequestNotes.CreatedDate = DateTime.Now;
+            RequestNotes.CreatedBy = "Admin";
+            _context.RequestNotes.Add(RequestNotes);
+            _context.SaveChanges();
+           
+        }
+        public List<AdminDash> Export(string status)
+        {
+            List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
+            List<AdminDash> allData = (from req in _context.Requests
+                                       join reqClient in _context.Requestclients
+                                       on req.RequestId equals reqClient.RequestId into reqClientGroup
+                                       from rc in reqClientGroup.DefaultIfEmpty()
+                                       join phys in _context.Physicians
+                                       on req.PhysicianId equals phys.PhysicianId into physGroup
+                                       from p in physGroup.DefaultIfEmpty()
+                                       join reg in _context.Regions
+                                       on rc.RegionId equals reg.RegionId into RegGroup
+                                       from rg in RegGroup.DefaultIfEmpty()
+                                       where statusdata.Contains((int)req.Status)
+                                       orderby req.CreatedDate descending
+                                       select new AdminDash
+                                       {
+                                           RequestId = req.RequestId,
+                                           RequestTypeId = req.RequestTypeId,
+                                           Requestor = req != null ? req.FirstName + " " + req.LastName : "",
+                                           PatientName = rc != null ? rc.FirstName + " " + rc.LastName : "",
+                                           DOB = rc != null && rc.IntYear != null && rc.StrMonth != null && rc.IntDate != null ?
+                                            new DateOnly((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate) : DateOnly.MinValue,
+                                           RequestedDate = req.CreatedDate,
+                                           Email = rc != null ? rc.Email : "",
+                                           Region = rg != null ? rg.Name : "",
+                                           ProviderName = p != null ? p.FirstName + " " + p.LastName : "",
+                                           PatientMobile = rc != null ? rc.PhoneNumber : "",
+                                           Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
+                                           Notes = rc != null ? rc.Notes : "",
+                                           ProviderId = req.PhysicianId,
+                                           RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
+                                           RequestClientId = rc != null ? rc.RequestclientId : null
+                                       }).ToList();
+            return allData;
+        }
+        public void SendLink(string email, string firstName, string lastName)
+        {
+            var fullName = $"{firstName} {lastName}";
+            var baseUrl = "http://localhost:5203";
+            var Action = "Create_request";
+            var controller = "PatientReq";
+            
+            string SubmitPageLink = $"{baseUrl}/{controller}/{Action}";
+
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("hardi.jayani@etatvasoft.com");
+                mail.To.Add(email);
+                mail.Subject = "Agreement for your request";
+                mail.Body = $"Dear {fullName},\n\nPlease Submit request by filling Create Request form: \n{SubmitPageLink}";
+
+                using (SmtpClient smtp = new SmtpClient("mail.etatvasoft.com", 587))
+                {
+                    smtp.Credentials = new System.Net.NetworkCredential("hardi.jayani@etatvasoft.com", "LHV0@}YOA?)M");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+            }
         }
     }
 }
