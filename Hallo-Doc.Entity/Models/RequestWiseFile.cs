@@ -47,6 +47,14 @@ public partial class RequestWiseFile
     [Column(TypeName = "bit(1)")]
     public BitArray? IsPatientRecords { get; set; }
 
+    [ForeignKey("AdminId")]
+    [InverseProperty("RequestWiseFiles")]
+    public virtual Admin? Admin { get; set; }
+
+    [ForeignKey("PhysicianId")]
+    [InverseProperty("RequestWiseFiles")]
+    public virtual Physician? Physician { get; set; }
+
     [ForeignKey("RequestId")]
     [InverseProperty("RequestWiseFiles")]
     public virtual Request Request { get; set; } = null!;

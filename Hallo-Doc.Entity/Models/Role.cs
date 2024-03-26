@@ -36,4 +36,7 @@ public partial class Role
     [Column("IP")]
     [StringLength(20)]
     public string? Ip { get; set; }
+
+    [InverseProperty("Role")]
+    public virtual ICollection<RoleMenu> RoleMenus { get; set; } = new List<RoleMenu>();
 }

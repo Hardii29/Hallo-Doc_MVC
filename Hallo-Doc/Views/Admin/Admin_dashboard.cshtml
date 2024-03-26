@@ -58,7 +58,7 @@
                         </a>
                     </li>
                     <li class="d-inline">
-                        <button type="button" class="btn btn-info text-white" onclick="Export('1')">
+                    <button type="button" class="btn btn-info text-white" onclick="Export(exportData)">
                         <i class="fa fa-mail-forward" aria-hidden="true"></i><span class="dash-btn"> Export</span>
                         </button>
                     </li>
@@ -132,9 +132,11 @@
     <script>
         var statusidglobal = $(this).data("id");
         var btnnameglobal = $(this).data("btn");
+        var exportData = '0';
         $(document).ready(function () {
             console.log("Document ready");
-
+            exportData = '1';
+            console.log(exportData);
             $.ajax({
                 url: '/Admin/GetPartialView',
                 method: 'GET',
@@ -152,7 +154,13 @@
                 console.log("Button clicked: " + btnnameglobal);
                 document.getElementById('cardName').innerText = "(" +btnnameglobal+ ")";
                 statusidglobal = $(this).data("id");
-                        
+                        if (statusidglobal == 1) { exportData = '1'; console.log("exportData:"+exportData) }
+                if (statusidglobal == 2) { exportData = '2'; console.log("exportData:" + exportData) }
+                if (statusidglobal == 3) { exportData = '4,5'; console.log("exportData:" + exportData) }
+                if (statusidglobal == 4) { exportData = '6'; console.log("exportData:" + exportData) }
+                if (statusidglobal == 5) { exportData = '3,7,8'; console.log("exportData:" + exportData) }
+                if (statusidglobal == 6) { exportData = '9'; console.log("exportData:" + exportData) }
+
                         $.ajax({
                             url: '@Url.Action("GetPartialView", "Admin")',
                             

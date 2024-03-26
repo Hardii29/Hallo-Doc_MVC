@@ -61,10 +61,19 @@ public partial class Admin
 
     public int? RoleId { get; set; }
 
+    [StringLength(500)]
+    public string? Address2 { get; set; }
+
+    [InverseProperty("Admin")]
+    public virtual ICollection<AdminRegion> AdminRegions { get; set; } = new List<AdminRegion>();
+
     [ForeignKey("AspNetUserId")]
     [InverseProperty("Admins")]
     public virtual AspnetUser AspNetUser { get; set; } = null!;
 
     [InverseProperty("Admin")]
     public virtual ICollection<RequestStatusLog> RequestStatusLogs { get; set; } = new List<RequestStatusLog>();
+
+    [InverseProperty("Admin")]
+    public virtual ICollection<RequestWiseFile> RequestWiseFiles { get; set; } = new List<RequestWiseFile>();
 }

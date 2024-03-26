@@ -35,8 +35,13 @@ public partial class Concierge
 
     public int? RegionId { get; set; }
 
+    [Column("IP")]
     [StringLength(20)]
-    public string? RoleId { get; set; }
+    public string? Ip { get; set; }
+
+    [ForeignKey("RegionId")]
+    [InverseProperty("Concierges")]
+    public virtual Region? Region { get; set; }
 
     [InverseProperty("Concierge")]
     public virtual ICollection<RequestConcierge> RequestConcierges { get; set; } = new List<RequestConcierge>();

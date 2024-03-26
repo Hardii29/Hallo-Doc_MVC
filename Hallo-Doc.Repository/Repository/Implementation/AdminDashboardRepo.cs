@@ -728,5 +728,33 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 }
             }
         }
+        public ProviderMenu? ProviderMenu()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var model = new ProviderMenu() {
+              data = (from p in _context.Physicians
+                         join PhysicianRole in _context.Roles
+                         on p.RoleId equals PhysicianRole.RoleId into pRoleGroup
+                         from pr in pRoleGroup.DefaultIfEmpty()
+                         join region in _context.Regions
+                         on p.RegionId equals region.RegionId into regionGroup
+                         from prg in regionGroup.DefaultIfEmpty()
+                         orderby p.PhysicianId descending
+                         select new ProviderMenu
+                         {
+                                    ProviderId = p.PhysicianId,
+                                    ProviderName = p.FirstName + " " + p.LastName,
+                                    RoleId = pr.RoleId,
+                                    RoleName = pr.Name,
+                                    RegionId = prg.RegionId,
+                                    Status = p.Status,
+
+                                }).ToList(),
+              AdminId = admin.AdminId,
+              AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+
+            return model;
+        }
     }
 }

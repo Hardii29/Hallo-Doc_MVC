@@ -270,5 +270,11 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.SendLink(email, FirstName, LastName);
             return RedirectToAction("Admin_dashboard");
         }
+        public IActionResult ProviderMenu()
+        {
+            ViewBag.Region = _adminDashboard.GetRegions();
+            var modal = _adminDashboard.ProviderMenu();
+            return View(modal);
+        }
     }
 }

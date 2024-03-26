@@ -48,5 +48,6 @@ namespace Hallo_Doc.Repository.Repository.Interface
         void CreateReq(PatientReq req);
         List<AdminDash> Export(string status);
         void SendLink(string email, string firstName, string lastName);
+        ProviderMenu? ProviderMenu();
     }
 }

@@ -114,6 +114,12 @@ public partial class Physician
     [InverseProperty("Physicians")]
     public virtual AspnetUser? AspNetUser { get; set; }
 
+    [InverseProperty("Physician")]
+    public virtual ICollection<PhysicianNotification> PhysicianNotifications { get; set; } = new List<PhysicianNotification>();
+
+    [InverseProperty("Physician")]
+    public virtual ICollection<PhysicianRegion> PhysicianRegions { get; set; } = new List<PhysicianRegion>();
+
     [ForeignKey("RegionId")]
     [InverseProperty("Physicians")]
     public virtual Region? Region { get; set; }
@@ -123,4 +129,13 @@ public partial class Physician
 
     [InverseProperty("TransToPhysician")]
     public virtual ICollection<RequestStatusLog> RequestStatusLogTransToPhysicians { get; set; } = new List<RequestStatusLog>();
+
+    [InverseProperty("Physician")]
+    public virtual ICollection<RequestWiseFile> RequestWiseFiles { get; set; } = new List<RequestWiseFile>();
+
+    [InverseProperty("Physician")]
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
+
+    [InverseProperty("Physician")]
+    public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
 }
