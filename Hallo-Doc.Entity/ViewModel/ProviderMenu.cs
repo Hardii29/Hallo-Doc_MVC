@@ -20,5 +20,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? StatusName { get; set; }
         public string? Region { get; set; }
         public int? RegionId { get; set; }
+        public bool IsNotificationStopped { get; set; }
+        public string? Message { get; set;}
     }
 }

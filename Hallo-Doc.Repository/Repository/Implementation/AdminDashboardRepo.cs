@@ -730,16 +730,21 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public ProviderMenu? ProviderMenu()
         {
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, true);
             var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
             var model = new ProviderMenu() {
               data = (from p in _context.Physicians
                          join PhysicianRole in _context.Roles
                          on p.RoleId equals PhysicianRole.RoleId into pRoleGroup
                          from pr in pRoleGroup.DefaultIfEmpty()
+                         join PhysicianNoti in _context.PhysicianNotifications
+                         on p.PhysicianId equals PhysicianNoti.PhysicianId into pNotifications
+                         from pn in pNotifications.DefaultIfEmpty()
                          join region in _context.Regions
                          on p.RegionId equals region.RegionId into regionGroup
                          from prg in regionGroup.DefaultIfEmpty()
-                         orderby p.PhysicianId descending
+                         orderby p.PhysicianId ascending
                          select new ProviderMenu
                          {
                                     ProviderId = p.PhysicianId,
@@ -748,13 +753,23 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                     RoleName = pr.Name,
                                     RegionId = prg.RegionId,
                                     Status = p.Status,
-
+                                    IsNotificationStopped = pn != null ? ( pn.IsNotificationStopped == bitArray ) : false,
                                 }).ToList(),
               AdminId = admin.AdminId,
               AdminName = $"{admin.FirstName} {admin.LastName}"
             };
 
             return model;
+        }
+        public void StopNotfy(int ProviderId)
+        {
+            var model = new PhysicianNotification();
+            model.PhysicianId = ProviderId;
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, true);
+            model.IsNotificationStopped = bitArray;
+            _context.PhysicianNotifications.Add(model);
+            _context.SaveChanges();
         }
     }
 }

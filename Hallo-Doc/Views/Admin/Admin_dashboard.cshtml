@@ -178,6 +178,10 @@
                         });
                     });
             });
+        var reqtypeElements = document.getElementsByClassName('reqtype');
+        for (var i = 0; i < reqtypeElements.length; i++) {
+            reqtypeElements[i].addEventListener('click', handleSearchClick);
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('searchInput').addEventListener('keyup', function (evt) {
@@ -199,7 +203,7 @@
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("GetPartialView", "Admin")',
-                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal, Region: region },
+                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal, Region: region, requesttype: requesttype },
                 success: function (data) {
                     console.log("AJAX success");
 

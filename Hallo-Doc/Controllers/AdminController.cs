@@ -276,5 +276,10 @@ namespace Hallo_Doc.Controllers
             var modal = _adminDashboard.ProviderMenu();
             return View(modal);
         }
+        public IActionResult StopNotification(int ProviderId)
+        {
+            _adminDashboard.StopNotfy(ProviderId); 
+            return RedirectToAction("ProviderMenu");
+        }
     }
 }

@@ -21,11 +21,10 @@
             <div class="form-group col-lg-4 col-md-6 col-sm-12">
                     <select class="form-select" id="SelectedRegion" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
                         <option value="">All Regions</option>
-
                     </select>
             </div>
                 <div>
-                <button type="button" class="btn btn-info text-white">Create Provider Account</button>
+                    <a class="btn btn-info text-white" asp-action="CreateProvider" asp-controller="Provider">Create Provider Account</a>
                 </div>
             </div>
             <table class="table table-hover" style="width:100%">
@@ -33,10 +32,10 @@
                     <tr style="padding:10px;">
                         <th class="col-1" style="text-align:center">Stop Notification</th>
                         <th class="col-3">Provider Name</th>
-                        <th class="col-2">Role</th>
-                        <th class="col-2">On Call Status</th>
+                        <th class="col-1">Role</th>
+                        <th class="col-2" style="text-align:center">On Call Status</th>
                         <th class="col-2">Status</th>
-                        <th class="col-2">Actions</th>
+                        <th class="col-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,8 +43,7 @@
                         {
                         string status = "";
                         switch(item.Status)
-                        {
-                           
+                        {                         
                             case 2:
                                 status = "Pending";
                                 break;
@@ -60,27 +58,31 @@
                                 status = "";
                                 break;
                         }
-
                         <tr class=" mt-2">
                         <td class="col-1" style="text-align:center">
                             <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            
+                                    <input class="form-check-input" type="checkbox" onchange="toggleSaveButton(this)" @(item.IsNotificationStopped ? "checked" : "")>
+                                    <input type="hidden" class="provider-id" value="@item?.ProviderId" />
                             </div>
-                        </td>
+                        </td>                           
                         <td class="col-3">  @item?.ProviderName</td>
-                        <td class="col-2">@item?.RoleName</td>
-                        <td class="col-2">UnAvailable</td>
-                  
+                        <td class="col-1">@item?.RoleName</td>
+                        <td class="col-2" style="text-align:center">UnAvailable</td>                 
                         <td class="col-2">@status</td>
-                            
-                        <td class="col-2"><a class="btn btn-outline-info mr-1">Contact</a><a class="btn btn-outline-info">Edit</a></td>
+                        <td class="col-3"><a class="btn btn-outline-info mr-1">Contact</a><a class="btn btn-outline-info">Edit</a><a id="saveButton_@item?.ProviderId" asp-action="StopNotification" asp-controller="Admin" asp-route-ProviderId="@item?.ProviderId" class="btn btn-info text-white ml-1" style="display:none">save</a></td>
                     </tr>
                   }  
                 </tbody>
             </table>
         </div>
-    </div>
- 
-    
+    </div> 
+    <script>
+        function toggleSaveButton(checkbox) {
+            var providerId = checkbox.parentElement.parentElement.querySelector('.provider-id').value; 
+            console.log("ProviderId:" + providerId);
+            var saveButton = document.getElementById('saveButton_' + providerId);
+            console.log(providerId);
+            saveButton.style.display = checkbox.checked ? 'inline-block' : 'none'; 
+        }
+    </script>
 </body>

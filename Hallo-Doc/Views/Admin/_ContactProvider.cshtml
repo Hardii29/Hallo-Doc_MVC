@@ -1,6 +1,5 @@
-﻿
-@{
-    ViewData["Title"] = "Block Case";
+﻿@{
+    ViewData["Title"] = "Contact Your Provider";
 
 }
 <div class="modal fade" id="blockCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -14,26 +13,26 @@
             </div>
             <form id="blockCaseForm" asp-action="BlockCase" asp-controller="Admin" method="post">
                 <input type="hidden" value=" " id="RequestID_ModelBlockCase" name="RequestId" />
-            <div class="modal-body">
-                
+                <div class="modal-body">
+
                     <input type="hidden" id="patientName" name="Patientname">
-                   
+
                     <p>Patient name : <span class="text-info" id="PatientName_ModelBlockCase"> </span></p>
-                    
+
                     <div class="form-floating mb-3">
-                        
+
                         <textarea class="form-control" id="reason" style="height: 100px" name="Notes" placeholder="Reason"></textarea>
                         <label for="reason">Reason for Block Request</label>
-                       
+
                     </div>
                 </div>
-                    <div class="modal-footer">
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-info text-white">Confirm</button>
                     <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
-                    
+
                 </div>
-                </form>
-            
+            </form>
+
         </div>
     </div>
 </div>

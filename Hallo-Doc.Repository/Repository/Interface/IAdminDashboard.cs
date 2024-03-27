@@ -49,5 +49,6 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<AdminDash> Export(string status);
         void SendLink(string email, string firstName, string lastName);
         ProviderMenu? ProviderMenu();
+        void StopNotfy(int ProviderId);
     }
 }
