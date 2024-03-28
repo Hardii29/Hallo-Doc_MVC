@@ -2,32 +2,49 @@
     ViewData["Title"] = "Contact Your Provider";
 
 }
-<div class="modal fade" id="blockCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="contactProviderModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header text-white" style="background-color:#0dcaf0">
-                <h5 class="modal-title" id="exampleModalLabel">Confirm Block</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Contact Your Provider</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="blockCaseForm" asp-action="BlockCase" asp-controller="Admin" method="post">
-                <input type="hidden" value=" " id="RequestID_ModelBlockCase" name="RequestId" />
+            <form asp-action="ContactProvider" asp-controller="Admin" method="post">
+                <input type="hidden" value=" " id="ProviderID_Model" name="ProviderId" />
+                <input type="hidden" value=" " id="Email_Model" name="Email" />
+                <input type="hidden" value=" " id="Mobile_Model" name="Mobile" />
                 <div class="modal-body">
-
-                    <input type="hidden" id="patientName" name="Patientname">
-
-                    <p>Patient name : <span class="text-info" id="PatientName_ModelBlockCase"> </span></p>
+                    <p class="mb-4">Choose communication to send message</p>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="radiobtn" id="sms" value="sms">
+                        <label class="form-check-label" for="sms">
+                            SMS
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="radiobtn" id="email" value="email">
+                        <label class="form-check-label" for="email">
+                            Email
+                        </label>
+                    </div>
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="radio" name="radiobtn" id="both" value="both">
+                        <label class="form-check-label" for="both">
+                            Both
+                        </label>
+                    </div>
 
                     <div class="form-floating mb-3">
 
-                        <textarea class="form-control" id="reason" style="height: 100px" name="Notes" placeholder="Reason"></textarea>
-                        <label for="reason">Reason for Block Request</label>
+                        <textarea class="form-control" id="message" style="height: 100px" name="Message" placeholder="Message"></textarea>
+                        <label for="message">Message</label>
 
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-info text-white">Confirm</button>
+                    <button type="submit" class="btn btn-info text-white">Send</button>
                     <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
 
                 </div>

@@ -668,7 +668,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.SaveChanges();
            
         }
-        public List<AdminDash> Export(string status)
+        public List<AdminDash> Export(string status, int? Region, int? requesttype)
         {
             List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
             List<AdminDash> allData = (from req in _context.Requests
@@ -682,6 +682,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                        on rc.RegionId equals reg.RegionId into RegGroup
                                        from rg in RegGroup.DefaultIfEmpty()
                                        where statusdata.Contains((int)req.Status)
+                                       && (Region == -1 || rc.RegionId == Region)
+                                       && (requesttype == -1 || req.RequestTypeId == requesttype)
                                        orderby req.CreatedDate descending
                                        select new AdminDash
                                        {
@@ -754,6 +756,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                     RegionId = prg.RegionId,
                                     Status = p.Status,
                                     IsNotificationStopped = pn != null ? ( pn.IsNotificationStopped == bitArray ) : false,
+                                    Mobile = p.Mobile,
+                                    Email = p.Email,
                                 }).ToList(),
               AdminId = admin.AdminId,
               AdminName = $"{admin.FirstName} {admin.LastName}"

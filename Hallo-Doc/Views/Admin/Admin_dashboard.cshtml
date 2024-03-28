@@ -215,12 +215,21 @@
             });
         }
 
+        var reqtypeElements = document.getElementsByClassName('reqtype');
+        for (var i = 0; i < reqtypeElements.length; i++) {
+            reqtypeElements[i].addEventListener('click', Export);
+        }
+       
         function Export(status) {
+            var region = $("#SelectedRegion").val();
+            var requesttype = $(this).data("id");
+            console.log("Region id in export: " + region);
+            console.log("Request type id in export: " + requesttype);
             console.log(status);
             $.ajax({
                 method: "POST",
                 url: "/Admin/Export",
-                data: { status: status },
+                data: { status: status, Region: region, requesttype: requesttype },
                 xhrFields: {
                     responseType: 'blob'
                 },
@@ -240,89 +249,5 @@
             });
         }
     </script>
-    @* <script>
-   
-
-        var statusidglobal = 1;
-        var btnnameglobal = "New";
-        $(document).ready(function () {
-            console.log("Document ready");
-            var defaultPartial = '/Admin/_new';
-            var searchValue = document.getElementById('searchInput').value;
-            var region = -1;
-            var requesttype = -1;
-            console.log(statusidglobal + btnnameglobal);
-
-            $.ajax({
-                url: defaultPartial,
-                method: 'GET',
-                success: function (data) {
-                    $("#btnContent").html(data);
-                    $(document).on("click", ".btn6", function () {
-                        var btnName = $(this).data("btn");
-                        btnnameglobal = btnName;
-                        var statusid = $(this).data("id");
-                        statusidglobal = statusid;
-                        console.log("Button clicked: " + btnName);
-                        document.getElementById('cardName').innerText = "(" + btnnameglobal + ")";
-                        var statusid = $(this).data("id");
-                        var page = $(this).data('page');
-                        $.ajax({
-                            url: '@Url.Action("GetPartialView", "Admin")',
-                            method: 'GET',
-                            data: { searchValue: searchValue, btnName: btnName, statusid: statusid, Region: region, requesttype: requesttype },
-                            success: function (data) {
-                                $("#btnContent").html(data);
-                                console.log("data added");
-                            },
-                            error: function () {
-                                console.error('Error fetching partial view.');
-                            }
-                        });
-                    });
-                },
-                error: function () {
-                    console.error('Error fetching default partial view.');
-                }
-            });
-        });
-
-        document.getElementById('searchButton').addEventListener('click', handleSearchClick);
-        var reqtypeElements = document.getElementsByClassName('reqtype');
-        for (var i = 0; i < reqtypeElements.length; i++) {
-            reqtypeElements[i].addEventListener('click', handleSearchClick);
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('searchInput').addEventListener('keyup', function (evt) {
-                if (evt.key === 'Enter') {
-                    evt.preventDefault();
-                    handleSearchClick();
-                }
-            });
-        });
-        function handleSearchClick() {
-            var searchValue = document.getElementById('searchInput').value;
-            var region = $("#SelectedRegion").val();
-            var pagesize = $('#pagesizedropdown').val();
-            var requesttype = $(this).data("id");
-            console.log("Button: " + statusidglobal + " " + btnnameglobal);
-            console.log("Search value: " + searchValue);
-            console.log("Region id: " + region);
-            console.log("Request type id: " + requesttype);
-            console.log(pagesize)
-            $.ajax({
-                type: "GET",
-                url: '@Url.Action("GetPartialView", "Admin")',
-                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal, Region: region, requesttype: requesttype, pagesize: pagesize },
-                success: function (data) {
-                    console.log("AJAX success");
-                    $("#btnContent").html(data);
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                }
-            });
-        }
-    </script> *@
 </body>
 </html>

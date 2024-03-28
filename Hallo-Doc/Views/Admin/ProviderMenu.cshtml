@@ -5,7 +5,9 @@
 }
 
 <body class="bg-light">
-
+    <div>
+        @Html.Partial("_ContactProvider")
+    </div>
     <div class="container mt-5">
         <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
             <h4 style="font-weight:bold;">Provider Information</h4>
@@ -69,7 +71,7 @@
                         <td class="col-1">@item?.RoleName</td>
                         <td class="col-2" style="text-align:center">UnAvailable</td>                 
                         <td class="col-2">@status</td>
-                        <td class="col-3"><a class="btn btn-outline-info mr-1">Contact</a><a class="btn btn-outline-info">Edit</a><a id="saveButton_@item?.ProviderId" asp-action="StopNotification" asp-controller="Admin" asp-route-ProviderId="@item?.ProviderId" class="btn btn-info text-white ml-1" style="display:none">save</a></td>
+                            <td class="col-3"><a class="btn btn-outline-info mr-1" data-bs-toggle="modal" data-bs-target="#contactProviderModel" onclick="ContactProviderid('@item?.ProviderId','@item?.Mobile','@item?.Email')">Contact</a><a class="btn btn-outline-info">Edit</a><a id="saveButton_@item?.ProviderId" asp-action="StopNotification" asp-controller="Admin" asp-route-ProviderId="@item?.ProviderId" class="btn btn-info text-white ml-1" style="display:none">save</a></td>
                     </tr>
                   }  
                 </tbody>
@@ -83,6 +85,17 @@
             var saveButton = document.getElementById('saveButton_' + providerId);
             console.log(providerId);
             saveButton.style.display = checkbox.checked ? 'inline-block' : 'none'; 
+        }
+        function ContactProviderid(id, mobile, email) {
+            var ProviderId = id;
+            var Mobile = mobile;
+            var Email = email;
+            console.log(ProviderId);
+            console.log(Mobile);
+            console.log(Email);
+            document.getElementById('ProviderID_Model').value = ProviderId;
+            document.getElementById('Mobile_Model').value = Mobile;
+            document.getElementById('Email_Model').value = Email;
         }
     </script>
 </body>

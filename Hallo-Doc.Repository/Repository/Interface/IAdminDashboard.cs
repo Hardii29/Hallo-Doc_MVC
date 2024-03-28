@@ -46,7 +46,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         void EditProfile(int adminId, AdminProfile profile);
         PatientReq? Admin();
         void CreateReq(PatientReq req);
-        List<AdminDash> Export(string status);
+        List<AdminDash> Export(string status, int? Region, int? requesttype);
         void SendLink(string email, string firstName, string lastName);
         ProviderMenu? ProviderMenu();
         void StopNotfy(int ProviderId);

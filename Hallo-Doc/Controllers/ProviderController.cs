@@ -1,4 +1,5 @@
-﻿using Hallo_Doc.Repository.Repository.Interface;
+﻿using Hallo_Doc.Entity.ViewModel;
+using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hallo_Doc.Controllers
@@ -17,6 +18,13 @@ namespace Hallo_Doc.Controllers
             ViewBag.Roles = _provider.GetRoles();
             var model = _provider.CreateProvider();
             return View("~/Views/Admin/CreateProvider.cshtml", model);
+        }
+        [HttpPost]
+        public IActionResult CreateProvider(Provider model)
+        {
+           
+            _provider.AddProvider(model);
+            return RedirectToAction("ProviderMenu", "Admin");
         }
     }
 }

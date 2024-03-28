@@ -221,9 +221,9 @@ namespace Hallo_Doc.Controllers
             return RedirectToAction("Admin_dashboard");
 
         }
-        public IActionResult Export(string status)
+        public IActionResult Export(string status, int Region = -1, int requesttype = -1)
         {
-            var requestData = _adminDashboard.Export(status);
+            var requestData = _adminDashboard.Export(status, Region, requesttype);
 
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
