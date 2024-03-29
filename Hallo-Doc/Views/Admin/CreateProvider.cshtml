@@ -69,30 +69,15 @@
                             <label for="npi">NPI Number</label>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
+                            @foreach (var region in Model.Regions)
+                            {
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input mt-1" name="RegionId" type="checkbox" value="1" id="rg1">
-                                <label class="form-check-label" for="rg1">
-                                    Ahmedabad
+                                    <input class="form-check-input mt-1" name="SelectRegion" type="checkbox" value="@region.RegionId" id="@($"Region_{region.RegionId}")">
+                                    <label class="form-check-label" for="@($"Region_{region.RegionId}")">
+                                    @region.Name
                                 </label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input mt-1" name="RegionId" type="checkbox" value="2" id="rg2">
-                                <label class="form-check-label" for="rg2">
-                                    New Delhi
-                                </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input mt-1" name="RegionId" type="checkbox" value="3" id="rg3">
-                                <label class="form-check-label" for="rg3">
-                                    Mumbai
-                                </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input mt-1" name="RegionId" type="checkbox" value="4" id="rg4">
-                                <label class="form-check-label" for="rg4">
-                                    Kolkata
-                                </label>
-                            </div>
+                            }
                         </div>
                       
                     </div>
@@ -112,7 +97,7 @@
                                 <label for="city">City</label>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
-                                <select class="form-select" id="state" name="State" asp-for="RegionId">
+                                <select class="form-select" id="state" name="State" asp-for="StateId">
                                     <option value="">Select State</option>
                                     <option value="1">Gujrat</option>
                                     <option value="2">Delhi</option>

@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<body class="bg-light">
+<body class="bg-light" id="tableContent">
     <div>
         @Html.Partial("_ContactProvider")
     </div>
@@ -18,18 +18,18 @@
                 </svg> Back
             </a>
         </div>
-        <div class="content">
+        <div class="content" >
             <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
             <div class="form-group col-lg-4 col-md-6 col-sm-12">
                     <select class="form-select" id="SelectedRegion" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
-                        <option value="">All Regions</option>
+                        <option value=" ">All Regions</option>
                     </select>
             </div>
                 <div>
                     <a class="btn btn-info text-white" asp-action="CreateProvider" asp-controller="Provider">Create Provider Account</a>
                 </div>
             </div>
-            <table class="table table-hover" style="width:100%">
+            <table class="table table-hover" style="width:100%" >
                 <thead class="table-light">
                     <tr style="padding:10px;">
                         <th class="col-1" style="text-align:center">Stop Notification</th>
@@ -71,7 +71,7 @@
                         <td class="col-1">@item?.RoleName</td>
                         <td class="col-2" style="text-align:center">UnAvailable</td>                 
                         <td class="col-2">@status</td>
-                            <td class="col-3"><a class="btn btn-outline-info mr-1" data-bs-toggle="modal" data-bs-target="#contactProviderModel" onclick="ContactProviderid('@item?.ProviderId','@item?.Mobile','@item?.Email')">Contact</a><a class="btn btn-outline-info">Edit</a><a id="saveButton_@item?.ProviderId" asp-action="StopNotification" asp-controller="Admin" asp-route-ProviderId="@item?.ProviderId" class="btn btn-info text-white ml-1" style="display:none">save</a></td>
+                            <td class="col-3"><a class="btn btn-outline-info mr-1" data-bs-toggle="modal" data-bs-target="#contactProviderModel" onclick="ContactProviderid('@item?.ProviderName','@item?.Mobile','@item?.Email')">Contact</a><a class="btn btn-outline-info" asp-action="EditPhysician" asp-controller="Provider" asp-route-ProviderId="@item?.ProviderId">Edit</a><a id="saveButton_@item?.ProviderId" asp-action="StopNotification" asp-controller="Admin" asp-route-ProviderId="@item?.ProviderId" class="btn btn-info text-white ml-1" style="display:none">save</a></td>
                     </tr>
                   }  
                 </tbody>
@@ -86,16 +86,40 @@
             console.log(providerId);
             saveButton.style.display = checkbox.checked ? 'inline-block' : 'none'; 
         }
-        function ContactProviderid(id, mobile, email) {
-            var ProviderId = id;
+        function ContactProviderid(name, mobile, email) {
+            var ProviderName = name;
             var Mobile = mobile;
             var Email = email;
-            console.log(ProviderId);
+            console.log(ProviderName);
             console.log(Mobile);
             console.log(Email);
-            document.getElementById('ProviderID_Model').value = ProviderId;
+            document.getElementById('ProviderName_Model').value = ProviderName;
             document.getElementById('Mobile_Model').value = Mobile;
             document.getElementById('Email_Model').value = Email;
+        }
+
+        $(document).ready(function () {
+            $('#SelectedRegion').change(function () {
+                searchProvider();
+            });
+        });
+        
+        function searchProvider() {
+            var region = $("#SelectedRegion").val();
+            console.log("ReginId:" + region);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ProviderMenu", "Admin")',
+                data: { RegionId: region },
+                success: function (data) {
+                    console.log("AJAX success");
+
+                    $("#tableContent").html(data);
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                }
+            });
         }
     </script>
 </body>

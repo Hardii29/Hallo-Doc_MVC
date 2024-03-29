@@ -270,15 +270,25 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.SendLink(email, FirstName, LastName);
             return RedirectToAction("Admin_dashboard");
         }
-        public IActionResult ProviderMenu()
+        public IActionResult ProviderMenu(int? RegionId = null)
         {
             ViewBag.Region = _adminDashboard.GetRegions();
-            var modal = _adminDashboard.ProviderMenu();
+            var modal = _adminDashboard.ProviderMenu(RegionId);
             return View(modal);
         }
         public IActionResult StopNotification(int ProviderId)
         {
             _adminDashboard.StopNotfy(ProviderId); 
+            return RedirectToAction("ProviderMenu");
+        }
+        [HttpPost]
+        public IActionResult ContactProvider(string radiobtn, string Email, string Message, string ProviderName, string Mobile)
+        {
+           
+            if(radiobtn == "email" || radiobtn == "both")
+            {
+                _adminDashboard.SendMailPhy(Email, Message, ProviderName);
+            }
             return RedirectToAction("ProviderMenu");
         }
     }

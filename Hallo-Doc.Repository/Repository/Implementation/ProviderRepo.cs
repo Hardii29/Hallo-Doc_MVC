@@ -2,6 +2,7 @@
 using Hallo_Doc.Entity.Models;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
+using Microsoft.DotNet.Scaffolding.Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,7 +53,6 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
                 var Aspnetuser = new AspnetUser();
                 var Physician = new Physician();
-                var pr = new PhysicianRegion();
 
                 Aspnetuser.Id = Guid.NewGuid().ToString();
                 Aspnetuser.Username = provider.FirstName;
@@ -77,8 +77,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 Physician.Address1 = provider.Address1;
                 Physician.Address2 = provider.Address2;
                 Physician.City = provider.City;
-                Physician.RegionId = provider.RegionId;
-                Physician.Zip = provider.ZipCode;
+            //Physician.RegionId = (int)provider.StateId;
+            Physician.Zip = provider.ZipCode;
                 Physician.AltPhone = provider.AltPhone;
                 Physician.CreatedBy = "Admin: "+provider.AdminName;
                 Physician.CreatedDate = DateTime.Now;
@@ -113,10 +113,65 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 _context.Physicians.Add(Physician);
                 _context.SaveChanges();
 
-                pr.PhysicianId = Physician.PhysicianId;
-                pr.RegionId = provider.RegionId;
+            foreach (var regionId in provider.SelectRegion)
+            {
+                var pr = new PhysicianRegion
+                {
+                    PhysicianId = Physician.PhysicianId,
+                    RegionId = regionId,
+                };
                 _context.PhysicianRegions.Add(pr);
-                _context.SaveChanges();
+                
+            }
+            _context.SaveChanges();
+        }
+        public Provider? PhysicianAccount(int ProviderId)
+        {
+            BitArray bit1 = new BitArray(1);
+            bit1.Set(0, true);
+            BitArray bit2 = new BitArray(1);
+            bit2.Set(0, true);
+            BitArray bit3 = new BitArray(1);
+            bit3.Set(0, true);
+            BitArray bit4 = new BitArray(1);
+            bit4.Set(0, true);
+            BitArray bit5 = new BitArray(1);
+            bit5.Set(0, true);
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var model = (from p in _context.Physicians
+                         where p.PhysicianId == ProviderId
+                         select new Provider
+                         {
+                             UserName = $"MD.{p.LastName}.{p.FirstName.Substring(0, 1)}",
+                             Status = (int)p.Status,
+                             RoleId = (int)p.RoleId,
+                             FirstName = p.FirstName,
+                             LastName = p.LastName,
+                             Mobile = p.Mobile,
+                             Email = p.Email,
+                             MedicalLicense = p.MedicalLicense,
+                             NPI = p.Npinumber,
+                             SyncEmail = p.Email,
+                             Address1 = p.Address1,
+                             Address2 = p.Address2,
+                             City = p.City,
+                             StateId = (int)p.RegionId,
+                             ZipCode = p.Zip,
+                             AltPhone = p.AltPhone,
+                             BusinessName = p.BusinessName,
+                             BusinessWebsite = p.BusinessWebsite,
+                             AdminNotes = p.AdminNotes,
+                             IsAgreement = p != null ? (p.IsAgreementDoc == bit1): false,
+                             IsBackground = p != null ? (p.IsBackgroundDoc == bit2) : false,
+                             IsHIPAA = p != null ? (p.IsTrainingDoc == bit3) : false,
+                             IsNonDisclosure = p != null ? (p.IsNonDisclosureDoc == bit4) : false,
+                             IsLicense = p != null ? (p.IsLicenceDoc == bit5) : false,
+                             AdminId = admin.AdminId,
+                             AdminName = $"{admin.FirstName} {admin.LastName}",
+                             
+                         }).FirstOrDefault();
+
+            return model;
         }
     }
 }

@@ -730,41 +730,90 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 }
             }
         }
-        public ProviderMenu? ProviderMenu()
+        //public ProviderMenu? ProviderMenu(int? RegionId)
+        //{
+        //    BitArray bitArray = new BitArray(1);
+        //    bitArray.Set(0, true);
+        //    var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+        //    var model = new ProviderMenu() {
+        //      data = (from p in _context.Physicians
+        //                 join PhysicianRole in _context.Roles
+        //                 on p.RoleId equals PhysicianRole.RoleId into pRoleGroup
+        //                 from pr in pRoleGroup.DefaultIfEmpty()
+        //                 join PhysicianNoti in _context.PhysicianNotifications
+        //                 on p.PhysicianId equals PhysicianNoti.PhysicianId into pNotifications
+        //                 from pn in pNotifications.DefaultIfEmpty()
+        //                 join region in _context.Regions
+        //                 on p.RegionId equals region.RegionId into regionGroup
+        //                 from prg in regionGroup.DefaultIfEmpty()
+        //                 join physicianrg in _context.PhysicianRegions
+        //                 on p.PhysicianId equals physicianrg.PhysicianId into pRegions
+        //                 from pRgroup in pRegions.DefaultIfEmpty()
+        //                 where (RegionId == -1 || pRgroup.RegionId == RegionId)
+        //              orderby p.PhysicianId ascending
+        //                 select new ProviderMenu
+        //                 {
+        //                            ProviderId = p.PhysicianId,
+        //                            ProviderName = p.FirstName + " " + p.LastName,
+        //                            RoleId = pr.RoleId,
+        //                            RoleName = pr.Name,
+        //                            RegionId = prg.RegionId,
+        //                            Status = p.Status,
+        //                            IsNotificationStopped = pn != null ? ( pn.IsNotificationStopped == bitArray ) : false,
+        //                            Mobile = p.Mobile,
+        //                            Email = p.Email,
+        //                        }).ToList(),
+        //      AdminId = admin.AdminId,
+        //      AdminName = $"{admin.FirstName} {admin.LastName}"
+        //    };
+
+        //    return model;
+        //}
+        public ProviderMenu? ProviderMenu(int? regionId = null)
         {
             BitArray bitArray = new BitArray(1);
             bitArray.Set(0, true);
             var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
-            var model = new ProviderMenu() {
-              data = (from p in _context.Physicians
-                         join PhysicianRole in _context.Roles
-                         on p.RoleId equals PhysicianRole.RoleId into pRoleGroup
-                         from pr in pRoleGroup.DefaultIfEmpty()
-                         join PhysicianNoti in _context.PhysicianNotifications
-                         on p.PhysicianId equals PhysicianNoti.PhysicianId into pNotifications
-                         from pn in pNotifications.DefaultIfEmpty()
-                         join region in _context.Regions
-                         on p.RegionId equals region.RegionId into regionGroup
-                         from prg in regionGroup.DefaultIfEmpty()
-                         orderby p.PhysicianId ascending
-                         select new ProviderMenu
-                         {
-                                    ProviderId = p.PhysicianId,
-                                    ProviderName = p.FirstName + " " + p.LastName,
-                                    RoleId = pr.RoleId,
-                                    RoleName = pr.Name,
-                                    RegionId = prg.RegionId,
-                                    Status = p.Status,
-                                    IsNotificationStopped = pn != null ? ( pn.IsNotificationStopped == bitArray ) : false,
-                                    Mobile = p.Mobile,
-                                    Email = p.Email,
-                                }).ToList(),
-              AdminId = admin.AdminId,
-              AdminName = $"{admin.FirstName} {admin.LastName}"
+
+            var query = from p in _context.Physicians
+                        join PhysicianRole in _context.Roles
+                        on p.RoleId equals PhysicianRole.RoleId into pRoleGroup
+                        from pr in pRoleGroup.DefaultIfEmpty()
+                        join PhysicianNoti in _context.PhysicianNotifications
+                        on p.PhysicianId equals PhysicianNoti.PhysicianId into pNotifications
+                        from pn in pNotifications.DefaultIfEmpty()
+                        join region in _context.Regions
+                        on p.RegionId equals region.RegionId into regionGroup
+                        from prg in regionGroup.DefaultIfEmpty()
+                        orderby p.PhysicianId ascending
+                        select new ProviderMenu
+                        {
+                            ProviderId = p.PhysicianId,
+                            ProviderName = p.FirstName + " " + p.LastName,
+                            RoleId = pr.RoleId,
+                            RoleName = pr.Name,
+                            RegionId = prg.RegionId,
+                            Status = p.Status,
+                            IsNotificationStopped = pn != null ? (pn.IsNotificationStopped == bitArray) : false,
+                            Mobile = p.Mobile,
+                            Email = p.Email,
+                        };
+
+            if (regionId != null)
+            {
+                query = query.Where(p => regionId == -1 || p.RegionId == regionId);
+            }
+
+            var model = new ProviderMenu()
+            {
+                data = query.ToList(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
             };
 
             return model;
         }
+
         public void StopNotfy(int ProviderId)
         {
             var model = new PhysicianNotification();
@@ -774,6 +823,23 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             model.IsNotificationStopped = bitArray;
             _context.PhysicianNotifications.Add(model);
             _context.SaveChanges();
+        }
+        public void SendMailPhy(string email, string Message, string ProviderName)
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("hardi.jayani@etatvasoft.com");
+                mail.To.Add(email);
+                mail.Subject = "Message from Admin";
+                mail.Body = $"Dear Doctor {ProviderName},\n\nPlease find Message : \n{Message}";
+
+                using (SmtpClient smtp = new SmtpClient("mail.etatvasoft.com", 587))
+                {
+                    smtp.Credentials = new System.Net.NetworkCredential("hardi.jayani@etatvasoft.com", "LHV0@}YOA?)M");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Password { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? UserName { get; set; }
         public string? DOB { get; set; }
         public string? Mobile { get; set; }
         public string? Email { get; set; }
@@ -22,7 +23,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Street { get; set; }
         public string? City { get; set; }
         public string? Region { get; set; }
-        public int RegionId { get; set; }
+        public int StateId { get; set; }
+        public int Status {  get; set; }
         public string? AltPhone { get; set; }
         public string? State { get; set; }
         public string? ZipCode { get; set; }
@@ -33,10 +35,20 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? BusinessName { get; set;}
         public string? BusinessWebsite { get; set; }
         public IFormFile? File { get; set; }
+        public IFormFile? FileSgn { get; set; }
+        public string? SyncEmail { get; set; }
         public string? AdminNotes { get; set; }
         public bool IsAgreement { get; set; }
         public bool IsBackground { get; set;}
         public bool IsHIPAA { get; set;}
         public bool IsNonDisclosure { get; set;}
+        public bool IsLicense { get; set;}
+        public List<RegionModel> Regions { get; set; }
+        public List<int> SelectRegion {  get; set; }
+    }
+    public class RegionModel
+    {
+        public int RegionId { get; set;}
+        public string? Name { get; set;}
     }
 }

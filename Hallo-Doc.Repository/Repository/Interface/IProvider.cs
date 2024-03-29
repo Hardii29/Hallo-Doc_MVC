@@ -14,5 +14,6 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<Region> GetRegions();
         List<Role> GetRoles();
         void AddProvider(Provider provider);
+        Provider? PhysicianAccount(int ProviderId);
     }
 }

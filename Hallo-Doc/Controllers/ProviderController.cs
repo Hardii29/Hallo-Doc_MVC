@@ -15,8 +15,10 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult CreateProvider()
         {
+            var region = _provider.GetRegions();
             ViewBag.Roles = _provider.GetRoles();
             var model = _provider.CreateProvider();
+            model.Regions = region.Select(r=> new RegionModel { RegionId = r.RegionId, Name = r.Name}).ToList();
             return View("~/Views/Admin/CreateProvider.cshtml", model);
         }
         [HttpPost]
@@ -25,6 +27,14 @@ namespace Hallo_Doc.Controllers
            
             _provider.AddProvider(model);
             return RedirectToAction("ProviderMenu", "Admin");
+        }
+        public IActionResult EditPhysician(int ProviderId)
+        {
+            var region = _provider.GetRegions();
+            ViewBag.Roles = _provider.GetRoles();
+            var model = _provider.PhysicianAccount(ProviderId);
+            model.Regions = region.Select(r => new RegionModel { RegionId = r.RegionId, Name = r.Name }).ToList();
+            return View("~/Views/Admin/EditPhysician.cshtml", model);
         }
     }
 }

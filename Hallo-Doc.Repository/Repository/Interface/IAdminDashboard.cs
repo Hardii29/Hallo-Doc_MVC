@@ -48,7 +48,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         void CreateReq(PatientReq req);
         List<AdminDash> Export(string status, int? Region, int? requesttype);
         void SendLink(string email, string firstName, string lastName);
-        ProviderMenu? ProviderMenu();
+        ProviderMenu? ProviderMenu(int? regionId = null);
         void StopNotfy(int ProviderId);
+        void SendMailPhy(string email, string Message, string ProviderName);
     }
 }
