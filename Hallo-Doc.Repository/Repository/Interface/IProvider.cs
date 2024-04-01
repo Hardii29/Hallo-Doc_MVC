@@ -15,5 +15,11 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<Role> GetRoles();
         void AddProvider(Provider provider);
         Provider? PhysicianAccount(int ProviderId);
+        void EditPrAccount(Provider pr);
+        void EditPrInfo(Provider pr);
+        void EditPrBilling(Provider pr);
+        void EditPrbusiness(Provider pr);
+        void EditOnbording(Provider pr);
+        void DeletePrAccount(int ProviderId);
     }
 }

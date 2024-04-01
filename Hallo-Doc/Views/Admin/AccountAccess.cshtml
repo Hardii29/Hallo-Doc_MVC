@@ -1,0 +1,60 @@
+﻿@model Hallo_Doc.Entity.ViewModel.AccountAccess;
+@{
+    ViewData["Title"] = "Account Access";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light" id="tableContent">
+  
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Account Access</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <div class="g-2 mb-3 first" style="text-align: right;">
+                <div>
+                    <a class="btn btn-outline-info" asp-action="CreateAccess" asp-controller="Admin">Create Access</a>
+                </div>
+            </div>
+            <table class="table table-hover" style="width:100%">
+                <thead class="table-light">
+                    <tr style="padding:10px;">
+                        <th class="col-5">Name</th>
+                        <th class="col-5">Account Type</th>
+                        <th class="col-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.data)
+                        {
+                        string status = "";
+                        switch(item.Accounttype)
+                        {                         
+                            case 1:
+                                status = "Admin";
+                                break;
+                            case 2:
+                                status = "Clinical";
+                                break;
+                            default:
+                                status = "";
+                                break;
+                        }
+                    <tr class=" mt-2">    
+                        <td class="col-5">@item.RoleName</td>
+                        <td class="col-5">@status</td>
+                        <td class="col-2"><a class="btn btn-outline-info mr-1" asp-action="Edit" asp-controller="Admin">Edit</a><a class="btn btn-outline-info">Delete</a></td>
+                    </tr> 
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+   
+</body>

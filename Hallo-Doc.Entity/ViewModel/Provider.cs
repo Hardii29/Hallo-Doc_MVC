@@ -9,13 +9,14 @@ namespace Hallo_Doc.Entity.ViewModel
 {
     public class Provider
     {
+        public int ProviderId { get; set; }
         public string? Password { get; set; }
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; }
         public string? LastName { get; set; }
         public string? UserName { get; set; }
         public string? DOB { get; set; }
         public string? Mobile { get; set; }
-        public string? Email { get; set; }
+        public string Email { get; set; }
         public string? Role { get; set; }
         public int RoleId { get; set; }
         public string? Address1 { get; set; }
@@ -32,8 +33,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public int AdminId { get; set; } = 0;
         public string? MedicalLicense { get; set; }
         public string? NPI {  get; set; }
-        public string? BusinessName { get; set;}
-        public string? BusinessWebsite { get; set; }
+        public string BusinessName { get; set;}
+        public string BusinessWebsite { get; set; }
         public IFormFile? File { get; set; }
         public IFormFile? FileSgn { get; set; }
         public string? SyncEmail { get; set; }

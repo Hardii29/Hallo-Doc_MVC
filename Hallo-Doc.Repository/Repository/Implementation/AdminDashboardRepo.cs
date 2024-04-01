@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -171,7 +172,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         {
             return _context.CaseTags.ToList();
         }
-        public List<Region> GetRegions()
+        public List<Entity.Models.Region> GetRegions()
         {
             return _context.Regions.ToList();
         }
@@ -730,45 +731,6 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 }
             }
         }
-        //public ProviderMenu? ProviderMenu(int? RegionId)
-        //{
-        //    BitArray bitArray = new BitArray(1);
-        //    bitArray.Set(0, true);
-        //    var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
-        //    var model = new ProviderMenu() {
-        //      data = (from p in _context.Physicians
-        //                 join PhysicianRole in _context.Roles
-        //                 on p.RoleId equals PhysicianRole.RoleId into pRoleGroup
-        //                 from pr in pRoleGroup.DefaultIfEmpty()
-        //                 join PhysicianNoti in _context.PhysicianNotifications
-        //                 on p.PhysicianId equals PhysicianNoti.PhysicianId into pNotifications
-        //                 from pn in pNotifications.DefaultIfEmpty()
-        //                 join region in _context.Regions
-        //                 on p.RegionId equals region.RegionId into regionGroup
-        //                 from prg in regionGroup.DefaultIfEmpty()
-        //                 join physicianrg in _context.PhysicianRegions
-        //                 on p.PhysicianId equals physicianrg.PhysicianId into pRegions
-        //                 from pRgroup in pRegions.DefaultIfEmpty()
-        //                 where (RegionId == -1 || pRgroup.RegionId == RegionId)
-        //              orderby p.PhysicianId ascending
-        //                 select new ProviderMenu
-        //                 {
-        //                            ProviderId = p.PhysicianId,
-        //                            ProviderName = p.FirstName + " " + p.LastName,
-        //                            RoleId = pr.RoleId,
-        //                            RoleName = pr.Name,
-        //                            RegionId = prg.RegionId,
-        //                            Status = p.Status,
-        //                            IsNotificationStopped = pn != null ? ( pn.IsNotificationStopped == bitArray ) : false,
-        //                            Mobile = p.Mobile,
-        //                            Email = p.Email,
-        //                        }).ToList(),
-        //      AdminId = admin.AdminId,
-        //      AdminName = $"{admin.FirstName} {admin.LastName}"
-        //    };
-
-        //    return model;
-        //}
         public ProviderMenu? ProviderMenu(int? regionId = null)
         {
             BitArray bitArray = new BitArray(1);
@@ -803,14 +765,12 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             {
                 query = query.Where(p => regionId == -1 || p.RegionId == regionId);
             }
-
             var model = new ProviderMenu()
             {
                 data = query.ToList(),
                 AdminId = admin.AdminId,
                 AdminName = $"{admin.FirstName} {admin.LastName}"
             };
-
             return model;
         }
 
@@ -840,6 +800,64 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                     smtp.Send(mail);
                 }
             }
+        }
+        public AccountAccess Access()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var query = from r in _context.Roles
+                        select new AccountAccess
+                        {
+                            RoleId = r.RoleId,
+                            RoleName = r.Name,
+                            Accounttype = r.AccountType
+                        };
+
+            var model = new AccountAccess()
+            {
+                data = query.ToList(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
+        }
+        public UserAccess UserAccess()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var query = from r in _context.Roles
+                        select new UserAccess
+                        {
+                            RoleId = r.RoleId,
+                            RoleName = r.Name,
+                            AccountType = r.AccountType,
+                            UserName = r.AccountType == 1 ? admin.FirstName + " " + admin.LastName :
+                                       r.AccountType == 2 ? $"{_context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).FirstName} {_context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).LastName}" : null,
+                            Phone = r.AccountType == 1 ? admin.Mobile :
+                                    r.AccountType == 2 ? _context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).Mobile : null,
+                            Status = (short)(r.AccountType == 1 ? admin.Status :
+                                     r.AccountType == 2 ? _context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).Status : null),
+                            RequestCount = r.AccountType == 1 ? _context.Requests.Count() : 0,
+                        };
+
+            var model = new UserAccess()
+            {
+                data = query.ToList(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
+        }
+        public AccountAccess CreateAccess()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            return new AccountAccess
+            {
+
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}",
+
+            };
         }
     }
 }

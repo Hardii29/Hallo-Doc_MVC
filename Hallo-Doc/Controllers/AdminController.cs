@@ -291,5 +291,20 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("ProviderMenu");
         }
+        public IActionResult AccountAccess() 
+        { 
+            var model = _adminDashboard.Access();
+            return View(model); 
+        }
+        public IActionResult UserAccess()
+        {
+            var model = _adminDashboard.UserAccess();
+            return View(model);
+        }
+        public IActionResult CreateAccess()
+        {
+            var model = _adminDashboard.CreateAccess();
+            return View(model);
+        }
     }
 }

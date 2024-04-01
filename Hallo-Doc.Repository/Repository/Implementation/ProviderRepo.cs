@@ -55,8 +55,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 var Physician = new Physician();
 
                 Aspnetuser.Id = Guid.NewGuid().ToString();
-                Aspnetuser.Username = provider.FirstName;
-                Aspnetuser.Email = provider.Email;
+                Aspnetuser.Username = $"MD.{provider.LastName}.{provider.FirstName.Substring(0, 1)}";
+            Aspnetuser.Email = provider.Email;
                 Aspnetuser.Passwordhash = hashedPassword;
                 Aspnetuser.Phonenumber = provider.Mobile;
                 Aspnetuser.Createddate = DateTime.Now;
@@ -142,6 +142,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                          where p.PhysicianId == ProviderId
                          select new Provider
                          {
+                             ProviderId = ProviderId,
                              UserName = $"MD.{p.LastName}.{p.FirstName.Substring(0, 1)}",
                              Status = (int)p.Status,
                              RoleId = (int)p.RoleId,
@@ -172,6 +173,170 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                          }).FirstOrDefault();
 
             return model;
+        }
+        public void EditPrAccount(Provider pr)
+        {
+            var user = _context.Physicians.FirstOrDefault(p => p.PhysicianId == pr.ProviderId);
+            if (user != null)
+            {
+                user.RoleId = pr.RoleId;
+                user.Status = (short?)pr.Status;
+                user.ModifiedBy = $"Admin: {pr.AdminName}";
+                user.ModifiedDate = DateTime.Now;
+                _context.Physicians.Update(user);
+                _context.SaveChanges();
+            }
+        }
+        public void EditPrInfo(Provider pr)
+        {
+            var user = _context.Physicians.FirstOrDefault(p => p.PhysicianId == pr.ProviderId);
+            if (user != null)
+            {
+                user.FirstName = pr.FirstName;
+                user.LastName = pr.LastName;
+                user.Email = pr.Email;
+                user.Mobile = pr.Mobile;
+                user.MedicalLicense = pr.MedicalLicense;
+                user.Npinumber = pr.NPI;
+                user.SyncEmailAddress = pr.SyncEmail;
+                user.ModifiedBy = $"Admin: {pr.AdminName}";
+                user.ModifiedDate = DateTime.Now;
+                _context.Physicians.Update(user);
+                _context.SaveChanges();
+            }
+        }
+        public void EditPrBilling(Provider pr)
+        {
+            var user = _context.Physicians.FirstOrDefault(p => p.PhysicianId == pr.ProviderId);
+            if (user != null)
+            {
+                user.Address1 = pr.Address1;
+                user.Address2 = pr.Address2;
+                user.City = pr.City;
+                user.Zip = pr.ZipCode;
+                user.AltPhone = pr.AltPhone;
+                user.ModifiedBy = $"Admin: {pr.AdminName}";
+                user.ModifiedDate = DateTime.Now;
+                _context.Physicians.Update(user);
+                _context.SaveChanges();
+            }
+        }
+        public void EditPrbusiness(Provider pr)
+        {
+            var user = _context.Physicians.FirstOrDefault(p => p.PhysicianId == pr.ProviderId);
+            if (user != null)
+            {
+                user.BusinessName = pr.BusinessName;
+                user.BusinessWebsite = pr.BusinessWebsite;
+                if (pr.File != null && pr.File.Length > 0)
+                {
+                    var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
+
+                    if (!Directory.Exists(uploadsDirectory))
+                    {
+                        Directory.CreateDirectory(uploadsDirectory);
+                    }
+
+                    var fileName = Path.GetFileName(pr.File.FileName);
+                    var filePath = Path.Combine(uploadsDirectory, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        pr.File.CopyTo(stream);
+                    }
+
+                    user.Photo = fileName;
+                }
+                if (pr.FileSgn != null && pr.FileSgn.Length > 0)
+                {
+                    var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
+
+                    if (!Directory.Exists(uploadsDirectory))
+                    {
+                        Directory.CreateDirectory(uploadsDirectory);
+                    }
+
+                    var fileName = Path.GetFileName(pr.FileSgn.FileName);
+                    var filePath = Path.Combine(uploadsDirectory, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        pr.FileSgn.CopyTo(stream);
+                    }
+
+                    user.Signature = fileName;
+                }
+                user.AdminNotes = pr.AdminNotes;
+                user.ModifiedBy = $"Admin: {pr.AdminName}";
+                user.ModifiedDate = DateTime.Now;
+                _context.Physicians.Update(user);
+                _context.SaveChanges();
+            }
+        }
+        public void EditOnbording(Provider pr)
+        {
+            BitArray bit1 = new BitArray(1);
+            bit1.Set(0, (bool)pr.IsAgreement);
+            BitArray bit2 = new BitArray(1);
+            bit2.Set(0, (bool)pr.IsBackground);
+            BitArray bit3 = new BitArray(1);
+            bit3.Set(0, (bool)pr.IsHIPAA);
+            BitArray bit4 = new BitArray(1);
+            bit4.Set(0, (bool)pr.IsNonDisclosure);
+            BitArray bit5 = new BitArray(1);
+            bit5.Set(0, (bool)pr.IsLicense);
+            var user = _context.Physicians.FirstOrDefault(p => p.PhysicianId == pr.ProviderId);
+            if (user != null)
+            {
+                user.IsAgreementDoc = bit1;
+                user.IsBackgroundDoc = bit2;
+                user.IsTrainingDoc = bit3;
+                user.IsNonDisclosureDoc = bit4;
+                user.IsLicenceDoc = bit5;
+                user.ModifiedBy = $"Admin: {pr.AdminName}";
+                user.ModifiedDate = DateTime.Now;
+                _context.Physicians.Update(user);
+                _context.SaveChanges();
+            }
+        }
+        public void DeletePrAccount(int ProviderId) 
+        {
+            var user = _context.Physicians.FirstOrDefault(p => p.PhysicianId == ProviderId);
+            if (user != null)
+            {
+                var id = _context.AspnetUsers.FirstOrDefault(a => a.Id == user.AspNetUserId);
+                var notifications = _context.PhysicianNotifications.Where(n => n.PhysicianId == ProviderId);
+                _context.PhysicianNotifications.RemoveRange(notifications);
+                _context.SaveChanges();
+
+                var locations = _context.PhysicianLocations.Where(l => l.PhysicianId == ProviderId);
+                _context.PhysicianLocations.RemoveRange(locations);
+                _context.SaveChanges();
+
+                var region = _context.PhysicianRegions.Where(r => r.PhysicianId == ProviderId);
+                _context.PhysicianRegions.RemoveRange(region);
+                _context.SaveChanges();
+
+                var rsl = _context.RequestStatusLogs.Where(rsl => rsl.PhysicianId == ProviderId);
+                _context.RequestStatusLogs.RemoveRange(rsl);
+                _context.SaveChanges();
+
+                //var shift = _context.Shifts.Where(s => s.PhysicianId == ProviderId);
+                //_context.Shifts.RemoveRange(shift);
+                //_context.SaveChanges();
+
+                var requests = _context.Requests.Where(r => r.PhysicianId == ProviderId);
+                foreach (var request in requests)
+                {
+                    request.PhysicianId = null;
+                }
+                _context.SaveChanges();
+
+                _context.Physicians.Remove(user);
+                _context.SaveChanges();
+                _context.AspnetUsers.RemoveRange(id);
+                _context.SaveChanges();
+            }
         }
     }
 }

@@ -1,0 +1,87 @@
+﻿@model Hallo_Doc.Entity.ViewModel.UserAccess;
+@{
+    ViewData["Title"] = "User Access";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light" id="tableContent">
+   
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">User Access</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
+                <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                    <select class="form-select" id="SelectedRegion" name="RoleId">
+                        <option value=" ">All</option>
+                    </select>
+                </div>
+                <div>
+                    <a class="btn btn-info text-white" asp-action="CreateAdmin" asp-controller="Admin">Create Admin Account</a>
+                </div>
+            </div>
+            <table class="table table-hover" style="width:100%">
+                <thead class="table-light">
+                    <tr style="padding:10px;">
+                        <th class="col-2">Account Type</th>
+                        <th class="col-2">Account POC</th>
+                        <th class="col-2">Phone</th>
+                        <th class="col-2">Status</th>
+                        <th class="col-2">Open Requests</th>
+                        <th class="col-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.data)
+                        {
+                        string status = "";
+                        switch(item.Status)
+                        {                         
+                            case 2:
+                                status = "Pending";
+                                break;
+                            
+                            case 4:
+                                status = "Active";
+                                break;
+                            case 5:
+                                status = "Active";
+                                break;
+                            default:
+                                status = "";
+                                break;
+                        }
+                        string accountType = "";
+                        switch(item.AccountType)
+                        {
+                            case 1 :
+                                accountType = "Admin";
+                                break;
+                            case 2:
+                                accountType = "Clinical";
+                                break;
+                            default:
+                                accountType = "";
+                                break;
+                        }
+                        <tr class=" mt-2">
+                        <td class="col-2">@accountType</td>
+                        <td class="col-2">@item.UserName</td>
+                        <td class="col-2">@item.Phone</td>
+                        <td class="col-2">@status</td>
+                        <td class="col-2">@item.RequestCount</td>
+                        <td class="col-2"><a class="btn btn-outline-info">Edit</a></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>

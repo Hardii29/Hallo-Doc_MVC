@@ -19,12 +19,18 @@
     <link href="~/css/admin_dashboard.css" rel="stylesheet">
  @*    <link rel="stylesheet" href="~/Hallo_Doc.styles.css" asp-append-version="true" /> *@
  <style>
-     .dropdown-toggle::after {
-         display:none !important;
-     }
-     .dropdown-menu {
-         left:auto;
-     }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
  </style>
 </head>
 <body >
@@ -72,22 +78,24 @@
                     <li class="nav-item mx-2">
                             <a class="nav-link" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model.AdminId">My Profile</a>
                     </li>
-                        <li class="nav-item mx-2">
-
-                            <a class="popout nav-link provider">Providers</a>
-                            <ul class="drp-nav dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="Admin" asp-action="ProviderMenu">Provider</a></li>
-                                <li><a class="dropdown-item" href="#">Schedulling</a></li>
-                                <li><a class="dropdown-item" href="#">Invoicing</a></li>
-                            </ul>
-
+                        <li class="nav-item mx-2 dropdown">
+                            <a class="nav-link">Providers</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="ProviderMenu">Provider</a>
+                                <a class="dropdown-item" href="#">Scheduling</a>
+                                <a class="dropdown-item" href="#">Invoicing</a>
+                            </div>
                         </li>
                     <li class="nav-item mx-2">
                         <a href="profession-menu-vendors.html" class="nav-link">Partners</a>
                     </li>
-                    <li class="nav-item mx-2">
-                        <a href="account-access.html" class="nav-link">Access</a>
-                    </li>
+                        <li class="nav-item mx-2 dropdown">
+                            <a class="nav-link">Access</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="AccountAccess">Account Access</a>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="UserAccess">User Access</a>
+                            </div>
+                        </li>
                     <li class="nav-item mx-2">
                         <a href="patient-history.html" class="nav-link">Records</a>
                     </li>
@@ -97,7 +105,10 @@
     </nav>
         <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
         <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
-        <script type="text/javascript">
+ @*        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.dropdown-toggle').dropdown();
+            });
             $(function () {
                 $(".navbar-nav li, .navbar-nav a, .navbar-nav ul").removeAttr('style');
                 $(".dropdown-menu").closest("li").removeClass().addClass("dropdown-toggle");
@@ -106,8 +117,11 @@
 
                 $("a.selected").closest("li").addClass("provider");
                 $("a.selected").closest(".dropdown-toggle").addClass("provider");
+                // $(".dropdown-toggle").dropdown();
+                $("a.selected").closest("li").addClass("access");
+                $("a.selected").closest(".dropdown-toggle").addClass("access");
             });
-        </script>
+        </script> *@
     </header>
 
     @RenderBody()

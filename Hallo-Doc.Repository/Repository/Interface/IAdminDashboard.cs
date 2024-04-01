@@ -51,5 +51,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         ProviderMenu? ProviderMenu(int? regionId = null);
         void StopNotfy(int ProviderId);
         void SendMailPhy(string email, string Message, string ProviderName);
+        AccountAccess Access();
+        UserAccess UserAccess();
+        AccountAccess CreateAccess();
     }
 }

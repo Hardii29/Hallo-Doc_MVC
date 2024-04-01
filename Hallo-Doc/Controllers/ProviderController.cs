@@ -36,5 +36,41 @@ namespace Hallo_Doc.Controllers
             model.Regions = region.Select(r => new RegionModel { RegionId = r.RegionId, Name = r.Name }).ToList();
             return View("~/Views/Admin/EditPhysician.cshtml", model);
         }
+        [HttpPost]
+        public IActionResult EditPrAccount(Provider model)
+        {
+            _provider.EditPrAccount(model);
+            return RedirectToAction("EditPhysician", "Provider", new { ProviderId = model.ProviderId });
+        }
+        [HttpPost]
+        public IActionResult EditPrInfo(Provider model)
+        {
+            _provider.EditPrInfo(model);
+            return RedirectToAction("EditPhysician", "Provider", new { ProviderId = model.ProviderId });
+        }
+        [HttpPost]
+        public IActionResult EditPrBilling(Provider model)
+        {
+            _provider.EditPrBilling(model);
+            return RedirectToAction("EditPhysician", "Provider", new { ProviderId = model.ProviderId });
+        }
+        [HttpPost]
+        public IActionResult EditPrbusiness(Provider model)
+        {
+            _provider.EditPrbusiness(model);
+            return RedirectToAction("EditPhysician", "Provider", new { ProviderId = model.ProviderId });
+        }
+        [HttpPost]
+        public IActionResult EditOnbording(Provider model)
+        {
+            _provider.EditOnbording(model);
+            return RedirectToAction("EditPhysician", "Provider", new { ProviderId = model.ProviderId });
+        }
+        [HttpPost]
+        public IActionResult DeleteAccount(int ProviderId)
+        {
+            _provider.DeletePrAccount(ProviderId);
+            return RedirectToAction("ProviderMenu", "Admin");
+        }
     }
 }
