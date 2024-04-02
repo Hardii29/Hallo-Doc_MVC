@@ -348,8 +348,6 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasKey(e => e.RoleMenuId).HasName("RoleMenu_pkey");
 
-            entity.Property(e => e.RoleMenuId).ValueGeneratedNever();
-
             entity.HasOne(d => d.Menu).WithMany(p => p.RoleMenus)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("RoleMenu_MenuId_fkey");

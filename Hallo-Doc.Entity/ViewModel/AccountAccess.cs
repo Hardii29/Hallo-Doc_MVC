@@ -14,6 +14,14 @@ namespace Hallo_Doc.Entity.ViewModel
         public int RoleId { get; set; }
         public string? RoleName { get; set;}
         public short Accounttype { get; set; }
-
+        public AccountType SelectedType { get; set; }
+        public List<int> SelectMenu { get; set; }
+    }
+    public enum AccountType
+    {
+        Admin = 1,
+        Physician = 2,
+        Patient = 3,
+        All = 4
     }
 }

@@ -12,6 +12,7 @@ using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -858,6 +859,37 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 AdminName = $"{admin.FirstName} {admin.LastName}",
 
             };
+        }
+        public List<Menu> GetMenuList(AccountType accountType)
+        {
+            switch (accountType)
+            {
+                case AccountType.Admin:
+                    return _context.Menus.Where(m => m.AccountType == 1).ToList();
+                case AccountType.Physician:
+                    return _context.Menus.Where(m => m.AccountType == 2).ToList();
+                case AccountType.Patient:
+                    return _context.Menus.Where(m => m.AccountType == 3).ToList();
+                case AccountType.All:
+                    return _context.Menus.ToList();
+                default:
+                    return new List<Menu>();
+            }
+        }
+        public void CreateRole(AccountAccess access)
+        {
+            var role = _context.Roles.FirstOrDefault(r => r.Name == access.RoleName);
+            foreach (var menuId in access.SelectMenu)
+            {
+                var rm = new RoleMenu
+                {
+                    RoleId = role.RoleId,
+                    MenuId = menuId,
+                };
+                _context.RoleMenus.Add(rm);
+               
+            }
+            _context.SaveChanges();
         }
     }
 }

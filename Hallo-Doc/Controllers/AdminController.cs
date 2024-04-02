@@ -306,5 +306,17 @@ namespace Hallo_Doc.Controllers
             var model = _adminDashboard.CreateAccess();
             return View(model);
         }
+        [HttpGet]
+        public JsonResult GetMenuList(int accountType)
+        {
+            var menuList = _adminDashboard.GetMenuList((AccountType)accountType);
+            return Json(menuList);
+        }
+        [HttpPost]
+        public IActionResult CreateAccess(AccountAccess access) 
+        { 
+            _adminDashboard.CreateRole(access);
+            return RedirectToAction("AccountAccess");
+        }
     }
 }

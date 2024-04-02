@@ -54,5 +54,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         AccountAccess Access();
         UserAccess UserAccess();
         AccountAccess CreateAccess();
+        List<Menu> GetMenuList(AccountType accountType);
+        void CreateRole(AccountAccess access);
     }
 }

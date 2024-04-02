@@ -8,7 +8,7 @@
 
     <div class="container mt-5">
         <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
-            <h4 style="font-weight:bold;">Create Access</h4>
+            <h4 style="font-weight:bold;">Create Role</h4>
 
             <a class="btn btn-outline-info out back" asp-action="AccountAccess" asp-controller="Admin">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
@@ -18,28 +18,62 @@
         </div>
         <div class="content">
             <h5 style="font-weight:bold;">Details</h5>
+            <form asp-controller="Admin" asp-action="CreateAccess" method="post">
             <div class="row g-2 mt-3">
                 <div class="form-group form-floating col-md-6 col-sm-12">
-                    <input type="text" id="RoleName" class="form-control" placeholder="RoleName">
+                    <input type="text" id="RoleName" asp-for="RoleName" class="form-control" placeholder="RoleName">
                     <label for="RoleName">Role Name</label>
                 </div>
                 <div class="form-group form-floating col-md-6 col-sm-12">
-                    <select class="form-select" id="accountType" name="AccountType">
-                        <option value=" ">All</option>
+                    <select asp-for="SelectedType" class="form-select" id="accountType" name="AccountType" onchange="getMenus(this)">
+                        <option value="">Select Account Type</option>
+                        @foreach (var accountType in Enum.GetValues(typeof(Hallo_Doc.Entity.ViewModel.AccountType)))
+                        {
+                            <option value="@((int)accountType)">@accountType.ToString()</option>
+                        }
                     </select>
                     <label for="accountType">Account Type</label>
                 </div>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input mt-1" name="SelectRegion" type="checkbox" value="true" id="check">
-                <label class="form-check-label" for="check">
-                    Name
-                </label>
-            </div>
+            <div id="menuCheckboxes"></div>
             <div class="g-2 mt-3" style="text-align: right;">
                 <button type="submit" class="btn btn-info text-white btn-lg">Save</button>
                 <button type="button" class="btn btn-outline-info btn-lg">Cancel</button>
             </div>
+            </form>
         </div>
     </div>
 </body>
+<style>
+    .inline-checkbox-container {
+        display: inline-block;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    .checkbox-inline {
+        display: inline-block;
+        margin-right: 50px !important; 
+    }
+</style>
+
+<script>
+    function getMenus(selectObject) {
+        var selectedAccountType = selectObject.value;
+        $.ajax({
+            url: '/Admin/GetMenuList',
+            type: 'GET',
+            data: { accountType: selectedAccountType },
+            success: function (data) {
+                $('#menuCheckboxes').empty();
+                var checkboxContainer = $('<div class="inline-checkbox-container"></div>');
+                data.forEach(function (item) {
+                    var checkbox = '<label class="checkbox-inline"><input class="form-check-input" name="SelectMenu" type="checkbox" value="' + item.menuId + '" id="menu' + item.menuId + '">' + item.name + '</label>';
+                    checkboxContainer.append(checkbox);
+                });
+                $('#menuCheckboxes').append(checkboxContainer);
+            }
+        });
+    }
+</script>
+
