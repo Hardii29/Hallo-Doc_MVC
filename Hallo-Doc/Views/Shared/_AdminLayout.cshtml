@@ -31,6 +31,12 @@
         .dropdown:hover .dropdown-menu {
             display: block;
         }
+
+        .nav-link.active {
+            background-color: white !important;
+            color: #17a2b8 !important;
+            border-bottom: 2px solid #17a2b8 !important;
+        }
  </style>
 </head>
 <body >
@@ -70,7 +76,7 @@
                     <ul class="navbar-nav nav-underline offcanvas-body">
 
                     <li class="nav-item mx-2 d-flex">
-                        <a class="nav-link text-info active">Dashboard</a>
+                            <a class="nav-link dashboard" asp-controller="Admin" asp-action="Admin_dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item mx-2">
                         <a class="nav-link">Provider Location</a>
@@ -82,7 +88,7 @@
                             <a class="nav-link">Providers</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="Admin" asp-action="ProviderMenu">Provider</a>
-                                <a class="dropdown-item" href="#">Scheduling</a>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="Scheduling">Scheduling</a>
                                 <a class="dropdown-item" href="#">Invoicing</a>
                             </div>
                         </li>
@@ -105,23 +111,7 @@
     </nav>
         <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
         <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
- @*        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.dropdown-toggle').dropdown();
-            });
-            $(function () {
-                $(".navbar-nav li, .navbar-nav a, .navbar-nav ul").removeAttr('style');
-                $(".dropdown-menu").closest("li").removeClass().addClass("dropdown-toggle");
 
-                $(".dropdown-toggle").find("a").eq(0).attr("data-toggle", "dropdown");
-
-                $("a.selected").closest("li").addClass("provider");
-                $("a.selected").closest(".dropdown-toggle").addClass("provider");
-                // $(".dropdown-toggle").dropdown();
-                $("a.selected").closest("li").addClass("access");
-                $("a.selected").closest(".dropdown-toggle").addClass("access");
-            });
-        </script> *@
     </header>
 
     @RenderBody()
@@ -132,6 +122,19 @@
     
     @await RenderSectionAsync("Scripts", required: false)
    
-
+    <script>
+    
+        $(document).ready(function () {
+            $('.dashboard').addClass('active');
+            $('.nav-link').click(function () {
+                $('.nav-link').removeClass('active');
+                $(this).addClass('active');
+            });
+            $('.dropdown-menu').on('hidden.bs.dropdown', function () {
+                $('.nav-link').removeClass('active');
+                $('.dashboard').addClass('active');
+            });
+        });
+    </script>
 </body>
 </html>

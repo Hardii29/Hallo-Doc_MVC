@@ -318,5 +318,22 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.CreateRole(access);
             return RedirectToAction("AccountAccess");
         }
+        public IActionResult Scheduling() 
+        {
+            ViewBag.Region = _adminDashboard.GetRegions();
+            var model = _adminDashboard.Schedule();
+            return View(model); 
+        }
+        public IActionResult PhysicianCalender(int? RegionId)
+        {
+            var physicians = _adminDashboard.PhysicianCalender(RegionId);
+            return Json(physicians);
+        }
+        [HttpPost]
+        public IActionResult CreateShift(int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime)
+        {
+            _adminDashboard.CreateShift(RegionId, PhysicianId, ShiftDate, StartTime, EndTime);
+            return RedirectToAction("Scheduling");
+        }
     }
 }

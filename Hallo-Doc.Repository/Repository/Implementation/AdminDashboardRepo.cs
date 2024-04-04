@@ -891,5 +891,62 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             }
             _context.SaveChanges();
         }
+        public Schedule Schedule()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            return new Schedule
+            {
+
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}",
+
+            };
+        }
+        public void CreateShift(int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, false);
+            Shift s = new Shift();
+            ShiftDetail sd = new ShiftDetail();
+            ShiftDetailRegion sdr = new ShiftDetailRegion();
+
+            s.PhysicianId = PhysicianId;
+            s.StartDate = ShiftDate;
+            s.IsRepeat = bitArray;
+            s.CreatedBy = "Admin";
+            s.CreatedDate = DateTime.Now; 
+            _context.Shifts.Add(s);
+            _context.SaveChanges();
+
+            sd.ShiftId = s.ShiftId;
+            sd.ShiftDate = DateTime.Now;
+            sd.RegionId = RegionId;
+            sd.StartTime = StartTime;
+            sd.EndTime = EndTime;
+            sd.Status = 2;
+            sd.IsDeleted = bitArray;
+            _context.ShiftDetails.Add(sd);
+            _context.SaveChanges();
+            
+            sdr.ShiftDetailId = sd.ShiftDetailId;
+            sdr.RegionId = RegionId;
+            sdr.IsDeleted = bitArray;
+            _context.ShiftDetailRegions.Add(sdr);
+            _context.SaveChanges();
+          
+        }
+        public List<Physician> PhysicianCalender(int? regionId)
+        {
+            if (regionId == null)
+            {
+                var allPhysicians = _context.Physicians.ToList();
+                return allPhysicians;
+            }
+            else
+            {
+                var physicians = _context.Physicians.Where(p => p.RegionId == regionId).ToList();
+                return physicians;
+            }
+        }
     }
 }

@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div>
+    @Html.Partial("_CreateShift")
+</div>
 <body class="bg-light" id="tableContent">
 
     <div class="container mt-5">
@@ -16,41 +19,180 @@
                 </svg> Back
             </a>
         </div>
-        <div class="content">
-            <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
-                <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <select class="form-select" id="SelectedRegion" name="RoleId">
-                        <option value=" ">All</option>
-                    </select>
-                </div>
-                <div>
-                    <a class="btn btn-info text-white">Create Admin Account</a>
-                </div>
+        <div class="flex-row d-flex mt-3 mb-3 justify-content-between">
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+            <select class="form-select" id="SelectedRegion" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
+                <option value="">All Regions</option>
+            </select>
             </div>
-            <table class="table table-hover" style="width:100%">
-                <thead class="table-light">
-                    <tr style="padding:10px;">
-                        <th class="col-2">Account Type</th>
-                        <th class="col-2">Account POC</th>
-                        <th class="col-2">Phone</th>
-                        <th class="col-2">Status</th>
-                        <th class="col-2">Open Requests</th>
-                        <th class="col-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                        <tr class=" mt-2">
-                            <td class="col-2"></td>
-                            <td class="col-2"></td>
-                            <td class="col-2"></td>
-                            <td class="col-2"></td>
-                            <td class="col-2"></td>
-                            <td class="col-2"><a class="btn btn-outline-info">Edit</a></td>
-                        </tr>
-                    
-                </tbody>
-            </table>
+            <ul>
+                <li class="d-inline">
+                    <a class="btn btn-info text-white" asp-action="MDOnCall" asp-controller="Admin">
+                        <span class="dash-btn">Providers On Call</span>
+                    </a>
+                </li>
+                <li class="d-inline">
+                    <a class="btn btn-info text-white" asp-action="RequestedShift" asp-controller="Admin">
+                        <span class="dash-btn">Shift For Review</span>
+                    </a>
+                </li>
+                <li class="d-inline">
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#createShiftModel">
+                        <span class="dash-btn">Add New Shift</span>
+                    </button>
+                </li>
+            </ul>
         </div>
+        <div class="flex-row d-flex mt-3 mb-3">
+            <h5 id="caldate"></h5>
+        </div>
+        <div class="g-2" style="display:flex; justify-content:flex-end;">
+            <button type="button" class="me-2 bg-light border-0" style="display:flex; align-items:center">
+                <i class="shift" style="background-color: pink; border-color: deeppink"></i>
+                <span style="margin-left:5px"> Panding Shifts</span>
+            </button>
+            <button type="button" class="me-2 bg-light border-0" style="display:flex; align-items:center">
+                <i class="shift" style="background-color: #ccf7d6; border-color: darkgreen"></i>
+                <span style="margin-left:5px"> Approved Shifts</span>
+            </button>
+        </div>
+        <div class="flex-row d-flex mt-3 mb-3 justify-content-between">
+           <ul>
+                <li class="d-inline">
+                    <button type="button" id="prev" class="btn btn-info text-white" style="border-radius:50%"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+                </li>
+                <li class="d-inline">
+                    <button class="btn" id="calendarIconBtn" onclick="picker.show(); return false;">
+                        <i class="fa fa-calendar" id="calendar-icon" style="color:gray"></i>
+                    </button> 
+                </li>
+                <li class="d-inline">
+                    <button type="button" id="nxt" class="btn btn-info text-white" style="border-radius:50%"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                </li>
+           </ul>
+            <ul>
+                <li class="d-inline">
+                    <button type="button" class="btn btn-mode" id="dateview">Day</button>
+                </li>
+                <li class="d-inline">
+                    <button type="button" class="btn btn-mode" id="weekview"> Week </button>
+                </li>
+                <li class="d-inline">
+                    <button type="button" class="btn btn-mode" id="monthview">Month</button>
+                </li>
+            </ul>
+        </div>
+  <div id="calendar"></div>
+  <table id="scheduleTable" class="table table-bordered" style="width: 100%"></table>
     </div>
 </body>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.11/index.global.min.js'></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            themeSystem: 'bootstrap5',
+            initialView: 'resourceTimelineDay',
+            height: 600,
+            headerToolbar: false,
+            editable: true,
+            resourceAreaHeaderContent: 'Physicians',
+            views: {
+                resourceTimelineWeek: {
+                    slotDuration: { days: 1 },
+                    slotLabelFormat: { weekday: 'short', day: 'numeric', week: 'long' },
+                },
+            },
+            displayEventTime: true,
+            eventDisplay: 'block',
+            dayMaxEvents: 1,
+            eventClick: function (event, jsEvent, view) {
+                ViewShift(event.event.id);
+                //ViewShift();
+            }
+        });
+        calendar.render();
+        showDate();
+        document.getElementById('prev').addEventListener('click', function () {
+            calendar.prev();
+            showDate();
+        });
+        document.getElementById('nxt').addEventListener('click', function () {
+            calendar.next();
+            showDate();
+        });
+        document.getElementById('dateview').addEventListener('click', function () {
+            calendar.changeView('resourceTimelineDay');
+            showDate();
+        });
+        document.getElementById('weekview').addEventListener('click', function () {
+            calendar.changeView('resourceTimelineWeek');
+            showDate();
+        });
+        document.getElementById('monthview').addEventListener('click', function () {
+            calendar.changeView('dayGridMonth');
+            showDate();
+        });
+        function showDate() {
+            var view = calendar.view;
+            document.getElementById('caldate').innerHTML = view.title;
+            ProviderData();
+            // EventData();
+        }
+        function ProviderData() {
+            region = $("#SelectedRegion").val();
+            console.log(region);
+            var response;
+            $.ajax({
+                type: "GET",
+                url: "PhysicianCalender",
+                data: {
+                    RegionId: region
+                },
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    calendar.getResources().forEach(function (resource) {
+                        resource.remove();
+                    });
+                    response.forEach(function (physician) {
+                        var fullName = physician.firstName + ' ' + physician.lastName;
+                        calendar.addResource({
+                            id: physician.physicianId,
+                            title: fullName
+                        });
+                    });
+                },
+            });
+        }
+        // function EventData() {
+        //     regionName = $("#SelectedRegion").val();
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "ProviderEventData",
+        //         data: {
+        //             region: regionName
+        //         },
+        //         dataType: 'json',
+        //         success: function (response) {
+        //             calendar.removeAllEvents();
+        //             response.forEach(function (event) {
+        //                 calendar.addEvent(event);
+        //             })
+        //         },
+        //     });
+        // }
+    });
+</script>
+
+@* <script src="/js/daypilot-all.min.js"></script>
+<script type="text/javascript">
+    var picker = new DayPilot.DatePicker({
+        target: 'start',
+        pattern: 'yyyy-MM-dd',
+        onTimeRangeSelected: function (args) {
+            document.getElementById('selectedDate').innerText = args.start.toString("dddd, MMMM dd, yyyy");
+        }
+    });
+</script> *@
