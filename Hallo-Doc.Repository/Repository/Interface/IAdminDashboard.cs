@@ -59,5 +59,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         Schedule Schedule();
         List<Physician> PhysicianCalender(int? regionId);
         void CreateShift(int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime);
+        List<Schedule> ShiftList();
+       
     }
 }

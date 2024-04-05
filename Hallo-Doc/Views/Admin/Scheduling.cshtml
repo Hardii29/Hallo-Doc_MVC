@@ -3,7 +3,22 @@
     ViewData["Title"] = "Scheduling";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<style>
+    thead{
+        text-decoration:none;
+        background-color: #343a40;
+        color:white;
+    }
+    th a {
+        text-decoration: none;
+        color: white;
+    }
 
+    td a {
+        text-decoration: none;
+        color: black;
+    }
+</style>
 <div>
     @Html.Partial("_CreateShift")
 </div>
@@ -52,7 +67,7 @@
                 <span style="margin-left:5px"> Panding Shifts</span>
             </button>
             <button type="button" class="me-2 bg-light border-0" style="display:flex; align-items:center">
-                <i class="shift" style="background-color: #ccf7d6; border-color: darkgreen"></i>
+                <i class="shift" style="background-color: lightgreen; border-color: darkgreen"></i>
                 <span style="margin-left:5px"> Approved Shifts</span>
             </button>
         </div>
@@ -83,9 +98,10 @@
             </ul>
         </div>
   <div id="calendar"></div>
-  <table id="scheduleTable" class="table table-bordered" style="width: 100%"></table>
     </div>
 </body>
+<script src='https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js'></script>
+<script src="~/js/index.global.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.11/index.global.min.js'></script>
 <script>
 
@@ -94,9 +110,11 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             themeSystem: 'bootstrap5',
             initialView: 'resourceTimelineDay',
-            height: 600,
+            aspectRatio: 1.8,
+            scrollTime: '00:00',
             headerToolbar: false,
             editable: true,
+            selectable: true,
             resourceAreaHeaderContent: 'Physicians',
             views: {
                 resourceTimelineWeek: {
@@ -138,7 +156,7 @@
             var view = calendar.view;
             document.getElementById('caldate').innerHTML = view.title;
             ProviderData();
-            // EventData();
+            EventData();
         }
         function ProviderData() {
             region = $("#SelectedRegion").val();
@@ -166,23 +184,46 @@
                 },
             });
         }
-        // function EventData() {
-        //     regionName = $("#SelectedRegion").val();
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "ProviderEventData",
-        //         data: {
-        //             region: regionName
-        //         },
-        //         dataType: 'json',
-        //         success: function (response) {
-        //             calendar.removeAllEvents();
-        //             response.forEach(function (event) {
-        //                 calendar.addEvent(event);
-        //             })
-        //         },
-        //     });
-        // }
+        function EventData() {
+            $.ajax({
+                type: "GET",
+                url: "EventShift",
+                
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    calendar.removeAllEvents();
+                    response.forEach(function (e) {
+                        var event = {
+                            id: e.shiftId,
+                            title: e.physicianName + "\n" + e.startTime+ "-" + e.endTime,
+                            start: e.start,
+                            end: e.end,
+                            backgroundColor: e.color,
+                            color: e.border,
+                            textColor: "Black",
+                            resourceId: e.physicianId,
+                        };
+                      
+                        calendar.addEvent(event);
+                    });
+                },
+            });
+            calendar.setOption('eventContent', function (arg) {
+                var status = arg.event.extendedProps.status;
+
+                var content = document.createElement('div');
+             
+                if (calendar.view.type === 'resourceTimelineWeek' || calendar.view.type === 'dayGridMonth') {
+                    content.innerText = arg.event.title;
+                }
+                else if (calendar.view.type === 'resourceTimelineDay')
+                {
+                    content.innerText = "Shift";
+                }
+                return { domNodes: [content] };
+            });
+        }
     });
 </script>
 

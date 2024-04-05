@@ -948,5 +948,33 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 return physicians;
             }
         }
+        public List<Schedule> ShiftList()
+        { 
+            List<Schedule> allData = (from s in _context.Shifts
+                                       join shiftDetail in _context.ShiftDetails
+                                       on s.ShiftId equals shiftDetail.ShiftId into shiftGroup
+                                       from sd in shiftGroup.DefaultIfEmpty()
+                                       join p in _context.Physicians
+                                       on s.PhysicianId equals p.PhysicianId into phyShift
+                                       from ps in phyShift.DefaultIfEmpty()
+                                       select new Schedule
+                                       {
+                                           PhysicianId = s.PhysicianId,
+                                           PhysicianName = ps.FirstName + " " + ps.LastName,
+                                           ShiftDate = s.StartDate,
+                                           StartTime = sd.StartTime,
+                                           EndTime = sd.EndTime,
+                                           Start = new DateTime(s.StartDate.Year, s.StartDate.Month, s.StartDate.Day, sd.StartTime.Hour, sd.StartTime.Minute, sd.StartTime.Second),
+                                           End = new DateTime(s.StartDate.Year, s.StartDate.Month, s.StartDate.Day, sd.EndTime.Hour, sd.EndTime.Minute, sd.EndTime.Second),
+                                           Status = sd.Status,
+                                           Color = sd.Status == 2 ? "pink" : "lightgreen",
+                                           Border = sd.Status == 2 ? "deeppink" : "darkgreen",
+                                       }).ToList();
+            return allData;
+        }
+        //private DateTime Combine(DateOnly date, TimeOnly time)
+        //{
+        //    return new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
+        //}
     }
 }

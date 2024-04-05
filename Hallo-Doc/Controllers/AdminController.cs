@@ -335,5 +335,11 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.CreateShift(RegionId, PhysicianId, ShiftDate, StartTime, EndTime);
             return RedirectToAction("Scheduling");
         }
+        public IActionResult EventShift()
+        {
+            var shift = _adminDashboard.ShiftList();
+            
+            return Json(shift); 
+        }
     }
 }

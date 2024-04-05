@@ -20,5 +20,9 @@ namespace Hallo_Doc.Entity.ViewModel
         public TimeOnly EndTime { get; set; }
         public short Status { get; set; }
         public BitArray? IsRepeat { get; set; }
+        public DateTime Start {  get; set; }
+        public DateTime End { get; set; }
+        public string? Color { get; set; }
+        public string? Border { get; set; }    
     }
 }
