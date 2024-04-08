@@ -1,0 +1,76 @@
+﻿@model Hallo_Doc.Entity.ViewModel.RequestedShift;
+@{
+    ViewData["Title"] = "Requested Shifts";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<body>
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Requested Shifts</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <div class="flex-row d-flex mt-3 mb-3 justify-content-between">
+                <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                    <select class="form-select" id="SelectedRegion" name="RegionId">
+                        <option value="">All Regions</option>
+                    </select>
+                </div>
+                <ul>
+                    <li class="d-inline">
+                        <button type="button" class="btn text-white" style="background-color: darkgreen;">
+                            <span class="dash-btn">View current Month Shifts</span>
+                        </button>
+                    </li>
+                    <li class="d-inline">
+                        <button type="button" class="btn btn-success text-white">
+                            <span class="dash-btn">Approved Selected</span>
+                        </button>
+                    </li>
+                    <li class="d-inline">
+                        <button type="button" class="btn btn-danger text-white">
+                            <span class="dash-btn">Delete Seleced</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <table class="table table-hover" style="width:100%">
+                <thead class="table-light">
+                    <tr style="padding:10px;">
+                        <th class="col-1" style="text-align:center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox">
+                            </div>
+                        </th>
+                        <th class="col-3">Staff</th>
+                        <th class="col-3">Day</th>
+                        <th class="col-3">Time</th>
+                        <th class="col-2">Region</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     @foreach (var item in Model.data)
+                        {
+                    <tr class=" mt-2">
+                        <td class="col-1" style="text-align:center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox">
+                                <input type="hidden" />
+                            </div>
+                        </td>
+                        <td class="col-3">@item.PhysicianName</td>
+                        <td class="col-3">@item.ShiftDate</td>
+                        <td class="col-3">@item.ShiftTime</td>
+                        <td class="col-2">@item.RegionName</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>

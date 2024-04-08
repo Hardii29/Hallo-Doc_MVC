@@ -18,10 +18,12 @@ namespace Hallo_Doc.Controllers
     {
         private readonly IAdminDashboard _adminDashboard;
         private readonly ILogger<AdminController> _logger;
-        public AdminController(ILogger<AdminController> logger, IAdminDashboard adminDashboard)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public AdminController(ILogger<AdminController> logger, IAdminDashboard adminDashboard, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _adminDashboard = adminDashboard;
+            _webHostEnvironment = webHostEnvironment;
         }
         
         public IActionResult Admin_dashboard()
@@ -320,6 +322,7 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult Scheduling() 
         {
+            ViewBag.Physician = _adminDashboard.AllPhysician();
             ViewBag.Region = _adminDashboard.GetRegions();
             var model = _adminDashboard.Schedule();
             return View(model); 
@@ -340,6 +343,47 @@ namespace Hallo_Doc.Controllers
             var shift = _adminDashboard.ShiftList();
             
             return Json(shift); 
+        }
+        public IActionResult ViewShift(int ShiftId)
+        {
+            var view = _adminDashboard.GetShiftDetails(ShiftId);
+            return Json(view);
+        }
+        [HttpPost]
+        public IActionResult EditShift(int ShiftId, int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime)
+        {
+            _adminDashboard.EditShift(ShiftId, RegionId, PhysicianId, ShiftDate, StartTime, EndTime);
+            return RedirectToAction("Scheduling");
+        }
+        [HttpPost]
+        public IActionResult DeleteShift(int ShiftId)
+        {
+            _adminDashboard.DeleteShift(ShiftId);
+            return RedirectToAction("Scheduling");
+        }
+        public IActionResult MDsOnCall()
+        {
+            var model = _adminDashboard.MDsOnCall();
+            return View(model);
+        }
+        [HttpGet("images/{fileName}")]
+        public IActionResult GetImage(string fileName)
+        {
+            var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents", fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileStream = System.IO.File.OpenRead(filePath);
+                return File(fileStream, "image/jpeg");
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        public IActionResult RequestedShift()
+        {
+            var model = _adminDashboard.RequestedShift();
+            return View(model);
         }
     }
 }

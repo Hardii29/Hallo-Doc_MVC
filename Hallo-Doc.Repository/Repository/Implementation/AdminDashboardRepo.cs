@@ -919,7 +919,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.SaveChanges();
 
             sd.ShiftId = s.ShiftId;
-            sd.ShiftDate = DateTime.Now;
+            sd.ShiftDate = new DateTime(ShiftDate.Year, ShiftDate.Month, ShiftDate.Day, StartTime.Hour, StartTime.Minute, StartTime.Second);
             sd.RegionId = RegionId;
             sd.StartTime = StartTime;
             sd.EndTime = EndTime;
@@ -948,6 +948,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 return physicians;
             }
         }
+        public List<Physician> AllPhysician()
+        {
+            var allPhysicians = _context.Physicians.ToList();
+            return allPhysicians;
+        }
         public List<Schedule> ShiftList()
         { 
             List<Schedule> allData = (from s in _context.Shifts
@@ -961,6 +966,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                        {
                                            PhysicianId = s.PhysicianId,
                                            PhysicianName = ps.FirstName + " " + ps.LastName,
+                                           ShiftId = s.ShiftId,
                                            ShiftDate = s.StartDate,
                                            StartTime = sd.StartTime,
                                            EndTime = sd.EndTime,
@@ -972,9 +978,133 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                        }).ToList();
             return allData;
         }
-        //private DateTime Combine(DateOnly date, TimeOnly time)
-        //{
-        //    return new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
-        //}
+        public Schedule GetShiftDetails(int ShiftId)
+        {
+            var data = (from s in _context.Shifts
+                                   join shiftDetail in _context.ShiftDetails
+                                   on s.ShiftId equals shiftDetail.ShiftId into shiftGroup
+                                   from sd in shiftGroup.DefaultIfEmpty()
+                                   join p in _context.Physicians
+                                   on s.PhysicianId equals p.PhysicianId into phyShift
+                                   from ps in phyShift.DefaultIfEmpty()
+                                   join r in _context.Regions
+                                   on sd.RegionId equals r.RegionId into shiftRegion
+                                   from rs in shiftRegion.DefaultIfEmpty()
+                                   where s.ShiftId == ShiftId
+                                   select new Schedule
+                                   {
+                                       RegionId = sd.RegionId,
+                                       RegionName = rs.Name,
+                                       PhysicianId = s.PhysicianId,
+                                       PhysicianName = ps.FirstName + " " + ps.LastName,
+                                       ShiftId = s.ShiftId,
+                                       ShiftDate = s.StartDate,
+                                       StartTime = sd.StartTime,
+                                       EndTime = sd.EndTime,
+                                       Start = new DateTime(s.StartDate.Year, s.StartDate.Month, s.StartDate.Day, sd.StartTime.Hour, sd.StartTime.Minute, sd.StartTime.Second),
+                                       End = new DateTime(s.StartDate.Year, s.StartDate.Month, s.StartDate.Day, sd.EndTime.Hour, sd.EndTime.Minute, sd.EndTime.Second),
+                                   }).FirstOrDefault();
+            return data;
+        }
+        public void EditShift(int ShiftId, int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime)
+        {
+            var s = _context.Shifts.FirstOrDefault(s=>s.ShiftId== ShiftId);
+            var sd = _context.ShiftDetails.FirstOrDefault(sd => sd.ShiftId == ShiftId);
+            var sdr = _context.ShiftDetailRegions.FirstOrDefault(sdr => sdr.ShiftDetail.ShiftId == ShiftId);
+            if(s != null)
+            {
+                s.PhysicianId = PhysicianId;
+                s.StartDate = ShiftDate;
+                _context.Shifts.Update(s);
+                _context.SaveChanges();
+            }
+            
+            if(sd != null)
+            {
+                sd.ShiftDate = new DateTime(ShiftDate.Year, ShiftDate.Month, ShiftDate.Day, StartTime.Hour, StartTime.Minute, StartTime.Second);
+                sd.RegionId = RegionId;
+                sd.StartTime = StartTime;
+                sd.EndTime = EndTime;
+                sd.ModifiedBy = "Admin";
+                sd.ModifiedDate = DateTime.Now;
+                _context.ShiftDetails.Update(sd);
+                _context.SaveChanges();
+            }
+            
+            if(sdr != null)
+            {
+                sdr.RegionId = RegionId;
+                _context.ShiftDetailRegions.Update(sdr);
+                _context.SaveChanges();
+            }
+            
+        }
+        public void DeleteShift(int ShiftId)
+        {
+            var sdr = _context.ShiftDetailRegions.Where(sdr => sdr.ShiftDetail.ShiftId==ShiftId);
+            _context.ShiftDetailRegions.RemoveRange(sdr);
+            _context.SaveChanges();
+            
+            var sd = _context.ShiftDetails.Where(sd => sd.ShiftId ==ShiftId);
+            _context.ShiftDetails.RemoveRange(sd);
+            _context.SaveChanges();
+
+            var shift = _context.Shifts.Where(s=> s.ShiftId == ShiftId);
+            _context.Shifts.RemoveRange(shift); 
+            _context.SaveChanges();
+        }
+        public MDsOnCall MDsOnCall()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var query = from p in _context.Physicians
+                        select new MDsOnCall
+                        {
+                            PhysicianId = p.PhysicianId,
+                            PhysicianName = p.FirstName + " " + p.LastName,
+                            Photo = p.Photo,
+                        };
+
+            var model = new MDsOnCall()
+            {
+                data = query.ToList(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
+        }
+        public RequestedShift RequestedShift()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var query = from s in _context.Shifts
+                        join shiftDetail in _context.ShiftDetails
+                        on s.ShiftId equals shiftDetail.ShiftId into shiftGroup
+                        from sd in shiftGroup.DefaultIfEmpty()
+                        join p in _context.Physicians
+                        on s.PhysicianId equals p.PhysicianId into phyShift
+                        from ps in phyShift.DefaultIfEmpty()
+                        join r in _context.Regions
+                        on sd.RegionId equals r.RegionId into shiftRegion
+                        from rs in shiftRegion.DefaultIfEmpty()
+                        select new RequestedShift
+                        {
+                            RegionId = sd.RegionId,
+                            RegionName = rs.Name,
+                            PhysicianId = s.PhysicianId,
+                            PhysicianName = ps.FirstName + " " + ps.LastName,
+                            ShiftId = s.ShiftId,
+                            ShiftDate = s.StartDate.ToString("MMM dd, yyyy"),
+                            ShiftTime = sd.StartTime.ToString("h:mm tt") + " - " + sd.EndTime.ToString("h:mm tt")
+                        };
+
+            var model = new RequestedShift()
+            {
+                data = query.ToList(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
+        }
     }
 }

@@ -57,9 +57,14 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<Menu> GetMenuList(AccountType accountType);
         void CreateRole(AccountAccess access);
         Schedule Schedule();
+        List<Physician> AllPhysician();
         List<Physician> PhysicianCalender(int? regionId);
         void CreateShift(int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime);
         List<Schedule> ShiftList();
-       
+        Schedule GetShiftDetails(int ShiftId);
+        void EditShift(int ShiftId, int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime);
+        void DeleteShift(int ShiftId);
+        MDsOnCall MDsOnCall();
+        RequestedShift RequestedShift();
     }
 }

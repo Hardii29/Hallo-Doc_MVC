@@ -42,7 +42,7 @@
             </div>
             <ul>
                 <li class="d-inline">
-                    <a class="btn btn-info text-white" asp-action="MDOnCall" asp-controller="Admin">
+                    <a class="btn btn-info text-white" asp-action="MDsOnCall" asp-controller="Admin">
                         <span class="dash-btn">Providers On Call</span>
                     </a>
                 </li>
@@ -99,6 +99,57 @@
         </div>
   <div id="calendar"></div>
     </div>
+    <div class="modal fade" id="viewShiftModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background-color:#0dcaf0">
+                    <h5 class="modal-title" id="exampleModalLabel">View Shift</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="shiftId" value=" " name="ShiftId" class="shiftId" />
+                        <div class="form-floating mb-3">
+                        <select class="form-select region" id="region" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))" disabled>
+                                <option value="">Select Region</option>
+
+                            </select>
+                            <label for="region">Region</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                        <select class="form-select physician" name="PhysicianId" id="physician" asp-items="@(new SelectList(ViewBag.Physician,"PhysicianId","FirstName"))" disabled>
+                                <option value="">Select Physician</option>
+                            </select>
+                            <label for="physician">Select</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                        <input type="date" id="shiftDate" name="ShiftDate" class="form-control shiftDate" placeholder="ShiftDate" disabled>
+                            <label for="ShiftDate">ShiftDate</label>
+                        </div>
+                        <div class="row g-2">
+                            <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="time" id="start" name="StartTime" class="form-control start" placeholder="start" disabled>
+                                <label for="start">Start</label>
+                            </div>
+                            <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="time" id="end" name="EndTime" class="form-control end" placeholder="end" disabled>
+                                <label for="end">End</label>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-bs-dismiss="modal" class="btn btn-info text-white">Return</button>
+                        <button type="button" id="editButton" class="btn btn-info text-white">Edit</button>
+                        <button type="button" id="saveButton" class="btn btn-success text-white" style="display: none;">Save</button>
+                        <button type="button" id="deleteButton" class="btn btn-danger">Delete</button>
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
 </body>
 <script src='https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js'></script>
 <script src="~/js/index.global.js"></script>
@@ -127,7 +178,6 @@
             dayMaxEvents: 1,
             eventClick: function (event, jsEvent, view) {
                 ViewShift(event.event.id);
-                //ViewShift();
             }
         });
         calendar.render();
@@ -224,16 +274,82 @@
                 return { domNodes: [content] };
             });
         }
-    });
-</script>
+        function ViewShift(eventId) {
+            $.ajax({
+                url: 'ViewShift',
+                type: 'GET',
+                data: { ShiftId: eventId },
+                success: function (data) {
+                    console.log(data);
+                    $('#viewShiftModel #region').val(data.regionId);
+                    $('#viewShiftModel #physician').val(data.physicianId);
+                    $('#viewShiftModel #shiftDate').val(data.shiftDate);
+                    $('#viewShiftModel #start').val(data.startTime);
+                    $('#viewShiftModel #end').val(data.endTime);
+                    $('#viewShiftModel #shiftId').val(data.shiftId);
+                    toggleEditMode(false);
+                    $('#viewShiftModel').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+        $('#editButton').click(function () {
+            toggleEditMode(true);
+        });
 
-@* <script src="/js/daypilot-all.min.js"></script>
-<script type="text/javascript">
-    var picker = new DayPilot.DatePicker({
-        target: 'start',
-        pattern: 'yyyy-MM-dd',
-        onTimeRangeSelected: function (args) {
-            document.getElementById('selectedDate').innerText = args.start.toString("dddd, MMMM dd, yyyy");
+        $('#saveButton').click(function () {
+            var shiftId = $('.shiftId').val();
+            var regionId = $('.region').val();
+            var physicianId = $('.physician').val();
+            var shiftDate = $('.shiftDate').val();
+            var startTime = $('.start').val();
+            var endTime = $('.end').val();
+            toggleEditMode(false);
+            $.ajax({
+                
+                url: 'EditShift',
+                type: 'POST',
+                data: { ShiftId: shiftId, RegionId: regionId, PhysicianId: physicianId, ShiftDate: shiftDate, StartTime: startTime, EndTime: endTime },
+                success: function (data) {
+                    console.log(data);
+                    $('#viewShiftModel').modal('hide');
+                    EventData();
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+        $('#deleteButton').click(function () {
+            var shiftId = $('#shiftId').val();
+            console.log(shiftId);
+            $.ajax({
+
+                url: 'DeleteShift',
+                type: 'POST',
+                data: { ShiftId: shiftId },
+                success: function (data) {
+                    $('#viewShiftModel').modal('hide');
+                    EventData();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+        function toggleEditMode(editMode) {
+            $('#viewShiftModel input, #viewShiftModel select').prop('disabled', !editMode);
+            if (editMode) {
+                $('#editButton').hide();
+                $('#saveButton').show();
+            } else {
+                $('#editButton').show();
+                $('#saveButton').hide();
+            }
         }
     });
-</script> *@
+</script>

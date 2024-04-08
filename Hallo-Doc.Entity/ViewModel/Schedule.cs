@@ -11,7 +11,7 @@ namespace Hallo_Doc.Entity.ViewModel
     {
         public string? AdminName { get; set; }
         public int AdminId { get; set; }
-        public int RegionId { get; set; }
+        public int? RegionId { get; set; }
         public string? RegionName { get; set;}
         public int PhysicianId { get; set; }
         public string? PhysicianName { get;set; }
@@ -24,5 +24,6 @@ namespace Hallo_Doc.Entity.ViewModel
         public DateTime End { get; set; }
         public string? Color { get; set; }
         public string? Border { get; set; }    
+        public int ShiftId { get; set; }
     }
 }
