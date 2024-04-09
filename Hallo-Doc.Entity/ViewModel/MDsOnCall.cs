@@ -14,5 +14,14 @@ namespace Hallo_Doc.Entity.ViewModel
         public int PhysicianId { get; set; }
         public string PhysicianName { get;set; }
         public string? Photo {  get; set; }
+        public int? RegionId { get; set; }
+        public string? RegionName { get; set; }
+        public int ShiftId { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public DateOnly ShiftDate { get; set;}
+        public TimeOnly EndTime { get; set; }
+        public DateTime Start {  get; set; }
+        public DateTime End { get; set; }
     }
+   
 }

@@ -1,0 +1,93 @@
+﻿@model Hallo_Doc.Entity.ViewModel.VendorMenu;
+@{
+    ViewData["Title"] = "Edit Business";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light" id="tableContent">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Edit Business</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="VendorMenu" asp-controller="AdminNavbar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <h4 class="mb-4">Submit Information</h4>
+            <form asp-controller="AdminNavbar" asp-action="EditBusiness" method="post">
+                <input type="hidden" name="VendorId" value="@Model.VendorId" />
+                <div class="row g-2 mb-3">
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="Business" asp-for="Business" id="business" class="form-control" placeholder="Business" value="@Model.Business" disabled>
+                        <label for="business">Business Name</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <select class="form-select" name="ProfessionId" id="profession" asp-for="ProfessionId"
+                                asp-items="@(new SelectList(ViewBag.Professions,"HealthProfessionalTypeId","ProfessionName"))" disabled>
+                            <option value="">Select Profession</option>
+                            <option value="@Model.ProfessionId"></option>
+
+                        </select>
+                        <label for="profession">Select Profession</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="FaxNumber" asp-for="FaxNumber" id="fax" class="form-control" placeholder="fax" value="@Model.FaxNumber" disabled>
+                        <label for="fax">Fax Number</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="tel" name="PhoneNumber" asp-for="PhoneNumber" id="mobile" class="form-control" value="@Model.PhoneNumber" style="width: 260%;" disabled>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="email" name="Email" asp-for="Email" id="email" class="form-control" value="@Model.Email" placeholder="Email" disabled>
+                        <label for="email">Email</label>
+                        <span id="email-msg"></span>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="BusinessNumber" asp-for="BusinessNumber" id="contact" class="form-control" value="@Model.BusinessNumber" placeholder="contact" disabled>
+                        <label for="contact">Business Contact</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="Street" asp-for="Street" id="Street" class="form-control" value="@Model.Street" placeholder="Street" disabled>
+                        <label for="Street">Street</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="City" asp-for="City" id="City" class="form-control" value="@Model.City" placeholder="City" disabled>
+                        <label for="City">City</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="State" asp-for="State" id="State" class="form-control" value="@Model.State" placeholder="State" disabled>
+                        <label for="State">State</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="Zip" asp-for="Zip" id="Zip" class="form-control" value="@Model.Zip" placeholder="Zip" disabled>
+                        <label for="Zip">Zip/Postal</label>
+                    </div>
+                </div>
+
+
+                <div class="g-2 mt-4 first" style="text-align: right;">
+                    <button type="button" id="edit" class="btn btn-info text-white btn-lg" onclick="EditVendor()">Edit</button>
+                    <button type="submit" id="save" class="btn btn-info text-white btn-lg" style="display:none">Save</button>
+                    <button type="button" class="btn btn-outline-info btn-lg">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</body>
+<script>
+    function EditVendor() {
+        var formFields = document.querySelectorAll('input, select');
+        formFields.forEach(function (field) {
+            field.disabled = !field.disabled;
+        });
+        var submitButton = document.getElementById('save');
+        submitButton.style.display = submitButton.style.display === 'none' ? 'inline' : 'none';
+        var editButton = document.getElementById('edit');
+        editButton.style.display = 'none';
+    }
+</script>

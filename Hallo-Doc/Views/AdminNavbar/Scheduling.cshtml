@@ -42,12 +42,12 @@
             </div>
             <ul>
                 <li class="d-inline">
-                    <a class="btn btn-info text-white" asp-action="MDsOnCall" asp-controller="Admin">
+                    <a class="btn btn-info text-white" asp-action="MDsOnCall" asp-controller="AdminNavbar">
                         <span class="dash-btn">Providers On Call</span>
                     </a>
                 </li>
                 <li class="d-inline">
-                    <a class="btn btn-info text-white" asp-action="RequestedShift" asp-controller="Admin">
+                    <a class="btn btn-info text-white" asp-action="RequestedShift" asp-controller="AdminNavbar">
                         <span class="dash-btn">Shift For Review</span>
                     </a>
                 </li>
@@ -160,7 +160,7 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             themeSystem: 'bootstrap5',
-            initialView: 'resourceTimelineDay',
+            initialView: 'dayGridMonth',
             aspectRatio: 1.8,
             scrollTime: '00:00',
             headerToolbar: false,

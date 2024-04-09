@@ -1,0 +1,94 @@
+﻿@model Hallo_Doc.Entity.ViewModel.VendorMenu;
+@{
+    ViewData["Title"] = "Vendor Menu";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light" id="tableContent">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Vendors</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
+                <div class="row g-2">
+                    <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
+                        <input type="text" class="form-control" placeholder="Search Vendors" id="searchVendor">
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
+                        <select class="form-select" id="Profession" onchange="handleSearchVendor()" asp-items="@(new SelectList(ViewBag.Professions,"HealthProfessionalTypeId","ProfessionName"))">
+                            <option value="">All Professions</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-outline-info" asp-action="AddBusiness" asp-controller="AdminNavbar"><i class="fa fa-plus" aria-hidden="true"></i> Add Business</a>
+                </div>
+            </div>
+            <table class="table table-hover" style="width:100%">
+                <thead class="table-light">
+                    <tr style="padding:10px;">
+                        <th class="col-2">Profession</th>
+                        <th class="col-2">Business Name</th>
+                        <th class="col-2">Email</th>
+                        <th class="col-2">Fax Number</th>
+                        <th class="col-1">Phone Number</th>
+                        <th class="col-1">Business Contact</th>
+                        <th class="col-2" style="text-align:center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="vendorlist">
+                    @foreach (var item in Model.data)
+                        {
+                    <tr class=" mt-2">
+                        <td class="col-2">@item.Profession</td>
+                        <td class="col-2">@item.Business</td>
+                        <td class="col-2">@item.Email</td>
+                        <td class="col-2">@item.FaxNumber</td>
+                        <td class="col-1">@item.PhoneNumber</td>
+                        <td class="col-1">@item.BusinessNumber</td>
+                            <td class="col-2" style="text-align:center"><a class="btn btn-outline-info btn-sm mr-1" asp-action="EditBusiness" asp-controller="AdminNavbar" asp-route-vendorId="@item.VendorId">Edit</a><a class="btn btn-outline-info btn-sm">Delete</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('searchVendor').addEventListener('keyup', function (evt) {
+            if (evt.key === 'Enter') {
+                evt.preventDefault();
+                handleSearchVendor();
+            }
+        });
+    });
+    function handleSearchVendor() {
+        var searchValue = $('#searchVendor').val();
+        var Profession = $("#Profession").val();
+        console.log("Search value: " + searchValue);
+        console.log("Profession id: " + Profession);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("VendorMenu", "AdminNavbar")',
+            data: { searchValue: searchValue, Profession: Profession },
+            success: function (data) {
+                console.log("AJAX success");
+                var bodyContent = $(data).find('tbody').html();
+                $('#vendorlist').html(bodyContent);
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+</script>

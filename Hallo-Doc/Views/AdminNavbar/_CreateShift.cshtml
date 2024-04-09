@@ -11,7 +11,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="CreateShift" asp-controller="Admin" method="post">
+            <form asp-action="CreateShift" asp-controller="AdminNavbar" method="post">
                 <div class="modal-body">
 
                     <div class="form-floating mb-3">
@@ -118,7 +118,7 @@
         console.log(region);
         $.ajax({
             type: "POST",
-            url: '@Url.Action("PhysicianList", "Admin")?RegionId=' + region,
+            url: '@Url.Action("PhysicianList", "AdminNavbar")?RegionId=' + region,
             cache: false,
             success: function (response) {
                 console.log(response);

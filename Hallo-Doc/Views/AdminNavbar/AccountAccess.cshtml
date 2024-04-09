@@ -19,7 +19,7 @@
         <div class="content">
             <div class="g-2 mb-3 first" style="text-align: right;">
                 <div>
-                    <a class="btn btn-outline-info" asp-action="CreateAccess" asp-controller="Admin">Create Access</a>
+                    <a class="btn btn-outline-info" asp-action="CreateAccess" asp-controller="AdminNavbar">Create Access</a>
                 </div>
             </div>
             <table class="table table-hover" style="width:100%">
@@ -49,7 +49,7 @@
                     <tr class=" mt-2">    
                         <td class="col-5">@item.RoleName</td>
                         <td class="col-5">@status</td>
-                        <td class="col-2"><a class="btn btn-outline-info mr-1" asp-action="Edit" asp-controller="Admin">Edit</a><a class="btn btn-outline-info">Delete</a></td>
+                            <td class="col-2"><a class="btn btn-outline-info mr-1" asp-action="Edit" asp-controller="AdminNavbar">Edit</a><a class="btn btn-outline-info">Delete</a></td>
                     </tr> 
                     }
                 </tbody>

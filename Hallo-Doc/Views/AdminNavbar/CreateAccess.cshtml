@@ -18,7 +18,7 @@
         </div>
         <div class="content">
             <h5 style="font-weight:bold;">Details</h5>
-            <form asp-controller="Admin" asp-action="CreateAccess" method="post">
+            <form asp-controller="AdminNavbar" asp-action="CreateAccess" method="post">
             <div class="row g-2 mt-3">
                 <div class="form-group form-floating col-md-6 col-sm-12">
                     <input type="text" id="RoleName" asp-for="RoleName" class="form-control" placeholder="RoleName">
@@ -61,7 +61,7 @@
     function getMenus(selectObject) {
         var selectedAccountType = selectObject.value;
         $.ajax({
-            url: '/Admin/GetMenuList',
+            url: '/AdminNavbar/GetMenuList',
             type: 'GET',
             data: { accountType: selectedAccountType },
             success: function (data) {

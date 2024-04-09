@@ -87,19 +87,19 @@
                         <li class="nav-item mx-2 dropdown">
                             <a class="nav-link">Providers</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Admin" asp-action="ProviderMenu">Provider</a>
-                                <a class="dropdown-item" asp-controller="Admin" asp-action="Scheduling">Scheduling</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="ProviderMenu">Provider</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="Scheduling">Scheduling</a>
                                 <a class="dropdown-item" href="#">Invoicing</a>
                             </div>
                         </li>
                     <li class="nav-item mx-2">
-                        <a href="profession-menu-vendors.html" class="nav-link">Partners</a>
+                            <a class="nav-link" asp-controller="AdminNavbar" asp-action="VendorMenu">Partners</a>
                     </li>
                         <li class="nav-item mx-2 dropdown">
                             <a class="nav-link">Access</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Admin" asp-action="AccountAccess">Account Access</a>
-                                <a class="dropdown-item" asp-controller="Admin" asp-action="UserAccess">User Access</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="AccountAccess">Account Access</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="UserAccess">User Access</a>
                             </div>
                         </li>
                     <li class="nav-item mx-2">

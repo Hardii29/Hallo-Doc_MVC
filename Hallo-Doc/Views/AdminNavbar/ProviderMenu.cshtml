@@ -71,7 +71,7 @@
                         <td class="col-1">@item?.RoleName</td>
                         <td class="col-2" style="text-align:center">UnAvailable</td>                 
                         <td class="col-2">@status</td>
-                            <td class="col-3"><a class="btn btn-outline-info mr-1" data-bs-toggle="modal" data-bs-target="#contactProviderModel" onclick="ContactProviderid('@item?.ProviderName','@item?.Mobile','@item?.Email')">Contact</a><a class="btn btn-outline-info" asp-action="EditPhysician" asp-controller="Provider" asp-route-ProviderId="@item?.ProviderId">Edit</a><a id="saveButton_@item?.ProviderId" asp-action="StopNotification" asp-controller="Admin" asp-route-ProviderId="@item?.ProviderId" class="btn btn-info text-white ml-1" style="display:none">save</a></td>
+                            <td class="col-3"><a class="btn btn-outline-info mr-1" data-bs-toggle="modal" data-bs-target="#contactProviderModel" onclick="ContactProviderid('@item?.ProviderName','@item?.Mobile','@item?.Email')">Contact</a><a class="btn btn-outline-info" asp-action="EditPhysician" asp-controller="Provider" asp-route-ProviderId="@item?.ProviderId">Edit</a><a id="saveButton_@item?.ProviderId" asp-action="StopNotification" asp-controller="AdminNavbar" asp-route-ProviderId="@item?.ProviderId" class="btn btn-info text-white ml-1" style="display:none">save</a></td>
                     </tr>
                   }  
                 </tbody>
@@ -109,7 +109,7 @@
             console.log("ReginId:" + region);
             $.ajax({
                 type: "GET",
-                url: '@Url.Action("ProviderMenu", "Admin")',
+                url: '@Url.Action("ProviderMenu", "AdminNavbar")',
                 data: { RegionId: region },
                 success: function (data) {
                     console.log("AJAX success");

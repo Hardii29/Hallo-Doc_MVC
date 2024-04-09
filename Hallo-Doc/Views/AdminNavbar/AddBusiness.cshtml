@@ -1,0 +1,78 @@
+﻿@model Hallo_Doc.Entity.ViewModel.VendorMenu;
+@{
+    ViewData["Title"] = "Add Business";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light" id="tableContent">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Add Business</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="VendorMenu" asp-controller="AdminNavbar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <h4 class="mb-4">Submit Information</h4>
+            <form asp-controller="AdminNavbar" asp-action="AddBusiness" method="post">
+                <div class="row g-2 mb-3">
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="Business" asp-for="Business" id="business" class="form-control" placeholder="Business">
+                        <label for="business">Business Name</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <select class="form-select" name="ProfessionId" id="profession" asp-for="ProfessionId"
+                                asp-items="@(new SelectList(ViewBag.Professions,"HealthProfessionalTypeId","ProfessionName"))">
+                            <option value="">Select Profession</option>
+
+                        </select>
+                        <label for="profession">Select Profession</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="FaxNumber" asp-for="FaxNumber" id="fax" class="form-control" placeholder="fax">
+                        <label for="fax">Fax Number</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="tel" name="PhoneNumber" asp-for="PhoneNumber" id="mobile" class="form-control" style="width: 260%;">
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="email" name="Email" asp-for="Email" id="email" class="form-control" placeholder="Email">
+                        <label for="email">Email</label>
+                        <span id="email-msg"></span>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="BusinessNumber" asp-for="BusinessNumber" id="contact" class="form-control" placeholder="contact">
+                        <label for="contact">Business Contact</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="Street" asp-for="Street" id="Street" class="form-control" placeholder="Street">
+                        <label for="Street">Street</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="City" asp-for="City" id="City" class="form-control" placeholder="City">
+                        <label for="City">City</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="State" asp-for="State" id="State" class="form-control" placeholder="State">
+                        <label for="State">State</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="Zip" asp-for="Zip" id="Zip" class="form-control" placeholder="Zip">
+                        <label for="Zip">Zip/Postal</label>
+                    </div>
+                </div>
+
+                
+                <div class="g-2 mt-4 first" style="text-align: right;">
+                    <button type="submit" class="btn btn-info text-white btn-lg">Save</button>
+                    <button type="button" class="btn btn-outline-info btn-lg">Cancel</button>
+                </div>
+            </form>
+       
+        </div>
+    </div>
+</body>
