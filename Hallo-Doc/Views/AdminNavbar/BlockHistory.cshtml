@@ -1,0 +1,100 @@
+﻿@model Hallo_Doc.Entity.ViewModel.BlockHistory;
+@{
+    ViewData["Title"] = "Blocked History";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light">
+    <div class="flex-row d-flex mt-5 m-3">
+        <h4 style="font-weight:bold;">Block History</h4>
+    </div>
+    <div class="container-custom mt-3">
+        <form asp-controller="AdminNavbar" asp-action="Search" method="post" id="bolckForm"> 
+            <div class="row g-2 m-2">
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="text" asp-for="PatientName" id="patientName" class="form-control" placeholder="PatientName">
+                    <label for="patientName">Name</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="date" asp-for="CreatedDate" name="CreatedDate" id="createdDate" class="form-control" placeholder="CreatedDate">
+                    <label for="createdDate">Date</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="text" asp-for="Email" id="email" class="form-control" placeholder="Email">
+                    <label for="email">Email</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="text" asp-for="Mobile" id="phone" class="form-control" placeholder="Phone Number">
+                    <label for="phone">Phone Number</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <div class="m-2 shadow-none">
+                    <a class="btn p-2 btn-outline-info text-info bg-white" id="clear" onclick="searchbtn(event)">
+                        Clear
+                    </a>
+                </div>
+                <div class="m-2 shadow-none">
+                    <a class="btn p-2 btn-info text-white" id="search" onclick="searchbtn(event)">
+                        Search
+                    </a>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-hover mt-3" style="width:100%">
+                <thead class="table-light">
+                    <tr style="padding:10px;">
+                        <th class="col-2">Patient Name</th>
+                        <th class="col-2">Phone Number</th>
+                        <th class="col-2">Email</th>
+                        <th class="col-2">Created Date</th>
+                        <th class="col-2">Notes</th>
+                        <th class="col-1">Is Active</th>
+                        <th class="col-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="blockHistory">
+                    @foreach(var item in Model.list)
+                    {
+                    
+                        <tr class=" mt-2">
+                            <td class="col-2">@item.PatientName</td>
+                            <td class="col-2">@item.Mobile</td>
+                            <td class="col-2">@item.Email</td>
+                            <td class="col-2">@item.CreatedDate</td>
+                            <td class="col-2">@item.Notes</td>
+                            <td class="col-1">
+                                <input class="form-check-input" type="checkbox" disabled @(item.IsActive == true ? "checked" : " ")>
+                                </td>
+                           <td class="col-1"><a class="btn btn-outline-info btn-sm">Unblock</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+      </div>
+    </div>
+</body>
+<script>
+    function searchbtn(event) {
+        var btnid = event.target.id;
+        console.log(btnid);
+        if (btnid == "clear") {
+            $('#bolckForm').trigger('reset');
+        }
+        var Data = $('#bolckForm').serialize();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("BlockHistory", "AdminNavbar")',
+            data: Data,
+            success: function (data) {
+                var bodyContent = $(data).find('tbody').html();
+                $('#blockHistory').html(bodyContent);
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+        
+    }
+</script>

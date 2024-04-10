@@ -3,6 +3,27 @@
     ViewData["Title"] = "Vendor Menu";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<div class="modal fade" id="deleteBusinessModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content justify-content-center" style="text-align:center;">
+
+            <form asp-action="DeleteBusiness" asp-controller="AdminNavbar" method="post">
+                <input type="hidden" value=" " id="VendorId_modal" name="VendorId" />
+                <div class="modal-body m-3">
+                    <img class="img-fluid m-2" src="./../images/Confirmation.png" alt="" width="120" height="60">
+
+                    <div class="mb-5">
+                        <h3>Confirmation for Delete Business</h3>
+                        <p> Are sure you want to clear this Business? </p>
+                    </div>
+
+                    <button type="submit" class="btn btn-info text-white">Delete</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <body class="bg-light" id="tableContent">
 
@@ -55,7 +76,9 @@
                         <td class="col-2">@item.FaxNumber</td>
                         <td class="col-1">@item.PhoneNumber</td>
                         <td class="col-1">@item.BusinessNumber</td>
-                            <td class="col-2" style="text-align:center"><a class="btn btn-outline-info btn-sm mr-1" asp-action="EditBusiness" asp-controller="AdminNavbar" asp-route-vendorId="@item.VendorId">Edit</a><a class="btn btn-outline-info btn-sm">Delete</a></td>
+                            <td class="col-2" style="text-align:center"><a class="btn btn-outline-info btn-sm mr-1" asp-action="EditBusiness" asp-controller="AdminNavbar" asp-route-vendorId="@item.VendorId">Edit</a>
+                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBusinessModel" onclick="Deleteid('@item.VendorId')">Delete</button>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -90,5 +113,10 @@
                 console.log("Error:", error);
             }
         });
+    }
+    function Deleteid(id) {
+        var VendorId = id;
+        console.log(VendorId);
+        document.getElementById('VendorId_modal').value = VendorId;
     }
 </script>

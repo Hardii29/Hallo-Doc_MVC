@@ -430,7 +430,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                           from asp in AdminGroup.DefaultIfEmpty()
                           where (searchValue == null || Hp.VendorName.Contains(searchValue))
                              && (Profession == 0 || Hp.Profession == Profession)
-                             //&& (Hp.IsDeleted == new BitArray(1))
+                             && (Hp.IsDeleted == new BitArray(1))
                           select new VendorMenu
                           {
                               VendorId = Hp.VendorId,
@@ -508,9 +508,9 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             return model;
         }
-        public void EditVendorInfo(VendorMenu model)
+        public void EditVendorInfo(int VendorId, VendorMenu model)
         {
-            var data = _context.HealthProffessionals.FirstOrDefault(v => v.VendorId == model.VendorId);
+            var data = _context.HealthProffessionals.FirstOrDefault(v => v.VendorId == VendorId);
             if (data != null)
             {
                 data.Profession = model.ProfessionId;
@@ -527,6 +527,41 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 _context.HealthProffessionals.Update(data);
                 _context.SaveChanges();
             }
+        }
+        public bool DeleteBusiness(int VendorId)
+        {
+            HealthProffessional r = _context.HealthProffessionals.Where(x => x.VendorId == VendorId).FirstOrDefault();
+            r.IsDeleted[0] = true;
+            r.ModifiedDate = DateTime.Now;
+            _context.HealthProffessionals.Update(r);
+            _context.SaveChanges();
+            return true;
+        }
+        public BlockHistory BlockedHistory(BlockHistory history)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var data = (from req in _context.BlockRequests
+                        join r in _context.Requests on req.RequestId equals r.RequestId
+                        where (string.IsNullOrEmpty(history.PatientName) || r.FirstName.Contains(history.PatientName))
+                           && (history.CreatedDate == null || req.CreatedDate.Value.Date == history.CreatedDate)
+                           && (string.IsNullOrEmpty(history.Email) || req.Email.Contains(history.Email))
+                           && (string.IsNullOrEmpty(history.Mobile) || req.PhoneNumber.Contains(history.Mobile))
+                        select new PatientData
+                        {
+                            PatientName = r.FirstName + " " + r.LastName,
+                            Email = req.Email,
+                            CreatedDate = (DateTime)req.CreatedDate,
+                            IsActive = req.IsActive[0],
+                            RequestId = Convert.ToInt32(req.RequestId),
+                            Mobile = req.PhoneNumber,
+                            Notes = req.Reason
+                        }).ToList();
+            BlockHistory bh = new BlockHistory();
+            bh.list = data;
+            bh.AdminId = admin.AdminId;
+            bh.AdminName = $"{admin.FirstName} {admin.LastName}";
+            return bh;
+           
         }
     }
 }

@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewData["Title"] = "Provider Location";
+    Layout = "~/Views/Shared/_AdminActionLayout.cshtml";
+}
+<link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps.css'>
+<style>
+ /*    #marker {
+        background-image: url("https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png");
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+    }
+ */
+    #map {
+        height: 65vh;
+        margin-top: 4rem auto;
+    }
+</style>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Provider Location</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <div id="map"></div>
+         
+        </div>
+    </div>
+</body>
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
+@* <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script> *@
+
+<script>
+    // Initialize the map
+    var map = tt.map({
+        key: 'tpN90txvbZsxu8rAENFEmjY0MxEtuy92',
+        container: 'map',
+        center: [23.03474661678888, 72.50052433384457], // Default center
+        zoom: 5
+    });
+    
+    // Add a marker for your location
+    var marker = new tt.Marker()
+        .setLngLat([23.03474661678888, 72.50052433384457]) // Set your location's coordinates
+        .addTo(map);
+</script>
+@* <script>
+
+    const APIKey = "0GTimHyQ1q73hIdmr5ljc5GUdIwG0BtC";
+    var center = { lat: 20.5937, lng: 78.9629 };
+    var map = tt.map({
+        key: APIKey,
+        container: "mapAreash",
+        center: center,
+        zoom: 5
+    });
+
+    var sourcearray = null;
+    var sites = [];
+    @if (@ViewBag.Log != null)
+    {
+        foreach (var location in ViewBag.Log)
+        {
+            <text>
+                console.log(sites);
+            sites.push({
+                lat: @location.Latitude,
+                lng: @location.Longitude,
+                name: '@location.PhysicianName'
+            });
+            </text>
+        }
+    }
+        sites.forEach(function (site) {
+            var element = document.createElement("div");
+            element.id = "marker";
+            var marker = new tt.Marker({ element: element }).setLngLat([site.lng, site.lat]).addTo(map);
+            var marker = new tt.Marker({ element: element }).setLngLat([site.lng, site.lat]).addTo(map);
+            var popup = new tt.Popup({ anchor: 'top' }).setHTML("<b>" + site.name + "</b>");
+            marker.setPopup(popup).togglePopup();
+        });
+
+</script> *@

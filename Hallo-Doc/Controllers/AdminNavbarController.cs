@@ -1,4 +1,5 @@
-﻿using Hallo_Doc.Entity.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Hallo_Doc.Entity.Data;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,14 @@ namespace Hallo_Doc.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IAdminNavbar _adminNav;
+        private readonly INotyfService _notyf;
         private readonly ILogger<AdminNavbarController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminNavbarController(ILogger<AdminNavbarController> logger, IAdminNavbar adminNav, IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
+        public AdminNavbarController(ILogger<AdminNavbarController> logger, IAdminNavbar adminNav, INotyfService notyf, IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
         {
             _logger = logger;
             _adminNav = adminNav;
+            _notyf = notyf;
             _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
@@ -157,10 +160,28 @@ namespace Hallo_Doc.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult EditBusiness(VendorMenu model)
+        public IActionResult EditBusiness(int VendorId,VendorMenu model)
         {
-            _adminNav.EditVendorInfo(model);
+            _adminNav.EditVendorInfo(VendorId, model);
             return RedirectToAction("EditBusiness", new { VendorId = model.VendorId });
+        }
+        public IActionResult DeleteBusiness(int VendorId)
+        {
+            bool res = _adminNav.DeleteBusiness(VendorId);
+            if (res == true)
+            {
+                _notyf.Success("Business Successfully Deleted..");
+            }
+            return RedirectToAction("VendorMenu");
+        }
+        public IActionResult BlockHistory(BlockHistory history)
+        {
+            var model = _adminNav.BlockedHistory(history);
+            return View(model);
+        }
+        public IActionResult ProviderLocation()
+        {
+            return View();
         }
     }
 }

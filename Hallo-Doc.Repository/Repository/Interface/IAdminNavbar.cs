@@ -33,6 +33,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         VendorMenu AddBusiness();
         void AddVendor(VendorMenu model);
         VendorMenu EditVendor(int VendorId);
-        void EditVendorInfo(VendorMenu model);
+        void EditVendorInfo(int VendorId, VendorMenu model);
+        bool DeleteBusiness(int VendorId);
+        BlockHistory BlockedHistory(BlockHistory history);
     }
 }

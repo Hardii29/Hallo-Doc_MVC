@@ -236,15 +236,25 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             var requestData = _context.Requests.FirstOrDefault(r => r.RequestId == RequestId);
             if (requestData != null)
             {
-                requestData.Status = 3;
+                requestData.Status = 11;
                 _context.Requests.Update(requestData);
                 _context.SaveChanges();
                 RequestStatusLog rsl = new RequestStatusLog();
                 rsl.RequestId = (int)RequestId;
                 rsl.Notes = Notes;
                 rsl.CreatedDate = DateTime.Now;
-                rsl.Status = 3;
+                rsl.Status = 11;
                 _context.RequestStatusLogs.Add(rsl);
+                _context.SaveChanges();
+                BlockRequest block = new BlockRequest
+                {
+                    RequestId = requestData.RequestId,
+                    PhoneNumber = requestData.PhoneNumber,
+                    Email = requestData.Email,
+                    Reason = Notes,
+                    CreatedDate = DateTime.Now,
+                };
+                _context.BlockRequests.Add(block);
                 _context.SaveChanges();
                 return true;
             }

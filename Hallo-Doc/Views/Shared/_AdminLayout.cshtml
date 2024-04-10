@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string path = Context.Request.Path;
+}
+<!DOCTYPE html>
 <html lang="en" class="w-100">
 <head>
     <meta charset="UTF-8">
@@ -76,16 +79,16 @@
                     <ul class="navbar-nav nav-underline offcanvas-body">
 
                     <li class="nav-item mx-2 d-flex">
-                            <a class="nav-link dashboard" asp-controller="Admin" asp-action="Admin_dashboard">Dashboard</a>
+                            <a class="nav-link dashboard @(path.StartsWith("/Admin/Admin_dashboard") ? "active" : "")" asp-controller="Admin" asp-action="Admin_dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link">Provider Location</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderLocation") ? "active" : "")" asp-controller="AdminNavbar" asp-action="ProviderLocation">Provider Location</a>
                     </li>
                     <li class="nav-item mx-2">
-                            <a class="nav-link" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model.AdminId">My Profile</a>
+                            <a class="nav-link @(path.StartsWith("/Admin/AdminProfile") ? "active" : "")" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model.AdminId">My Profile</a>
                     </li>
                         <li class="nav-item mx-2 dropdown">
-                            <a class="nav-link">Providers</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderMenu") || path.StartsWith("/AdminNavbar/Scheduling") ? "active" : "")">Providers</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="ProviderMenu">Provider</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="Scheduling">Scheduling</a>
@@ -93,17 +96,24 @@
                             </div>
                         </li>
                     <li class="nav-item mx-2">
-                            <a class="nav-link" asp-controller="AdminNavbar" asp-action="VendorMenu">Partners</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/VendorMenu") ? "active" : "")" asp-controller="AdminNavbar" asp-action="VendorMenu">Partners</a>
                     </li>
                         <li class="nav-item mx-2 dropdown">
-                            <a class="nav-link">Access</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/AccountAccess") || path.StartsWith("/AdminNavbar/UserAccess") ? "active" : "")">Access</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="AccountAccess">Account Access</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="UserAccess">User Access</a>
                             </div>
                         </li>
-                    <li class="nav-item mx-2">
-                        <a href="patient-history.html" class="nav-link">Records</a>
+                        <li class="nav-item mx-2 dropdown">
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/SearchRecords") || path.StartsWith("/AdminNavbar/EmailLogs") || path.StartsWith("/AdminNavbar/SMSLogs") || path.StartsWith("/AdminNavbar/PatientRecords") || path.StartsWith("/AdminNavbar/BlockHistory") ? "active" : "")">Records</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="SearchRecords">Search Records</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="EmailLogs">Email Logs</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="SMSLogs">SMS Logs</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="PatientRecords">Patient Records</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="BlockHistory">Blocked History</a>
+                            </div>
                     </li>
                 </ul>
           </div>
@@ -121,8 +131,8 @@
    <script src="~/js/site.js" asp-append-version="true"></script>
     
     @await RenderSectionAsync("Scripts", required: false)
-   
-    <script>
+    @await Component.InvokeAsync("Notyf")
+  @*   <script>
     
         $(document).ready(function () {
             $('.dashboard').addClass('active');
@@ -135,6 +145,6 @@
                 $('.dashboard').addClass('active');
             });
         });
-    </script>
+    </script> *@
 </body>
 </html>

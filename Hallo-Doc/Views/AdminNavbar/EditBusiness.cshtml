@@ -18,8 +18,7 @@
         </div>
         <div class="content">
             <h4 class="mb-4">Submit Information</h4>
-            <form asp-controller="AdminNavbar" asp-action="EditBusiness" method="post">
-                <input type="hidden" name="VendorId" value="@Model.VendorId" />
+            <form asp-controller="AdminNavbar" asp-action="EditBusiness" asp-route-vendorId="@Model.VendorId" method="post">
                 <div class="row g-2 mb-3">
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="text" name="Business" asp-for="Business" id="business" class="form-control" placeholder="Business" value="@Model.Business" disabled>
