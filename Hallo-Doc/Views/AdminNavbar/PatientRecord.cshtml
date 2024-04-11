@@ -1,0 +1,61 @@
+﻿@model Hallo_Doc.Entity.ViewModel.PatientData;
+@{
+    ViewData["Title"] = "Patient Record";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light">
+    <div class="flex-row d-flex mt-5 m-3 justify-content-between">
+        <h4 style="font-weight:bold;">Patient Record</h4>
+        <a class="btn btn-outline-info out back" asp-action="PatientHistory" asp-controller="AdminNavbar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+            </svg> Back
+        </a>
+    </div>
+    <div class="container-custom mt-3">
+        
+        <div class="table-responsive">
+            <table class="table table-hover mt-3" style="width:100%">
+                <thead class="table-light">
+                    <tr style="padding:10px;">
+                        <th>Client/Member</th>
+                        <th>Created Date</th>
+                        <th>Confirmation</th>
+                        <th>Provider Name</th>
+                        <th>Conclude Date</th>
+                        <th>Status</th>
+                        <th style="text-align:center">Final report</th>
+                        <th style="text-align:center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="patientRecord">
+                    @foreach(var item in Model.Record)
+                    {
+                        <tr class="mt-2">
+                            <td scope="row">@item.PatientName</td>
+                            <td scope="row">@string.Format("{0:MMM dd, yyyy}", item.RequestedDate)</td>
+                            <td scope="row">@item.Confirmation</td>
+                            <td scope="row">@item.Physician</td>
+                            <td scope="row">@string.Format("{0:MMM dd, yyyy}", item.ConcludedDate)</td>
+                            <td scope="row">@item.Status</td>
+                            <td scope="row" style="text-align:center">
+                                <a class="btn btn-outline-info btn-sm">View</a>
+                            </td>
+                            <td scope="row" style="text-align:center">
+                                <a class="dropdown btn btn-sm btn-outline-info " role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </a>
+                                <div class="dropdown-menu mt-2" aria-labelledby="">
+                                    <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="@item.RequestId">View Case</a>
+                                    <a class="dropdown-item ">Chats</a>
+                                    <a class="dropdown-item" asp-action="View_upload" asp-controller="Admin" asp-route-requestId="@item.RequestId">Documents</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>

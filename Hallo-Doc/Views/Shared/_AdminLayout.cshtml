@@ -106,12 +106,12 @@
                             </div>
                         </li>
                         <li class="nav-item mx-2 dropdown">
-                            <a class="nav-link @(path.StartsWith("/AdminNavbar/SearchRecords") || path.StartsWith("/AdminNavbar/EmailLogs") || path.StartsWith("/AdminNavbar/SMSLogs") || path.StartsWith("/AdminNavbar/PatientRecords") || path.StartsWith("/AdminNavbar/BlockHistory") ? "active" : "")">Records</a>
+                            <a class="nav-link @(path.EndsWith("SearchRecords") || path.EndsWith("EmailLogs") || path.EndsWith("SMSLogs") || path.EndsWith("PatientRecords") || path.EndsWith("PatientHistory") || path.EndsWith("BlockHistory") ? "active" : "")">Records</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="SearchRecords">Search Records</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="EmailLogs">Email Logs</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="SMSLogs">SMS Logs</a>
-                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="PatientRecords">Patient Records</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="PatientHistory">Patient Records</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="BlockHistory">Blocked History</a>
                             </div>
                     </li>

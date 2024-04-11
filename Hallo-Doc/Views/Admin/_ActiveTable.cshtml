@@ -193,15 +193,14 @@
 </nav>
 <script>
     $(".pagination-container a").on("click", function (e) {
-        //e.preventDefault();
-        console.log("etfh");
+       
         var page = $(this).data('page');
         $.ajax({
             url: "@Url.Action("GetPartialView", "Admin")",
             type: "GET",
             data: {
                 page: page,
-                //status: 1,
+               
                 btnName: "Active",
                 statusid: 3
             },

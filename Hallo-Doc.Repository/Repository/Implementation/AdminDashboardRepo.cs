@@ -234,6 +234,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         public bool BlockCaseReq(int RequestId, string Notes)
         {
             var requestData = _context.Requests.FirstOrDefault(r => r.RequestId == RequestId);
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, false);
             if (requestData != null)
             {
                 requestData.Status = 11;
@@ -252,6 +254,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                     PhoneNumber = requestData.PhoneNumber,
                     Email = requestData.Email,
                     Reason = Notes,
+                    IsActive = bitArray,
                     CreatedDate = DateTime.Now,
                 };
                 _context.BlockRequests.Add(block);

@@ -3,6 +3,7 @@ using Hallo_Doc.Entity.Models;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -552,7 +553,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             Email = req.Email,
                             CreatedDate = (DateTime)req.CreatedDate,
                             IsActive = req.IsActive[0],
-                            RequestId = Convert.ToInt32(req.RequestId),
+                            RequestId = req.RequestId,
                             Mobile = req.PhoneNumber,
                             Notes = req.Reason
                         }).ToList();
@@ -562,6 +563,143 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             bh.AdminName = $"{admin.FirstName} {admin.LastName}";
             return bh;
            
+        }
+        public bool UnBlock(int reqId)
+        {
+            BlockRequest r = _context.BlockRequests.Where(x => x.RequestId == reqId).FirstOrDefault();
+            r.IsActive[0] = true;
+            r.ModifiedDate = DateTime.Now;
+            _context.BlockRequests.Update(r);
+            _context.SaveChanges();
+
+            Entity.Models.Request req = _context.Requests.Where(x => x.RequestId == reqId).FirstOrDefault();
+            req.Status = 1;
+            req.ModifiedDate = DateTime.Now;
+            _context.Requests.Update(req);
+            _context.SaveChanges();
+
+            return true;
+        }
+        public UserData PatientHistory(string fname, string lname, string email, string phone)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var query = from u in _context.Users
+                        .Where(pp => (string.IsNullOrEmpty(fname) || pp.Firstname.Contains(fname))
+                               && (string.IsNullOrEmpty(lname) || pp.Lastname.Contains(lname))
+                               && (string.IsNullOrEmpty(email) || pp.Email.Contains(email))
+                               && (string.IsNullOrEmpty(phone) || pp.Mobile.Contains(phone)))
+                        select new UserData
+                        {
+                            Id = u.Userid,
+                            Firstname = u.Firstname,
+                            Lastname = u.Lastname,
+                            Email = u.Email,
+                            Mobile = u.Mobile,
+                            Address = u.Street + ", " + u.City + ", " + u.State,
+                        };
+
+            var model = new UserData()
+            {
+                data = query.ToList(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
+        }
+        public PatientData PatientRecord(int UserId)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var result = (from req in _context.Requests
+                          join reqClient in _context.Requestclients
+                          on req.RequestId equals reqClient.RequestId into reqClientGroup
+                          from rc in reqClientGroup.DefaultIfEmpty()
+                          join phys in _context.Physicians
+                          on req.PhysicianId equals phys.PhysicianId into physGroup
+                          from p in physGroup.DefaultIfEmpty()
+                          where req.UserId == UserId
+                          select new PatientData
+                          {
+                              PatientName = rc.FirstName + " " + rc.LastName,
+                              RequestedDate = req.CreatedDate,
+                              Confirmation = req.ConfirmationNumber,
+                              Physician = p.FirstName + " " + p.LastName,
+                              ConcludedDate = req.CreatedDate,
+                              Status = (status)req.Status,
+                              RequestTypeId = req.RequestTypeId,
+                              RequestId = req.RequestId
+                          }).ToList();
+
+            var model = new PatientData()
+            {
+                Record = result,
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
+        }
+        public SearchRecordList SearchRecord(SearchRecordList sl)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var result = (from req in _context.Requests
+                          join reqClient in _context.Requestclients
+                          on req.RequestId equals reqClient.RequestId into reqClientGroup
+                          from rc in reqClientGroup.DefaultIfEmpty()
+                          join phys in _context.Physicians
+                          on req.PhysicianId equals phys.PhysicianId into physGroup
+                          from p in physGroup.DefaultIfEmpty()
+                          join nts in _context.RequestNotes
+                          on req.RequestId equals nts.RequestId into ntsgrp
+                          from nt in ntsgrp.DefaultIfEmpty()
+                          where req.IsDeleted == new BitArray(1) && (sl.ReqStatus == 0 || req.Status == sl.ReqStatus) &&
+                                                    (sl.RequestTypeID == 0 || req.RequestTypeId == sl.RequestTypeID) &&
+                                                    (!sl.StartDOS.HasValue || req.CreatedDate.Value.Date >= sl.StartDOS.Value.Date) &&
+                                                    (!sl.EndDOS.HasValue || req.CreatedDate.Value.Date <= sl.EndDOS.Value.Date) &&
+                                                    (sl.PatientName.IsNullOrEmpty() || (req.FirstName + " " + req.LastName).ToLower().Contains(sl.PatientName.ToLower())) &&
+                                                    (sl.PhysicianName.IsNullOrEmpty() || (p.FirstName + " " + p.LastName).ToLower().Contains(sl.PhysicianName.ToLower())) &&
+                                                    (sl.Email.IsNullOrEmpty() || rc.Email.ToLower().Contains(sl.Email.ToLower())) &&
+                                                    (sl.Mobile.IsNullOrEmpty() || rc.PhoneNumber.ToLower().Contains(sl.Mobile.ToLower()))
+                          orderby req.CreatedDate descending
+                          select new SearchRecords
+                          {
+                              PatientName = rc.FirstName + " " + rc.LastName,
+                              RequestTypeID = req.RequestTypeId,
+                              DateOfService = req.CreatedDate,
+                              Email = rc.Email ?? "-",
+                              Mobile = rc.PhoneNumber ?? "-",
+                              Address = rc.Address + "," + rc.City,
+                              Zip = rc.ZipCode,
+                              Status = (status)req.Status,
+                              Physician = p.FirstName + " " + p.LastName ?? "-",
+                              PhyNotes = nt != null ? nt.PhysicianNotes ?? "-" : "-",
+                              AdminNotes = nt != null ? nt.AdminNotes ?? "-" : "-",
+                              PatientNotes = rc.Notes ?? "-",
+                              RequestID = req.RequestId,
+                              Modifieddate = req.ModifiedDate
+                          }).ToList();
+
+            var model = new SearchRecordList();
+            int totalItemCount = result.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)sl.PageSize);
+            List<SearchRecords> list1 = result.Skip((sl.CurrentPage - 1) * sl.PageSize).Take(sl.PageSize).ToList();
+
+            model.list = list1;
+            model.CurrentPage = sl.CurrentPage;
+            model.TotalPages = totalPages;
+            model.AdminId = admin.AdminId;
+            model.AdminName = $"{admin.FirstName} {admin.LastName}";
+            
+            return model;
+        }
+        public bool RecordsDelete(int RequestId)
+        {
+            Entity.Models.Request hp = _context.Requests.Where(x => x.RequestId == RequestId).FirstOrDefault();
+            hp.IsDeleted[0] = true;
+            _context.Requests.Update(hp);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

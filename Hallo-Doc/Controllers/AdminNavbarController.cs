@@ -179,9 +179,42 @@ namespace Hallo_Doc.Controllers
             var model = _adminNav.BlockedHistory(history);
             return View(model);
         }
+        public IActionResult Unblock(int reqId)
+        {
+            bool res = _adminNav.UnBlock(reqId);
+            if (res == true)
+            {
+                _notyf.Success("Patient is Unblocked");
+            }
+            return RedirectToAction("BlockHistory");
+        }
         public IActionResult ProviderLocation()
         {
             return View();
+        }
+        public IActionResult PatientHistory(string Firstname, string Lastname, string Email, string Mobile)
+        {
+            var model = _adminNav.PatientHistory(Firstname, Lastname, Email, Mobile);
+            return View(model);
+        }
+        public IActionResult PatientRecord(int UserId)
+        {
+            var model = _adminNav.PatientRecord(UserId);
+            return View(model);
+        }
+        public IActionResult SearchRecords(SearchRecordList list)
+        {
+            var model = _adminNav.SearchRecord(list);
+            return View(model);
+        }
+        public IActionResult DeleteRecord(int RequestId)
+        {
+            bool res = _adminNav.RecordsDelete(RequestId);
+            if (res == true)
+            {
+                _notyf.Success("Patient Record Deleted successfully");
+            }
+            return RedirectToAction("SearchRecords");
         }
     }
 }

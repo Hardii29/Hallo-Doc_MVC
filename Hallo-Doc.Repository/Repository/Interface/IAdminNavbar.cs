@@ -36,5 +36,12 @@ namespace Hallo_Doc.Repository.Repository.Interface
         void EditVendorInfo(int VendorId, VendorMenu model);
         bool DeleteBusiness(int VendorId);
         BlockHistory BlockedHistory(BlockHistory history);
+        bool UnBlock(int reqId);
+        UserData PatientHistory(string fname, string lname, string email, string phone);
+        PatientData PatientRecord(int UserId);
+        SearchRecordList SearchRecord(SearchRecordList sl);
+        bool RecordsDelete(int RequestId);
+
+
     }
 }

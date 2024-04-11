@@ -25,10 +25,8 @@
     </div>
 </div>
 
-<body class="bg-light" id="tableContent">
-
-    <div class="container mt-5">
-        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+<body class="bg-light">
+        <div class="flex-row d-flex mt-5 m-3 justify-content-between">
             <h4 style="font-weight:bold;">Vendors</h4>
 
             <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
@@ -37,7 +35,7 @@
                 </svg> Back
             </a>
         </div>
-        <div class="content">
+    <div class="container-custom mt-3">
             <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
                 <div class="row g-2">
                     <div class="form-group col-md-6 col-sm-12" style="display: inline-block;">
@@ -54,37 +52,39 @@
                     <a class="btn btn-outline-info" asp-action="AddBusiness" asp-controller="AdminNavbar"><i class="fa fa-plus" aria-hidden="true"></i> Add Business</a>
                 </div>
             </div>
+        <div class="table-responsive">
             <table class="table table-hover" style="width:100%">
                 <thead class="table-light">
                     <tr style="padding:10px;">
-                        <th class="col-2">Profession</th>
-                        <th class="col-2">Business Name</th>
-                        <th class="col-2">Email</th>
-                        <th class="col-2">Fax Number</th>
-                        <th class="col-1">Phone Number</th>
-                        <th class="col-1">Business Contact</th>
-                        <th class="col-2" style="text-align:center">Actions</th>
+                        <th>Profession</th>
+                        <th>Business Name</th>
+                        <th>Email</th>
+                        <th>Fax Number</th>
+                        <th>Phone Number</th>
+                        <th>Business Contact</th>
+                        <th style="text-align:center">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="vendorlist">
                     @foreach (var item in Model.data)
                         {
-                    <tr class=" mt-2">
-                        <td class="col-2">@item.Profession</td>
-                        <td class="col-2">@item.Business</td>
-                        <td class="col-2">@item.Email</td>
-                        <td class="col-2">@item.FaxNumber</td>
-                        <td class="col-1">@item.PhoneNumber</td>
-                        <td class="col-1">@item.BusinessNumber</td>
-                            <td class="col-2" style="text-align:center"><a class="btn btn-outline-info btn-sm mr-1" asp-action="EditBusiness" asp-controller="AdminNavbar" asp-route-vendorId="@item.VendorId">Edit</a>
+                        <tr class=" mt-2">
+                            <td scope="row">@item.Profession</td>
+                            <td scope="row">@item.Business</td>
+                            <td scope="row">@item.Email</td>
+                            <td scope="row">@item.FaxNumber</td>
+                            <td scope="row">@item.PhoneNumber</td>
+                            <td scope="row">@item.BusinessNumber</td>
+                            <td scope="row" style="text-align:center">
+                                <a class="btn btn-outline-info btn-sm mr-1" asp-action="EditBusiness" asp-controller="AdminNavbar" asp-route-vendorId="@item.VendorId">Edit</a>
                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBusinessModel" onclick="Deleteid('@item.VendorId')">Delete</button>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+            </div>
         </div>
-    </div>
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

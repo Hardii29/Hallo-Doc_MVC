@@ -1,5 +1,213 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using static Hallo_Doc.Entity.ViewModel.PatientData;
+@model Hallo_Doc.Entity.ViewModel.SearchRecordList;
 @{
+    ViewData["Title"] = "Search Records";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<div class="modal fade" id="deleteRecordModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content justify-content-center" style="text-align:center;">
+
+            <form asp-action="DeleteRecord" asp-controller="AdminNavbar" method="post">
+                <input type="hidden" value=" " id="RequestId_modal" name="RequestID" />
+                <div class="modal-body m-3">
+                    <img class="img-fluid m-2" src="./../images/Confirmation.png" alt="" width="120" height="60">
+
+                    <div class="mb-5">
+                        <h3>Confirmation for Delete Record</h3>
+                        <p> Are sure you want to delete this Record? 
+                            After deleting the record you can not find it in Search Record page.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn btn-info text-white">Delete</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<body class="bg-light">
+    <div class="flex-row d-flex mt-5 m-3 justify-content-between">
+        <h4 style="font-weight:bold;">Search Records</h4>
+        <button type="button" class="btn btn-info text-white">
+            <i class="fa-solid fa-share-from-square"></i><span class="dash-btn"> Export Data To Excel</span>
+        </button>
+    </div>
+    <div class="container-custom mt-3">
+        <form method="post" id="searchForm">
+            <div class="row g-2 m-2">
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                <select asp-for="ReqStatus" class="form-select form-select-md h-100 p-2" placeholder="Select Request Status">
+                    <option value="0">Select Request Status</option>
+                    @foreach (var item in Enum.GetValues(typeof(Hallo_Doc.Entity.ViewModel.status)))
+                    {
+                        <option value="@((int)item)"> @item.ToString() </option>
+                    }
+                </select>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="text" asp-for="PatientName" id="patientName" class="form-control" placeholder="PatientName">
+                    <label for="patientName">Patient Name</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <select asp-for="RequestTypeID" class="form-select form-select-md h-100 p-2" placeholder="Select Request Type">
+                        <option value="0">Select Request Type</option>
+                        @foreach (var item in Enum.GetValues(typeof(Hallo_Doc.Entity.ViewModel.RequestTypes)))
+                        {
+                            <option value="@((int)item)"> @item.ToString() </option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="date" asp-for="StartDOS" name="StartDOS" id="startDOS" class="form-control" placeholder="StartDOS">
+                    <label for="startDOS">From Date Of Service</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="date" asp-for="EndDOS" name="EndDOS" id="endDOS" class="form-control" placeholder="EndDOS">
+                    <label for="endDOS">To Date Of Service</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="text" asp-for="PhysicianName" id="physicianName" class="form-control" placeholder="PhysicianName">
+                    <label for="physicianName">Provider Name</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="text" asp-for="Email" id="email" class="form-control" placeholder="Email">
+                    <label for="email">Email</label>
+                </div>
+                <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
+                    <input type="text" asp-for="Mobile" id="phone" class="form-control" placeholder="Phone Number">
+                    <label for="phone">Phone Number</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <div class="m-2 shadow-none">
+                    <a class="btn p-2 btn-outline-info text-info bg-white" id="clear" onclick="searchRecord(event)">
+                        Clear
+                    </a>
+                </div>
+                <div class="m-2 shadow-none">
+                    <a class="btn p-2 btn-info text-white" id="search" onclick="searchRecord(event)">
+                        Search
+                    </a>
+                </div>
+            </div>
+            <input type="hidden" asp-for="CurrentPage" id="CurrentPage" />
+        </form>
+        <div class="table-responsive">
+            <table class="table table-hover mt-3" style="width:100%">
+                <thead class="table-light" >
+                    <tr style="padding:10px;">
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Requestor</th>
+                        <th scope="col">Date Of Service</th>
+                        <th scope="col">Close Case Date</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col" style="text-align:center">Address</th>
+                        <th scope="col">Zip</th>
+                        <th scope="col">Request Status</th>
+                        <th scope="col">Physician</th>
+                        <th scope="col">Physician Note</th>
+                        <th scope="col">Cancelled By Provider Note</th>
+                        <th scope="col">Admin Note</th>
+                        <th scope="col">Patient Note</th>
+                        <th scope="col">Delete Permanently</th>
+                    </tr>
+                </thead>
+                <tbody id="searchRecords">
+                    @foreach(var item in Model.list)
+                    {
+                        <tr class="mt-2">
+                            <td scope="col">@item.PatientName</td>
+                            <td scope="col">@Enum.GetName(typeof(Hallo_Doc.Entity.ViewModel.RequestTypes), item.RequestTypeID)</td>
+                            <td scope="col">@string.Format("{0:MMM dd, yyyy}", item.DateOfService)</td>
+                            <td scope="col">-</td>
+                            <td scope="col">@item.Email</td>
+                            <td scope="col">@item.Mobile</td>
+                            <td scope="col" style="text-align:center">@item.Address</td>
+                            <td scope="col">@item.Zip</td>
+                            <td scope="col">@item.Status</td>
+                            <td scope="col">@item.Physician</td>
+                            <td scope="col">@item.PhyNotes</td>
+                            <td scope="col">-</td>
+                            <td scope="col">@item.AdminNotes</td>
+                            <td scope="col">@item.PatientNotes</td>
+                            <td scope="col">
+                                <a class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRecordModel" onclick="DeleteRecord('@item.RequestID')">Delete</a>
+                            </td>
+                        </tr>
+                    }    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example" class="pagenav">
+        <ul class="pagination pagination-container d-flex justify-content-end m-3" id="pagination">
+            @{
+                int i;
+
+                if (Model.CurrentPage > 1)
+                {
+                    <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage - 1)">&lt;</a></li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><a class="page-link">&lt;</a></li>
+                }
+                @for (i = 1; i <= Model.TotalPages; i++)
+                {
+
+                    <li class="page-item"><a href="#" data-page="@i" class="@(i == Model.CurrentPage ? "active" : "") page-link">@i</a></li>
+                }
+                if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage + 1)">&gt;</a></li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><a class="page-link">&gt;</a></li>
+                }
+            }
+        </ul>
+    </nav>
+</body>
+<script>
+    function searchRecord(event) {
+        var btnid = event.target.id;
+        console.log(btnid);
+        if (btnid == "clear") {
+            $('#searchForm').trigger('reset');
+            $('#CurrentPage').val(1);
+        }
+        if (btnid == "search") {
+            $('#CurrentPage').val(1);
+        }
+        var formData = $('#searchForm').serialize();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SearchRecords", "AdminNavbar")',
+            data: formData,
+            success: function (data) {
+                var bodyContent = $(data).find('tbody').html();
+                var page = $(data).find('.pagenav').html();
+                $('#searchRecords').html(bodyContent);
+                $('#pagination').html(page);
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+    $(document).on('click', '.page-link', function (event) {
+        var page = $(this).data('page');
+        console.log(page);
+        $('#CurrentPage').val(page);
+        searchRecord(event);
+    });
+    function DeleteRecord(id) {
+        var RequestId = id;
+        console.log(RequestId);
+        document.getElementById('RequestId_modal').value = RequestId;
+    }
+</script>
