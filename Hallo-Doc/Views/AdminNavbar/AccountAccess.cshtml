@@ -33,23 +33,11 @@
                 <tbody>
                     @foreach (var item in Model.data)
                         {
-                        string status = "";
-                        switch(item.Accounttype)
-                        {                         
-                            case 1:
-                                status = "Admin";
-                                break;
-                            case 2:
-                                status = "Clinical";
-                                break;
-                            default:
-                                status = "";
-                                break;
-                        }
+                       
                     <tr class=" mt-2">    
                         <td class="col-5">@item.RoleName</td>
-                        <td class="col-5">@status</td>
-                            <td class="col-2"><a class="btn btn-outline-info mr-1" asp-action="Edit" asp-controller="AdminNavbar">Edit</a><a class="btn btn-outline-info">Delete</a></td>
+                            <td class="col-5">@Enum.GetName(typeof(Hallo_Doc.Entity.ViewModel.AccountType), item.Accounttype)</td>
+                            <td class="col-2"><a class="btn btn-sm btn-outline-info mr-1" asp-action="Edit" asp-controller="AdminNavbar">Edit</a><a class="btn btn-outline-info btn-sm">Delete</a></td>
                     </tr> 
                     }
                 </tbody>

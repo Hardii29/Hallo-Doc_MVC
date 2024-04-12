@@ -78,7 +78,10 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 User.City = patientReq.City;
                 User.State = patientReq.State;
                 User.Zipcode = patientReq.ZipCode;
-                User.Createdby = "123";
+                User.Createdby = "Patient";
+                User.Intyear = patientReq.DOB.Year;
+                User.Strmonth = patientReq.DOB.Month.ToString();
+                User.Intdate = patientReq.DOB.Day;
                 User.Createddate = DateTime.Now;
                 _context.Users.Add(User);
                 _context.SaveChanges();
@@ -93,7 +96,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 Request.LastName = patientReq.LastName;
                 Request.Email = patientReq.Email;
                 Request.PhoneNumber = patientReq.Mobile;
-                Request.Status = 3;
+                Request.Status = 1;
                 Request.CreatedDate = DateTime.Now;
                 _context.Requests.Add(Request);
                 _context.SaveChanges();
@@ -108,6 +111,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 Requestclient.StrMonth = patientReq.DOB.Month.ToString();
                 Requestclient.IntDate = patientReq.DOB.Day;
                 Requestclient.PhoneNumber = patientReq.Mobile;
+                Requestclient.Notes = patientReq.Symptoms;
                 _context.Requestclients.Add(Requestclient);
                 _context.SaveChanges();
 
@@ -156,7 +160,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 Request.LastName = patientReq.LastName;
                 Request.Email = patientReq.Email;
                 Request.PhoneNumber = patientReq.Mobile;
-                Request.Status = 3;
+                Request.Status = 1;
                 Request.CreatedDate = DateTime.Now;
                 _context.Requests.Add(Request);
                  _context.SaveChanges();
@@ -170,6 +174,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 Requestclient.StrMonth = patientReq.DOB.Month.ToString();
                 Requestclient.IntDate = patientReq.DOB.Day;
                 Requestclient.PhoneNumber = patientReq.Mobile;
+                Requestclient.Notes = patientReq.Symptoms;
                 _context.Requestclients.Add(Requestclient);
                  _context.SaveChanges();
 
@@ -221,7 +226,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             Request.LastName = familyReq.f_lastname;
             Request.Email = familyReq.f_email;
             Request.PhoneNumber = familyReq.f_mobile;
-            Request.Status = 3;
+            Request.Status = 1;
             Request.RelationName = familyReq.f_relation;
             Request.CreatedDate = DateTime.Now;
             _context.Requests.Add(Request);
@@ -236,6 +241,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             Requestclient.StrMonth = familyReq.DOB.Month.ToString();
             Requestclient.IntDate = familyReq.DOB.Day;
             Requestclient.PhoneNumber = familyReq.Mobile;
+            Requestclient.Notes = familyReq.Symptoms;
             _context.Requestclients.Add(Requestclient);
             _context.SaveChanges();
 
@@ -257,7 +263,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             Request.LastName = conciergeReq.c_lastname;
             Request.Email = conciergeReq.c_email;
             Request.PhoneNumber = conciergeReq.c_mobile;
-            Request.Status = 3;
+            Request.Status = 1;
             Request.CreatedDate = DateTime.Now;
             _context.Requests.Add(Request);
             _context.SaveChanges();
@@ -286,6 +292,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             Requestclient.StrMonth = conciergeReq.DOB.Month.ToString();
             Requestclient.IntDate = conciergeReq.DOB.Day;
             Requestclient.PhoneNumber = conciergeReq.Mobile;
+            Requestclient.Notes = conciergeReq.Symptoms;
             _context.Requestclients.Add(Requestclient);
             _context.SaveChanges();
 
@@ -305,7 +312,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             Request.LastName = businessReq.b_lastname;
             Request.Email = businessReq.b_email;
             Request.PhoneNumber = businessReq.b_mobile;
-            Request.Status = 3;
+            Request.Status = 1;
             Request.CreatedDate = DateTime.Now;
             _context.Requests.Add(Request);
             _context.SaveChanges();
@@ -319,6 +326,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             Requestclient.StrMonth = businessReq.DOB.Month.ToString();
             Requestclient.IntDate = businessReq.DOB.Day;
             Requestclient.PhoneNumber = businessReq.Mobile;
+            Requestclient.Notes = businessReq.Symptoms;
             _context.Requestclients.Add(Requestclient);
             _context.SaveChanges();
 

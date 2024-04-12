@@ -1,17 +1,17 @@
-﻿
+﻿@model Hallo_Doc.Entity.ViewModel.ProviderLocation;
 @{
     ViewData["Title"] = "Provider Location";
-    Layout = "~/Views/Shared/_AdminActionLayout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps.css'>
 <style>
- /*    #marker {
-        background-image: url("https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png");
+    #marker {
+        background-image: url("https://cdn4.iconfinder.com/data/icons/map-location-19/512/197_Plus_Location_Map_Marker_Pin-256.png");
         background-size: cover;
-        width: 30px;
-        height: 30px;
+        width: 35px;
+        height: 40px;
     }
- */
+
     #map {
         height: 65vh;
         margin-top: 4rem auto;
@@ -36,45 +36,30 @@
     </div>
 </body>
 <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
-@* <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script> *@
-
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script>
 <script>
-    // Initialize the map
-    var map = tt.map({
-        key: 'tpN90txvbZsxu8rAENFEmjY0MxEtuy92',
-        container: 'map',
-        center: [23.03474661678888, 72.50052433384457], // Default center
-        zoom: 5
-    });
-    
-    // Add a marker for your location
-    var marker = new tt.Marker()
-        .setLngLat([23.03474661678888, 72.50052433384457]) // Set your location's coordinates
-        .addTo(map);
-</script>
-@* <script>
 
-    const APIKey = "0GTimHyQ1q73hIdmr5ljc5GUdIwG0BtC";
-    var center = { lat: 20.5937, lng: 78.9629 };
+    const APIKey = "tpN90txvbZsxu8rAENFEmjY0MxEtuy92";
+    var center = { lat: 23.78655, lng: 77.82323 };
     var map = tt.map({
         key: APIKey,
-        container: "mapAreash",
+        container: "map",
         center: center,
         zoom: 5
     });
 
     var sourcearray = null;
     var sites = [];
-    @if (@ViewBag.Log != null)
+    @if (Model != null)
     {
-        foreach (var location in ViewBag.Log)
+        foreach (var item in Model.Locations)
         {
             <text>
                 console.log(sites);
             sites.push({
-                lat: @location.Latitude,
-                lng: @location.Longitude,
-                name: '@location.PhysicianName'
+                lat: @item.lat,
+                lng: @item.lng,
+                name: '@item.PhyName @item.Address'
             });
             </text>
         }
@@ -88,4 +73,4 @@
             marker.setPopup(popup).togglePopup();
         });
 
-</script> *@
+</script>

@@ -23,10 +23,10 @@
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <select class="form-select" name="HealthProfessionalTypeId" id="profession" 
                         asp-items="@(new SelectList(ViewBag.Profession,"HealthProfessionalTypeId","ProfessionName"))" onchange="FindBusiness()">
-                            <option value="">Select Profession</option>
-                             
+                            <option value="">Select Profession</option>                             
                         </select>
                         <label for="profession">Select Profession</label>
+                        <span asp-validation-for="HealthProfessionalTypeId" class="text-danger"></span>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <select class="form-select" name="VendorId" asp-for="VendorId" id="business" onchange="FetchBusinessDetails()">
@@ -42,7 +42,6 @@
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="email" name="Email" asp-for="Email" id="email" class="form-control" placeholder="Email">
                         <label for="email">Email</label>
-                        <span id="email-msg"></span>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="text" name="FaxNumber" asp-for="FaxNumber" id="fax" class="form-control" placeholder="fax">

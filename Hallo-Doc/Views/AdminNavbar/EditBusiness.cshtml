@@ -23,6 +23,7 @@
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="text" name="Business" asp-for="Business" id="business" class="form-control" placeholder="Business" value="@Model.Business" disabled>
                         <label for="business">Business Name</label>
+                        <span asp-validation-for="Business" class="text-danger"></span>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <select class="form-select" name="ProfessionId" id="profession" asp-for="ProfessionId"
@@ -36,14 +37,16 @@
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="text" name="FaxNumber" asp-for="FaxNumber" id="fax" class="form-control" placeholder="fax" value="@Model.FaxNumber" disabled>
                         <label for="fax">Fax Number</label>
+                        <span asp-validation-for="FaxNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
-                        <input type="tel" name="PhoneNumber" asp-for="PhoneNumber" id="mobile" class="form-control" value="@Model.PhoneNumber" style="width: 260%;" disabled>
+                        <input type="tel" name="PhoneNumber" asp-for="PhoneNumber" id="mobile" class="form-control" value="@Model.PhoneNumber" disabled>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="email" name="Email" asp-for="Email" id="email" class="form-control" value="@Model.Email" placeholder="Email" disabled>
                         <label for="email">Email</label>
-                        <span id="email-msg"></span>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="text" name="BusinessNumber" asp-for="BusinessNumber" id="contact" class="form-control" value="@Model.BusinessNumber" placeholder="contact" disabled>
@@ -64,6 +67,7 @@
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="text" name="Zip" asp-for="Zip" id="Zip" class="form-control" value="@Model.Zip" placeholder="Zip" disabled>
                         <label for="Zip">Zip/Postal</label>
+                        <span asp-validation-for="Zip" class="text-danger"></span>
                     </div>
                 </div>
 

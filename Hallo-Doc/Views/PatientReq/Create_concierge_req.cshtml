@@ -12,13 +12,13 @@
     
     <div class="container">
 
-        <form class="form-inline my-2 my-lg-0" style="text-align: right;">
-            <a class="btn btn-outline-info out back" asp-action="Create_request" asp-controller="Patient">
+        <div class="g-2" style="text-align: right;">
+            <a class="btn btn-outline-info out back" asp-action="Create_request" asp-controller="PatientReq">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
             </a>
-        </form>
+        </div>
         <div class="content">
             <form asp-action="Create_concierge_req" asp-controller="PatientReq" method="post">
             <div class="row g-2 first">
@@ -27,6 +27,7 @@
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" asp-for="c_firstname" class="form-control" id="c_firstname" placeholder="Your Firstname">
                             <label for="c_firstname">Your Firstname</label>
+                            <span asp-validation-for="c_firstname" class="text-danger"></span>
                     </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" asp-for="c_lastname" class="form-control" id="c_lastname" placeholder="Your Lastname">
@@ -39,6 +40,7 @@
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="email" asp-for="c_email" class="form-control" id="c_email" placeholder="Your Email">
                             <label for="c_email">Your Email</label>
+                            <span asp-validation-for="c_email" class="text-danger"></span>
                     </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" asp-for="c_address" class="form-control" id="c_address" placeholder="Hotel/Property Name">
@@ -65,6 +67,7 @@
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="number" asp-for="c_zip" class="form-control" id="Zip" placeholder="ZipCode">
                             <label for="Zip">ZipCode</label>
+                            <span asp-validation-for="c_zip" class="text-danger"></span>
                         </div>
 </div>
                     
@@ -72,13 +75,15 @@
             <div class="row g-2 first">
                 <p class="mt-4">Patient Information</p>
                     <div class="form-group form-floating mb-3">
-                    <textarea class="form-control" id="symptoms" placeholder="Enter brief details of your symptoms" rows="3"></textarea>
+                        <textarea class="form-control" id="symptoms" asp-for="Symptoms" placeholder="Enter brief details of your symptoms" style="height:100px"></textarea>
                         <label for="symptoms">Enter brief details of your symptoms</label>
+                        <span asp-validation-for="Symptoms" class="text-danger"></span>
                 </div>
                 <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" asp-for="FirstName" class="form-control" id="First name" placeholder="First name" aria-label="First name">
                             <label for="First name">First name</label>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" asp-for="LastName" class="form-control" id="Last name" placeholder="Last name" aria-label="Last name">
@@ -96,9 +101,10 @@
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="email" asp-for="Email" class="form-control" id="Email" placeholder="Email">
                             <label for="Email">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="tel" asp-for="Mobile" class="form-control" id="mobile">
+                            <input type="tel" asp-for="Mobile" class="form-control" id="mobile" style="width:250%">
                             
                     </div>
                 </div>

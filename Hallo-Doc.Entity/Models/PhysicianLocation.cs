@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hallo_Doc.Entity.Models;
 
-[Keyless]
 [Table("PhysicianLocation")]
 public partial class PhysicianLocation
 {
+    [Key]
     public int LocationId { get; set; }
 
     public int PhysicianId { get; set; }
@@ -30,5 +30,6 @@ public partial class PhysicianLocation
     public string? Address { get; set; }
 
     [ForeignKey("PhysicianId")]
+    [InverseProperty("PhysicianLocations")]
     public virtual Physician Physician { get; set; } = null!;
 }

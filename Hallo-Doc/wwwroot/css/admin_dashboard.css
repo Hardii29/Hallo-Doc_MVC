@@ -29,6 +29,10 @@
         color: #54B4D3;
         background-color: #e9f4f7;
 }
+.iti {
+    display: block;
+    width: 100%;
+}
 
 .ptxt {
     font-size: smaller;
@@ -131,8 +135,26 @@ button[data-btn="Unpaid"]:focus {
     background-color: #00bce7;
     color: #fff;
 }
+.pagination a {
+    margin: 5px;
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+}
 
+.pagination a:hover {
+    background-color: #0dcaf0 !important;
+    color: #ffffff;
+}
 
+.pagination .active {
+    background-color: #0dcaf0;
+    color: #ffffff;
+}
+.pagination a:focus {
+    background-color: #0dcaf0 !important;
+    color: #ffffff;
+}
 
 @media screen and (min-width: 768px) {
     .mobile-view

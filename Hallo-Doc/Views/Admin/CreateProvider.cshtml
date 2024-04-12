@@ -10,7 +10,7 @@
         <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
             <h4 style="font-weight:bold;">Create Provider Account</h4>
 
-            <a class="btn btn-outline-info out back" asp-action="ProviderMenu" asp-controller="Admin">
+            <a class="btn btn-outline-info out back" asp-action="ProviderMenu" asp-controller="AdminNavbar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
@@ -30,6 +30,7 @@
                         <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
                             <input type="text" name="Password" id="Password" asp-for="Password" class="form-control" placeholder="Password">
                             <label for="Password">Password</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         
                         <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
@@ -37,6 +38,7 @@
                                 <option value="">Select Role</option>
                             </select>
                             <label for="role">Role</label>
+                            <span asp-validation-for="RoleId" class="text-danger"></span>
                         </div>
                     </div>
                    
@@ -48,6 +50,7 @@
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" name="FirstName" id="firstName" asp-for="FirstName" class="form-control" placeholder="First name" aria-label="First name">
                             <label for="firstName">FirstName</label>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" name="LastName" id="lastName" asp-for="LastName" class="form-control" placeholder="Last name" aria-label="Last name">
@@ -56,9 +59,11 @@
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="email" name="Email" id="email" asp-for="Email" class="form-control" placeholder="Email">
                             <label for="email">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control">
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
                         </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
                             <input type="text" name="MedicalLicense" id="mdLicense" asp-for="MedicalLicense" class="form-control" placeholder="MedicalLicense">
@@ -109,6 +114,7 @@
                             <div class="form-group form-floating col-md-6 col-sm-12">
                                 <input type="number" name="ZipCode" id="zipCode" asp-for="ZipCode" class="form-control" placeholder="ZipCode">
                                 <label for="zipCode">ZipCode</label>
+                                <span asp-validation-for="ZipCode" class="text-danger"></span>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
                                 <input type="tel" name="AltPhone" id="mobile2" asp-for="AltPhone" class="form-control">
@@ -122,10 +128,12 @@
                             <div class="form-group form-floating col-md-6 col-sm-12">
                                 <input type="text" name="BusinessName" id="businessName" asp-for="BusinessName" class="form-control" placeholder="BusinessName">
                                 <label for="businessName">Business Name</label>
+                                <span asp-validation-for="BusinessName" class="text-danger"></span>
                             </div>
                             <div class="form-group form-floating col-md-6 col-sm-12">
                                 <input type="text" name="BusinessWebsite" id="businessWebsite" asp-for="BusinessWebsite" class="form-control" placeholder="BusinessWebsite">
                                 <label for="businessWebsite">Business Website</label>
+                                <span asp-validation-for="BusinessWebsite" class="text-danger"></span>
                             </div>
                             <div class="input-group col-md-6 col-sm-12">
                                 <input type="file" asp-for="File" class="form-control" placeholder="Select Photo" aria-label="Select file">

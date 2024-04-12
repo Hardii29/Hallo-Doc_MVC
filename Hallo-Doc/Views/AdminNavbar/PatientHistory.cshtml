@@ -9,7 +9,7 @@
         <h4 style="font-weight:bold;">Patient History</h4>
     </div>
     <div class="container-custom mt-3">
-        <form asp-controller="AdminNavbar" asp-action="Search" method="post" id="userData"> 
+        <form method="post" id="userData"> 
             <div class="row g-2 m-2">
                 <div class="form-group form-floating col-lg-3 col-md-6 col-sm-12">
                     <input type="text" asp-for="Firstname" id="firstname" class="form-control" placeholder="Firstname">
@@ -40,6 +40,7 @@
                     </a>
                 </div>
             </div>
+            <input type="hidden" asp-for="CurrentPage" id="CurrentPage" />
         </form>
         <div class="table-responsive">
             <table class="table table-hover mt-3" style="width:100%">
@@ -71,6 +72,35 @@
             </table>
       </div>
     </div>
+    <nav aria-label="Page navigation example" class="pagenav">
+        <ul class="pagination pagination-container d-flex justify-content-end m-3" id="pagination">
+            @{
+                int i;
+
+                if (Model.CurrentPage > 1)
+                {
+                    <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage - 1)">&lt;</a></li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><a class="page-link">&lt;</a></li>
+                }
+                @for (i = 1; i <= Model.TotalPages; i++)
+                {
+
+                    <li class="page-item"><a href="#" data-page="@i" class="@(i == Model.CurrentPage ? "active" : "") page-link">@i</a></li>
+                }
+                if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage + 1)">&gt;</a></li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><a class="page-link">&gt;</a></li>
+                }
+            }
+        </ul>
+    </nav>
 </body>
 <script>
     function searchUser(event) {
@@ -78,15 +108,16 @@
         console.log(btnid);
         if (btnid == "clear") {
             $('#userData').trigger('reset');
+            $('#CurrentPage').val(1);
         }
-        var fname = $('#firstname').val();
-        var lname = $('#lastname').val();
-        var email = $('#email').val();
-        var mobile = $('#phone').val();
+        if (btnid == "search") {
+            $('#CurrentPage').val(1);
+        }
+        var formData = $('#userData').serialize();
         $.ajax({
             type: "POST",
             url: '@Url.Action("PatientHistory", "AdminNavbar")',
-            data: { Firstname: fname, Lastname: lname, Email: email, Mobile: mobile },
+            data: formData,
             success: function (data) {
                 var content = $(data).find('tbody').html();
                 $('#patientRecord').html(content);
@@ -96,4 +127,11 @@
             }
         });       
     }
+    $(document).on('click', '.page-link', function (event) {
+        var page = $(this).data('page');
+        console.log(page);
+        $('#CurrentPage').val(page);
+        searchUser(event);
+
+    });
 </script>

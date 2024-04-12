@@ -48,6 +48,9 @@ namespace Hallo_Doc.Entity.ViewModel
         public int AdminId { get; set; }
         public string AdminName { get; set; }
         public List<UserData> data { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; } = 5;
 
     }
     public enum status

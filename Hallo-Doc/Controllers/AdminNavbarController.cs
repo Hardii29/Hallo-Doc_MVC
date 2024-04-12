@@ -190,11 +190,13 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult ProviderLocation()
         {
-            return View();
+           
+            var model = _adminNav.ProviderLocation();
+            return View(model);
         }
-        public IActionResult PatientHistory(string Firstname, string Lastname, string Email, string Mobile)
+        public IActionResult PatientHistory(UserData userData)
         {
-            var model = _adminNav.PatientHistory(Firstname, Lastname, Email, Mobile);
+            var model = _adminNav.PatientHistory(userData);
             return View(model);
         }
         public IActionResult PatientRecord(int UserId)
@@ -202,9 +204,9 @@ namespace Hallo_Doc.Controllers
             var model = _adminNav.PatientRecord(UserId);
             return View(model);
         }
-        public IActionResult SearchRecords(SearchRecordList list)
+        public IActionResult SearchRecords(SearchRecordList search)
         {
-            var model = _adminNav.SearchRecord(list);
+            var model = _adminNav.SearchRecord(search);
             return View(model);
         }
         public IActionResult DeleteRecord(int RequestId)

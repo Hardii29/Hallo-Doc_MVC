@@ -465,6 +465,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public void AddVendor(VendorMenu model)
         {
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, false);
             var data = new HealthProffessional();
             var lastPhy = _context.HealthProffessionals.OrderByDescending(p => p.VendorId).FirstOrDefault();
             var lastid = lastPhy != null ? lastPhy.VendorId : 1000;
@@ -480,6 +482,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             data.City = model.City;
             data.Zip = model.Zip;
             data.State = model.State;
+            data.IsDeleted = bitArray;
             data.CreatedDate = DateTime.Now;
             _context.HealthProffessionals.Add(data);
             _context.SaveChanges();
@@ -580,15 +583,15 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             return true;
         }
-        public UserData PatientHistory(string fname, string lname, string email, string phone)
+        public UserData PatientHistory(UserData data)
         {
             var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
 
-            var query = from u in _context.Users
-                        .Where(pp => (string.IsNullOrEmpty(fname) || pp.Firstname.Contains(fname))
-                               && (string.IsNullOrEmpty(lname) || pp.Lastname.Contains(lname))
-                               && (string.IsNullOrEmpty(email) || pp.Email.Contains(email))
-                               && (string.IsNullOrEmpty(phone) || pp.Mobile.Contains(phone)))
+            var query = (from u in _context.Users
+                        .Where(d => (string.IsNullOrEmpty(data.Firstname) || d.Firstname.Contains(data.Firstname))
+                               && (string.IsNullOrEmpty(data.Lastname) || d.Lastname.Contains(data.Lastname))
+                               && (string.IsNullOrEmpty(data.Email) || d.Email.Contains(data.Email))
+                               && (string.IsNullOrEmpty(data.Mobile) || d.Mobile.Contains(data.Mobile)))
                         select new UserData
                         {
                             Id = u.Userid,
@@ -597,14 +600,18 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             Email = u.Email,
                             Mobile = u.Mobile,
                             Address = u.Street + ", " + u.City + ", " + u.State,
-                        };
+                        }).ToList();
+            var model = new UserData();
+            int totalItemCount = query.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
+            List<UserData> list1 = query.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
 
-            var model = new UserData()
-            {
-                data = query.ToList(),
-                AdminId = admin.AdminId,
-                AdminName = $"{admin.FirstName} {admin.LastName}"
-            };
+            model.data = list1;
+            model.CurrentPage = data.CurrentPage;
+            model.TotalPages = totalPages;
+            model.AdminId = admin.AdminId;
+            model.AdminName = $"{admin.FirstName} {admin.LastName}";
+           
             return model;
         }
         public PatientData PatientRecord(int UserId)
@@ -700,6 +707,31 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.Requests.Update(hp);
             _context.SaveChanges();
             return true;
+        }
+       
+        public ProviderLocation ProviderLocation()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+
+            var result = (from p in _context.PhysicianLocations
+                          orderby p.PhysicianId ascending
+                          select new ProviderLocation
+                          {
+                              LocationId = p.LocationId,
+                              PhysicianId = p.PhysicianId,
+                              lng = p.Longitude,
+                              lat = p.Latitude,
+                              PhyName = p.PhysicianName,
+                              Address = p.Address,
+                          }).ToList();
+
+            var model = new ProviderLocation()
+            {
+                Locations = result,
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
         }
     }
 }
