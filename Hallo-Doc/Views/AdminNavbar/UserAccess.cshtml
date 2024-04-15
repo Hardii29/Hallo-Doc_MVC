@@ -58,21 +58,9 @@
                                 status = "";
                                 break;
                         }
-                        string accountType = "";
-                        switch(item.AccountType)
-                        {
-                            case 1 :
-                                accountType = "Admin";
-                                break;
-                            case 2:
-                                accountType = "Clinical";
-                                break;
-                            default:
-                                accountType = "";
-                                break;
-                        }
+                  
                         <tr class=" mt-2">
-                        <td class="col-2">@accountType</td>
+                            <td class="col-2">@Enum.GetName(typeof(Hallo_Doc.Entity.ViewModel.AccountType), item.AccountType)</td>
                         <td class="col-2">@item.UserName</td>
                         <td class="col-2">@item.Phone</td>
                         <td class="col-2">@status</td>

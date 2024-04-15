@@ -11,10 +11,9 @@ namespace Hallo_Doc.Entity.Models;
 public partial class EmailLog
 {
     [Key]
-    [Precision(9, 0)]
-    public decimal EmailLogId { get; set; }
+    public int EmailLogId { get; set; }
 
-    [StringLength(20)]
+    [StringLength(500)]
     public string? EmailTemplate { get; set; }
 
     [StringLength(200)]

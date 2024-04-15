@@ -25,6 +25,7 @@ builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IAdminLogin, AdminLoginRepo>();
 builder.Services.AddScoped<IProvider, ProviderRepo>();
 builder.Services.AddScoped<IAdminNavbar, AdminNavbarRepo>();
+builder.Services.AddScoped<IEmail_SMS, Email_SMSservices>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();
 

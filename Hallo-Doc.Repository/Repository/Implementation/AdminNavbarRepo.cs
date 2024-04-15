@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Twilio.Http;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
@@ -19,10 +20,12 @@ namespace Hallo_Doc.Repository.Repository.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminNavbarRepo(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        private readonly IEmail_SMS _services;
+        public AdminNavbarRepo(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IEmail_SMS services)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _services = services;
         }
 
         public List<Entity.Models.Region> GetRegions()
@@ -81,28 +84,59 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.PhysicianNotifications.Add(model);
             _context.SaveChanges();
         }
-        public void SendMailPhy(string email, string Message, string ProviderName)
+        public bool SendMailPhy(string email, string Message, string ProviderName)
         {
-            using (MailMessage mail = new MailMessage())
+            var subject = "Message from Admin";
+            var body = $"Dear Doctor {ProviderName},\n\nPlease find Message : \n{Message}";
+            _services.SendEmail(body, subject, email);
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, true);
+            EmailLog em = new EmailLog
             {
-                mail.From = new MailAddress("hardi.jayani@etatvasoft.com");
-                mail.To.Add(email);
-                mail.Subject = "Message from Admin";
-                mail.Body = $"Dear Doctor {ProviderName},\n\nPlease find Message : \n{Message}";
+                EmailTemplate = body,
+                SubjectName = subject,
+                EmailId = email,
+                CreateDate = DateTime.Now,
+                SentDate = DateTime.Now,
+                IsEmailSent = bitArray,
+                AdminId = 1,
+                SentTries = 1,
+                Action = 3,
+                RoleId = 1,
+            };
+            _context.EmailLogs.Add(em);
+            _context.SaveChanges();
+            return true;
 
-                using (SmtpClient smtp = new SmtpClient("mail.etatvasoft.com", 587))
-                {
-                    smtp.Credentials = new System.Net.NetworkCredential("hardi.jayani@etatvasoft.com", "LHV0@}YOA?)M");
-                    smtp.EnableSsl = true;
-                    smtp.Send(mail);
-                }
-            }
+        }
+        public bool SendSMS(string Mobile, string Message, string ProviderName)
+        {
+            var msg = $"Dear Doctor {ProviderName},\n\nPlease find Message : \n{Message}";
+            _services.SendSMS(Mobile, msg);
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, true);
+            Smslog sms = new Smslog
+            {
+                Smstemplate = msg,
+                MobileNumber = Mobile,
+                CreateDate = DateTime.Now,
+                SentDate = DateTime.Now,
+                IsSmssent = bitArray,
+                AdminId = 1,
+                RoleId = 1,
+                Action = 5,
+                SentTries= 1,
+            };
+            _context.Smslogs.Add(sms);
+            _context.SaveChanges();
+            return true;
         }
         public AccountAccess Access()
         {
             var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
 
             var query = from r in _context.Roles
+                        where r.IsDeleted == new BitArray(1)
                         select new AccountAccess
                         {
                             RoleId = r.RoleId,
@@ -186,6 +220,62 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             }
             _context.SaveChanges();
+        }
+        public AccountAccess ViewEditRole(int RoleId)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            AccountAccess? v = (from r in _context.Roles
+
+                             where r.RoleId == RoleId
+                             select new AccountAccess
+                             {
+                                 RoleName = r.Name,
+                                 SelectedType = (AccountType)r.AccountType,
+                             }).FirstOrDefault();
+            List<Menu> Menu = _context.Menus
+                .Where(req => req.AccountType == (short)v.SelectedType).ToList();
+            v.menus = Menu;
+            List<RoleMenu> rm = _context.RoleMenus
+                                .Where(obj => obj.RoleId == RoleId).ToList();
+            v.editRole = rm;
+            v.AdminId = admin.AdminId;
+            v.AdminName = $"{admin.FirstName} {admin.LastName}";
+            return v;
+        }
+        public bool SaveEditRole(AccountAccess roles)
+        {
+            List<int> selectedmenus = roles.list.Split(',').Select(int.Parse).ToList();
+            List<int> rolemenus = _context.RoleMenus.Where(r => r.RoleId == roles.RoleId).Select(req => req.RoleMenuId).ToList();
+
+            if (rolemenus.Count > 0)
+            {
+                foreach (var item in rolemenus)
+                {
+                    RoleMenu ar = _context.RoleMenus.Where(r => r.RoleId == roles.RoleId).First();
+                    _context.RoleMenus.Remove(ar);
+                    _context.SaveChanges();
+                }
+            }
+            foreach (var item in selectedmenus)
+            {
+                RoleMenu ar = new()
+                {
+                    RoleId = roles.RoleId,
+                    MenuId = item
+                };
+                _context.RoleMenus.Update(ar);
+                _context.SaveChanges();
+            }
+            return true;
+        }
+        public bool DeleteRole(int RoleId)
+        {
+            Role r = _context.Roles.Where(x => x.RoleId == RoleId).FirstOrDefault();
+            r.IsDeleted[0] = true;
+            r.ModifiedDate = DateTime.Now;
+            _context.Roles.Update(r);
+            _context.SaveChanges();
+            return true;
         }
         public Schedule Schedule()
         {
@@ -731,6 +821,82 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 AdminId = admin.AdminId,
                 AdminName = $"{admin.FirstName} {admin.LastName}"
             };
+            return model;
+        }
+        public Logs EmailLog(Logs el)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var result = (from em in _context.EmailLogs
+                          join req in _context.Requests
+                          on em.RequestId equals req.RequestId into Group
+                          from rc in Group.DefaultIfEmpty()
+                          where (el.Role == 0 || em.RoleId == el.Role) &&
+                                                   (!el.CreatedDate.HasValue || em.CreateDate.Value.Date == el.CreatedDate.Value.Date) &&
+                                                   (!el.SentDate.HasValue || em.SentDate == el.SentDate.Value.Date) &&
+                                                   (el.Recipient.IsNullOrEmpty() || (rc.FirstName).ToLower().Contains(el.Recipient.ToLower())) &&
+                                                   (el.Email.IsNullOrEmpty() || em.EmailId.ToLower().Contains(el.Email.ToLower()))
+                          orderby em.CreateDate descending
+                          select new Logs
+                          {
+                              Recipient = _context.AspnetUsers.Where(req => req.Email == em.EmailId).Select(req => req.Username).FirstOrDefault(),
+                              Confirmation = em.ConfirmationNumber ?? " - ",
+                              CreatedDate = em.CreateDate,
+                              SentDate = em.SentDate,
+                              RoleId = (AccountType)em.RoleId,
+                              Email = em.EmailId,
+                              IsEmailSent = (em.IsEmailSent[0] == false ? "No" : "Yes"),
+                              SentTries = em.SentTries,
+                              Action = em.SubjectName,
+                          }).ToList();
+
+            var model = new Logs();
+            int totalItemCount = result.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)el.PageSize);
+            List<Logs> list1 = result.Skip((el.CurrentPage - 1) * el.PageSize).Take(el.PageSize).ToList();
+            model.EmailLog = list1;
+            model.CurrentPage = el.CurrentPage;
+            model.TotalPages = totalPages;
+            model.AdminId = admin.AdminId;
+            model.AdminName = $"{admin.FirstName} {admin.LastName}";
+
+            return model;
+        }
+        public SMSLog SMSLog(SMSLog sl)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var result = (from em in _context.Smslogs
+                          join req in _context.Requests
+                          on em.RequestId equals req.RequestId into Group
+                          from rc in Group.DefaultIfEmpty()
+                          where (sl.Role == 0 || em.RoleId == sl.Role) &&
+                                                   (!sl.CreatedDate.HasValue || em.CreateDate.Date == sl.CreatedDate.Value.Date) &&
+                                                   (!sl.SentDate.HasValue || em.SentDate == sl.SentDate.Value.Date) &&
+                                                   (sl.Recipient.IsNullOrEmpty() || (rc.FirstName).ToLower().Contains(sl.Recipient.ToLower())) &&
+                                                   (sl.Mobile.IsNullOrEmpty() || em.MobileNumber.ToLower().Contains(sl.Mobile.ToLower()))
+                          orderby em.CreateDate descending
+                          select new SMSLog
+                          {
+                              Recipient = _context.AspnetUsers.Where(req => req.Phonenumber == em.MobileNumber).Select(req => req.Username).FirstOrDefault(),
+                              Confirmation = em.ConfirmationNumber ?? " - ",
+                              CreatedDate = em.CreateDate,
+                              SentDate = em.SentDate,
+                              RoleId = (AccountType)em.RoleId,
+                              Mobile = em.MobileNumber,
+                              IsSMSSent = (em.IsSmssent[0] == false ? "No" : "Yes"),
+                              SentTries = em.SentTries,
+                              Action = (LogsAction)em.Action,
+                          }).ToList();
+
+            var model = new SMSLog();
+            int totalItemCount = result.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)sl.PageSize);
+            List<SMSLog> list1 = result.Skip((sl.CurrentPage - 1) * sl.PageSize).Take(sl.PageSize).ToList();
+            model.list = list1;
+            model.CurrentPage = sl.CurrentPage;
+            model.TotalPages = totalPages;
+            model.AdminId = admin.AdminId;
+            model.AdminName = $"{admin.FirstName} {admin.LastName}";
+
             return model;
         }
     }

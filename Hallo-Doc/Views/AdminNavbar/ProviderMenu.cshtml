@@ -21,7 +21,7 @@
         <div class="content" >
             <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
             <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <select class="form-select" id="SelectedRegion" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))">
+                    <select class="form-select" id="SelectedRegion" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))" onchange="searchProvider(event)">
                         <option value=" ">All Regions</option>
                     </select>
             </div>
@@ -40,7 +40,7 @@
                         <th class="col-3">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="providerbody">
                     @foreach (var item in Model.data)
                         {
                         string status = "";
@@ -98,28 +98,26 @@
             document.getElementById('Email_Model').value = Email;
         }
 
-        $(document).ready(function () {
-            $('#SelectedRegion').change(function () {
-                searchProvider();
-            });
-        });
-        
-        function searchProvider() {
+        function searchProvider(event) {
+            var btnid = event.target.id;
+            console.log(btnid);
+           
             var region = $("#SelectedRegion").val();
-            console.log("ReginId:" + region);
+            console.log("Region id: " + region);
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("ProviderMenu", "AdminNavbar")',
                 data: { RegionId: region },
                 success: function (data) {
                     console.log("AJAX success");
-
-                    $("#tableContent").html(data);
+                    var bodyContent = $(data).find('tbody').html();
+                    $('#providerbody').html(bodyContent);
                 },
                 error: function (error) {
                     console.log("Error:", error);
                 }
             });
         }
+     
     </script>
 </body>

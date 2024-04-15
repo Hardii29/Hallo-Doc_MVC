@@ -100,11 +100,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             if (jwtService == null)
             {
-                if (_role == "1")
+                if (_role == "Admin")
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "AdminLogin", action = "Login" }));
                 }
-                else if (_role == "3")
+                else if (_role == "Patient")
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "Login" }));
                 }
@@ -116,11 +116,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             if (token == null || !jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
             {
-                if (_role == "1")
+                if (_role == "Admin")
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "AdminLogin", action = "Login" }));
                 }
-                else if (_role == "3")
+                else if (_role == "Patient")
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "Login" }));
                 }
@@ -131,11 +131,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             if (roleClaim == null)
             {
-                if (_role == "1")
+                if (_role == "Admin")
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "AdminLogin", action = "Login" }));
                 }
-                else if (_role == "3")
+                else if (_role == "Patient")
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "Login" }));
                 }

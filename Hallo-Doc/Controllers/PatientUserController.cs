@@ -6,7 +6,7 @@ using Hallo_Doc.Repository.Repository.Implementation;
 
 namespace Hallo_Doc.Controllers
 {
-    [CustomAuthorize("3")]
+    [CustomAuthorize("Patient")]
     public class PatientUserController : Controller
     {
         private readonly IPatientUser _user;

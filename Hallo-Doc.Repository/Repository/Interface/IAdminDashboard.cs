@@ -34,7 +34,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         void DeleteAllFiles(int RequestId);
         bool TransferCaseReq(int RequestId, int PhysicianId, string Notes);
         bool ClearCaseReq(int RequestId);
-        void SendAgreementEmail(string email, int RequestId);
+        bool SendAgreementEmail(string email, int RequestId);
         bool SendAgreement_accept(int RequestID);
         bool SendAgreement_Reject(int RequestID, string Notes);
         Order GetOrderView(int requestId);
@@ -47,7 +47,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         PatientReq? Admin();
         void CreateReq(PatientReq req);
         List<AdminDash> Export(string status, int? Region, int? requesttype);
-        void SendLink(string email, string firstName, string lastName);
+        bool SendLink(string email, string firstName, string lastName);
         
         
         

@@ -1,0 +1,92 @@
+﻿@model Hallo_Doc.Entity.ViewModel.AccountAccess;
+@{
+    ViewData["Title"] = "Edit Role";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light" id="tableContent">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Edit Role</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="AccountAccess" asp-controller="AdminNavbar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <h5 style="font-weight:bold;">Details</h5>
+            <form asp-controller="AdminNavbar" asp-action="EditRole" method="post" id="editRoleForm">
+                <input type="hidden" asp-for="RoleId" />
+                <div class="row g-2 mt-3">
+                    <div class="form-group form-floating col-md-6 col-sm-12">
+                        <input type="text" id="RoleName" asp-for="RoleName" class="form-control" placeholder="RoleName" disabled>
+                        <label for="RoleName">Role Name</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12">
+                        <select asp-for="SelectedType" class="form-select" id="accountType" name="AccountType" onchange="getMenus(this)" disabled>
+                            <option value="">Select Account Type</option>
+                            @foreach (var accountType in Enum.GetValues(typeof(Hallo_Doc.Entity.ViewModel.AccountType)))
+                            {
+                                <option value="@((int)accountType)">@accountType.ToString()</option>
+                            }
+                        </select>
+                        <label for="accountType">Account Type</label>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="list" id="menus" />
+                <div class="inline-checkbox-container">
+                    @foreach (var item in Model.menus)
+                    {
+                        @if (Model != null && Model.editRole.Count > 0 && Model.editRole.Exists(id => id.MenuId == item.MenuId))
+                        {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="@item.MenuId " checked>
+                                <label class="checkbox-inline"> @item.Name </label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="@item.MenuId ">
+                                <label class="checkbox-inline"> @item.Name </label>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="g-2 mt-3" style="text-align: right;">
+                    <button type="submit" class="btn btn-info text-white btn-lg" onclick="saveRole()">Save</button>
+                    <button type="reset" class="btn btn-outline-info btn-lg">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<style>
+    .inline-checkbox-container {
+        display: inline-block;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    .checkbox-inline {
+        display: inline-block;
+        margin-right: 50px !important;
+    }
+</style>
+
+<script>
+    function saveRole() {
+        var files = [];
+        $('input[type="checkbox"]:checked').each(function () {
+            files.push(this.value);
+        });
+        $("#menus").val(files.join(','));
+        console.log(files);
+        $("#editRoleForm").submit();
+
+    }
+</script>
+

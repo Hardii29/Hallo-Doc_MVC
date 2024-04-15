@@ -9,21 +9,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Hallo_Doc.Repository.Repository.Implementation;
 using NuGet.Protocol.Plugins;
 using OfficeOpenXml;
-
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace Hallo_Doc.Controllers
 {
-    [CustomAuthorize("1")]
+    [CustomAuthorize("Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminDashboard _adminDashboard;
         private readonly ILogger<AdminController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminController(ILogger<AdminController> logger, IAdminDashboard adminDashboard, IWebHostEnvironment webHostEnvironment)
+        private readonly INotyfService _notyf;
+        public AdminController(ILogger<AdminController> logger, IAdminDashboard adminDashboard, IWebHostEnvironment webHostEnvironment, INotyfService notyf)
         {
             _logger = logger;
             _adminDashboard = adminDashboard;
             _webHostEnvironment = webHostEnvironment;
+            _notyf = notyf;
         }
         
         public IActionResult Admin_dashboard()
@@ -40,11 +42,7 @@ namespace Hallo_Doc.Controllers
             var request = _adminDashboard.GetRequestData(statusId, searchValue, page, pagesize, Region, sortColumn, sortOrder, requesttype);
             return PartialView(partialView, request);
         }
-        public IActionResult _new()
-        {
-            var result = _adminDashboard.GetRequestData(1, null, 1, 5, -1, null, null, -1);
-            return PartialView(result);
-        }
+       
         public IActionResult View_case(int requestId)
         {
             var model = _adminDashboard.GetView(requestId);
@@ -154,7 +152,11 @@ namespace Hallo_Doc.Controllers
         public IActionResult SendAgreement(string email, int RequestId)
         {
             
-            _adminDashboard.SendAgreementEmail(email, RequestId);
+            bool result = _adminDashboard.SendAgreementEmail(email, RequestId);
+            if (result == true)
+            {
+                _notyf.Success("Agreement is sent to the patient successfully..");
+            }
             return RedirectToAction("Admin_dashboard");
         }
         public IActionResult Order(int RequestId)
@@ -268,8 +270,11 @@ namespace Hallo_Doc.Controllers
         [HttpPost]
         public IActionResult SendLink(string email, string FirstName, string LastName)
         {
-
-            _adminDashboard.SendLink(email, FirstName, LastName);
+            bool sendEmail = _adminDashboard.SendLink(email, FirstName, LastName);
+            if (sendEmail == true)
+            {
+                _notyf.Success("Request Page is sent to the patient successfully..");
+            }
             return RedirectToAction("Admin_dashboard");
         }
         

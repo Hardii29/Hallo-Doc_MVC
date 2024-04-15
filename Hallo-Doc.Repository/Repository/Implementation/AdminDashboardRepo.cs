@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Twilio.Http;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
@@ -23,10 +24,12 @@ namespace Hallo_Doc.Repository.Repository.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminDashboardRepo(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        private readonly IEmail_SMS _services;
+        public AdminDashboardRepo(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IEmail_SMS services)
         {  
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _services = services;
         }
         public CountStatusWiseRequest CountRequestData()
         {
@@ -92,13 +95,13 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
                             RequestClientId = rc != null ? rc.RequestclientId : null
                         }).ToList();
-            switch (sortColumn)
-            {
-                case "Name":
-                    list = sortOrder == "desc" ? list.OrderByDescending(x => x.PatientName).ToList() : list.OrderBy(x => x.PatientName).ToList();
-                    break;
+            //switch (sortColumn)
+            //{
+            //    case "Name":
+            //        list = sortOrder == "desc" ? list.OrderByDescending(x => x.PatientName).ToList() : list.OrderBy(x => x.PatientName).ToList();
+            //        break;
                     
-            }
+            //}
             int totalItemCount = list.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)pagesize);
             List<AdminDash> list1 = list.Skip((page - 1) * pagesize).Take(pagesize).ToList();
@@ -440,28 +443,37 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             }
             else { return false; }
         }
-        public void SendAgreementEmail(string email, int RequestId)
+        public bool SendAgreementEmail(string email, int RequestId)
         {
             var baseUrl = "http://localhost:5203";
             var Action = "Agreement";
             var controller = "Admin";
             
             string agreementPageLink = $"{baseUrl}/{controller}/{Action}?requestId={RequestId}";
+            var subject = "Agreement for your request";
+            var body = $"Dear Patient,\n\nPlease review and agree the agreement using the following link: \n{agreementPageLink}";
 
-            using (MailMessage mail = new MailMessage())
+            _services.SendEmail(body, subject, email);
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, true);
+            EmailLog em = new EmailLog
             {
-                mail.From = new MailAddress("hardi.jayani@etatvasoft.com");
-                mail.To.Add(email);
-                mail.Subject = "Agreement for your request";
-                mail.Body = $"Dear user,\n\nPlease review and agree the agreement using the following link: \n{agreementPageLink}";
-
-                using (SmtpClient smtp = new SmtpClient("mail.etatvasoft.com", 587))
-                {
-                    smtp.Credentials = new System.Net.NetworkCredential("hardi.jayani@etatvasoft.com", "LHV0@}YOA?)M");
-                    smtp.EnableSsl = true;
-                    smtp.Send(mail);
-                }
-            }
+                RequestId = RequestId,
+                EmailTemplate = body,
+                SubjectName = subject,
+                EmailId = email,
+                ConfirmationNumber = _context.Requests.Where(req => req.RequestId == RequestId).Select(req => req.ConfirmationNumber).FirstOrDefault(),
+                CreateDate = DateTime.Now,
+                SentDate = DateTime.Now,
+                IsEmailSent = bitArray,
+                AdminId = 1,
+                SentTries = 1,
+                Action = 4, 
+                RoleId = 1, 
+            };
+            _context.EmailLogs.Add(em);
+            _context.SaveChanges();
+            return true;
         }
         public bool SendAgreement_accept(int RequestID)
         {
@@ -721,7 +733,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                        }).ToList();
             return allData;
         }
-        public void SendLink(string email, string firstName, string lastName)
+        public bool SendLink(string email, string firstName, string lastName)
         {
             var fullName = $"{firstName} {lastName}";
             var baseUrl = "http://localhost:5203";
@@ -729,25 +741,28 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             var controller = "PatientReq";
             
             string SubmitPageLink = $"{baseUrl}/{controller}/{Action}";
-
-            using (MailMessage mail = new MailMessage())
+            var subject = "Create Patient Request";
+            var body = $"Dear {fullName},\n\nPlease Submit request by filling Create Request form: \n{SubmitPageLink}";
+            _services.SendEmail(body, subject, email);
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, true);
+            EmailLog em = new EmailLog
             {
-                mail.From = new MailAddress("hardi.jayani@etatvasoft.com");
-                mail.To.Add(email);
-                mail.Subject = "Agreement for your request";
-                mail.Body = $"Dear {fullName},\n\nPlease Submit request by filling Create Request form: \n{SubmitPageLink}";
-
-                using (SmtpClient smtp = new SmtpClient("mail.etatvasoft.com", 587))
-                {
-                    smtp.Credentials = new System.Net.NetworkCredential("hardi.jayani@etatvasoft.com", "LHV0@}YOA?)M");
-                    smtp.EnableSsl = true;
-                    smtp.Send(mail);
-                }
-            }
+                EmailTemplate = body,
+                SubjectName = subject,
+                EmailId = email,
+                CreateDate = DateTime.Now,
+                SentDate = DateTime.Now,
+                IsEmailSent = bitArray,
+                AdminId = 1,
+                SentTries = 1,
+                Action = 2,
+                RoleId = 1,
+            };
+            _context.EmailLogs.Add(em);
+            _context.SaveChanges();
+            return true;
         }
-        
-
-        
-        
+                       
     }
 }

@@ -39,7 +39,19 @@ namespace Hallo_Doc.Controllers
 
             if (radiobtn == "email" || radiobtn == "both")
             {
-                _adminNav.SendMailPhy(Email, Message, ProviderName);
+                bool sent = _adminNav.SendMailPhy(Email, Message, ProviderName);
+                if(sent == true)
+                {
+                    _notyf.Success("Email sent Successfully..");
+                }
+            }
+            if (radiobtn == "sms" || radiobtn == "both")
+            {
+                bool sent = _adminNav.SendSMS(Mobile, Message, ProviderName);
+                if(sent == true)
+                {
+                    _notyf.Success("SMS sent Successfully..");
+                }
             }
             return RedirectToAction("ProviderMenu");
         }
@@ -68,6 +80,30 @@ namespace Hallo_Doc.Controllers
         public IActionResult CreateAccess(AccountAccess access)
         {
             _adminNav.CreateRole(access);
+            return RedirectToAction("AccountAccess");
+        }
+        public IActionResult EditRole(int RoleId)
+        {
+            var model = _adminNav.ViewEditRole(RoleId);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult EditRole(AccountAccess access)
+        {
+            bool succ = _adminNav.SaveEditRole(access);
+            if(succ == true)
+            {
+                _notyf.Success("Role menu updated..");
+            }
+            return RedirectToAction("AccountAccess");
+        }
+        public IActionResult DeleteRole(int RoleId)
+        {
+            bool res = _adminNav.DeleteRole(RoleId);
+            if (res == true)
+            {
+                _notyf.Success("Role Successfully Deleted..");
+            }
             return RedirectToAction("AccountAccess");
         }
         public IActionResult Scheduling()
@@ -218,5 +254,16 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("SearchRecords");
         }
+        public IActionResult EmailLogs(Logs logs)
+        {
+            var model = _adminNav.EmailLog(logs);
+            return View(model);
+        }
+        public IActionResult SMSLogs(SMSLog logs)
+        {
+            var model = _adminNav.SMSLog(logs);
+            return View(model);
+        }
+        
     }
 }

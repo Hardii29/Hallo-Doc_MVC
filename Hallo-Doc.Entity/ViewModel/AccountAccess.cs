@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hallo_Doc.Entity.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,10 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? RoleName { get; set;}
         public short Accounttype { get; set; }
         public AccountType SelectedType { get; set; }
+        public string list { get; set; }
         public List<int> SelectMenu { get; set; }
+        public List<Menu> menus { get; set; }
+        public List<RoleMenu> editRole { get; set; }
     }
     public enum AccountType
     {

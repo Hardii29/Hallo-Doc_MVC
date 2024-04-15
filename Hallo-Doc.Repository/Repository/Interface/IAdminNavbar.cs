@@ -13,12 +13,16 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<Entity.Models.Region> GetRegions();
         ProviderMenu? ProviderMenu(int? regionId = null);
         void StopNotfy(int ProviderId);
-        void SendMailPhy(string email, string Message, string ProviderName);
+        bool SendMailPhy(string email, string Message, string ProviderName);
+        bool SendSMS(string Mobile, string Message, string ProviderName);
         AccountAccess Access();
         UserAccess UserAccess();
         AccountAccess CreateAccess();
         List<Menu> GetMenuList(AccountType accountType);
         void CreateRole(AccountAccess access);
+        AccountAccess ViewEditRole(int RoleId);
+        bool SaveEditRole(AccountAccess roles);
+        bool DeleteRole(int RoleId);
         Schedule Schedule();
         List<Physician> AllPhysician();
         List<Physician> PhysicianCalender(int? regionId);
@@ -42,6 +46,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         SearchRecordList SearchRecord(SearchRecordList sl);
         bool RecordsDelete(int RequestId);
         ProviderLocation ProviderLocation();
+        Logs EmailLog(Logs el);
+        SMSLog SMSLog(SMSLog sl);
 
     }
 }
