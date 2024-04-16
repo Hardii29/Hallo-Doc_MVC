@@ -35,6 +35,8 @@ namespace Hallo_Doc.Entity.ViewModel
     }
     public class Order
     {
+        public int AdminId { get; set; }
+        public string AdminName { get; set; }
         public int? RequestId { get; set; }
         public string? Prescription { get; set; }
         public int? NoOfRefill { get; set; }

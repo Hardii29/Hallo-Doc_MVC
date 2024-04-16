@@ -52,15 +52,14 @@
                 </thead>
                 <tbody>
                     @foreach (var item in Model.data)
-                        {
-                       
-                    <tr class=" mt-2">    
-                        <td class="col-5">@item.RoleName</td>
+                    {
+                        <tr class=" mt-2">    
+                            <td class="col-5">@item.RoleName</td>
                             <td class="col-5">@Enum.GetName(typeof(Hallo_Doc.Entity.ViewModel.AccountType), item.Accounttype)</td>
                             <td class="col-2"><a class="btn btn-sm btn-outline-info mr-1" asp-action="EditRole" asp-controller="AdminNavbar" asp-route-RoleId="@item.RoleId">Edit</a>
                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRoleModel" onclick="DeleteRole('@item.RoleId')">Delete</button>
                             </td>
-                    </tr> 
+                        </tr> 
                     }
                 </tbody>
             </table>

@@ -1,19 +1,15 @@
 ﻿@model Hallo_Doc.Entity.ViewModel.PatientReq;
 @{
-    ViewData["Title"] = "Create_patient_req";
+    ViewData["Title"] = "Create Request";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link href="~/css/create_request.css" rel="stylesheet">
-</head>
+
 <body class="bg-light">
 
     <div class="container">
 
         <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
-            <p style="font-weight:bold;"></p>
+            <h4 style="font-weight:bold">Submit Information</h4>
 
             <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
@@ -25,11 +21,8 @@
             <form asp-action="CreateRequest" asp-controller="Admin" method="post" id="Patient_req" enctype="multipart/form-data">
                 <div class="row g-2 first">
 
-                    <p class="mt-4">Patient Information</p>
-                    <div class="form-group form-floating mb-2">
-                        <textarea name="Symptoms" asp-for="Symptoms" class="form-control" id="symptoms" placeholder="Enter brief details of your symptoms" style="height:100px"></textarea>
-                        <label for="symptoms">Enter brief details of your symptoms</label>
-                    </div>
+                    <h5 class="mt-4">Patient</h5>
+             
                     <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="FirstName" name="Firstname" class="form-control" id="First name" placeholder="First name" aria-label="First name">
@@ -43,12 +36,6 @@
                             <input type="text" asp-for="DOB" name="Dob" class="form-control" placeholder="Date of Birth" id="Date of Birth" onfocus="(this.type='date')">
                             <label for="Date of Birth">Date of Birth</label>
                         </div>
-                    </div>
-                </div>
-
-                <div class="row g-2 first">
-                    <p class="mt-4">Patient Contact Information</p>
-                    <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="email" asp-for="Email" name="Email" id="Email" class="form-control" placeholder="Email" required>
                             <label for="Email">Email</label>
@@ -58,12 +45,11 @@
                             <input type="tel" asp-for="Mobile" name="Mobile" class="form-control" id="mobile">
 
                         </div>
-                        
                     </div>
                 </div>
 
                 <div class="row g-2 first">
-                    <p class="mt-4">Patient Location</p>
+                    <h5 class="mt-4">Location</h5>
                     <div class="row g-2">
                         <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                             <input type="text" asp-for="Street" name="Street" class="form-control" id="Street" placeholder="Street">
@@ -85,9 +71,23 @@
                             <input type="text" name="Optional" class="form-control" id="Room" placeholder="Room#/Suite (Optional)">
                             <label for="Room">Room#/Suite (Optional)</label>
                         </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <a class="btn btn-outline-info py-3 mr-2"> Verify </a>
+                            <a class="btn btn-outline-info py-3">
+                                <i class="fa-solid fa-location-dot"></i> Map
+                            </a>
+                        </div>
                     </div>
                 </div>
-
+                <div class="row g-2 first">
+                    <h5 class="mt-4">Notes</h5>
+                <div class="row g-2">
+                    <div class="form-group form-floating mb-2">
+                        <textarea name="Symptoms" asp-for="Symptoms" class="form-control" id="notes" placeholder="Notes" style="height:150px"></textarea>
+                        <label for="notes">Admin Notes (Optional)</label>
+                    </div>
+                </div>
+                </div>
                 <div class="g-2 mt-4 first" style="text-align: right;">
                     <button type="submit" class="btn btn-info text-white">Submit</button>
                     <button type="button" class="btn btn-outline-info">Cancel</button>
@@ -98,5 +98,3 @@
     </div>
 
 </body>
-
-</html>

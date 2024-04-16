@@ -512,8 +512,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public Order GetOrderView(int requestId)
         {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
             var order = new Order();
             order.RequestId = requestId;
+            order.AdminId = admin.AdminId;
+            order.AdminName = $"{admin.FirstName} {admin.LastName}";
             return order;
         }
         public void SendOrder(Order order)

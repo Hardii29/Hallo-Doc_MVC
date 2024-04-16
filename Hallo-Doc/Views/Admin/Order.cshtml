@@ -1,7 +1,7 @@
 ﻿@model Hallo_Doc.Entity.ViewModel.Order;
 @{
     ViewData["Title"] = "Send Order";
-    Layout = "~/Views/Shared/_AdminActionLayout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <body class="bg-light">
@@ -36,8 +36,8 @@
                         <label for="business">Business</label>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
-                        <input type="tel" name="BusinessContact" asp-for="BusinessContact" id="mobile" class="form-control" placeholder="mobile">
-                        <label for="mobile">Business Contact</label>
+                        <input type="tel" name="BusinessContact" asp-for="BusinessContact" id="contact" class="form-control" placeholder="mobile">
+                        <label for="contact">Business Contact</label>
                     </div>
                     <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
                         <input type="email" name="Email" asp-for="Email" id="email" class="form-control" placeholder="Email">
@@ -108,7 +108,7 @@
             url: '@Url.Action("BusinessDetails", "Admin")',
             data: { vendorId: vendorId },
             success: function (response) {
-                $("#mobile").val(response.businessContact);
+                $("#contact").val(response.businessContact);
                 $("#email").val(response.email);
                 $("#fax").val(response.faxNumber);
             },

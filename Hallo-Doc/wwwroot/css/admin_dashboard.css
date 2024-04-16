@@ -80,32 +80,38 @@ h3{
 button[data-btn="New"]:focus {
     background-color: #0d6efd !important;
     color: white !important;
-    outline: none ;
+    outline: none;
+    box-shadow: none !important;
 }
 button[data-btn="Pending"]:focus {
     background-color: #0dcaf0 !important;
     color: white !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 button[data-btn="Active"]:focus {
     background-color: #28a745 !important;
     color: white !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 button[data-btn="Conclude"]:focus {
     background-color: rgb(201, 56, 214) !important;
     color: white !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 button[data-btn="ToClose"]:focus {
     background-color: rgba(14, 14, 252, 0.822) !important;
     color: white !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 button[data-btn="Unpaid"]:focus {
     background-color: rgba(139, 5, 216, 0.822) !important;
     color: white !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 .circle { 
     width: 10px; 
