@@ -59,9 +59,20 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.CancelViewCase(RequestId);
             return RedirectToAction("Admin_dashboard");
         }
-        public IActionResult View_notes()
+        public IActionResult View_notes(int RequestId)
         {
-            return View();
+            var model = _adminDashboard.viewNotesData(RequestId);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult EditNote(string? AdminNotes, int RequestId)
+        {
+            bool model = _adminDashboard.ViewNotes(AdminNotes, RequestId);
+            if(model==false)
+            {
+                return NotFound();
+            }
+            return RedirectToAction("View_notes", new {RequestId = RequestId});
         }
         public IActionResult PhysicianList(int RegionId) 
         { 
@@ -276,9 +287,6 @@ namespace Hallo_Doc.Controllers
                 _notyf.Success("Request Page is sent to the patient successfully..");
             }
             return RedirectToAction("Admin_dashboard");
-        }
-        
-        
-        
+        }   
     }
 }

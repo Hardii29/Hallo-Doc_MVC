@@ -65,7 +65,7 @@
                                 <div class="dropdown-menu" aria-labelledby="action">
                                     <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-file-text" aria-hidden="true"></i> View Case</a>
                                     <a class="dropdown-item" asp-action="View_upload" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-cloud-upload" aria-hidden="true"></i> View Uploads</a>
-                                    <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
+                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="@request.RequestId"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
                                     <a class="dropdown-item" asp-action="Order" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-list-ul" aria-hidden="true"></i> Order</a>
                                     <a class="dropdown-item" asp-action="Close_case" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Close Case</a>
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#clearCaseModel" onclick="Clearcaseid('@request.RequestId')"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Clear Case</button>

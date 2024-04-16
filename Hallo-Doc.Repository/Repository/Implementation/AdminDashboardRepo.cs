@@ -194,6 +194,150 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             var business = _context.HealthProffessionals.Where(b => b.Profession ==  businessId).ToList();
             return business;
         }
+        public ViewNotes viewNotesData(int RequestId)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var req = _context.Requests.FirstOrDefault(W => W.RequestId == RequestId);
+            //var symptoms = _context.RequestClients.FirstOrDefault(W => W.RequestId == RequestId);
+            var transferlog = (from rs in _context.RequestStatusLogs
+                               join py in _context.Physicians on rs.PhysicianId equals py.PhysicianId into pyGroup
+                               from py in pyGroup.DefaultIfEmpty()
+                               join p in _context.Physicians on rs.TransToPhysicianId equals p.PhysicianId into pGroup
+                               from p in pGroup.DefaultIfEmpty()
+                                   //join a in _context.Admins on rs.AdminId equals a.AdminId into aGroup
+                                   //from a in aGroup.DefaultIfEmpty()
+                               where rs.RequestId == RequestId && rs.Status == 2
+                               select new TransferNotes
+                               {
+                                   TransPhysician = p.FirstName,
+                                   //Admin = a.FirstName,
+                                   Physician = py.FirstName,
+                                   Requestid = rs.RequestId,
+                                   Notes = rs.Notes,
+                                   Status = rs.Status,
+                                   Physicianid = rs.PhysicianId,
+                                   Createddate = rs.CreatedDate,
+                                   Requeststatuslogid = rs.RequestStatusLogId,
+                                   Transtoadmin = rs.TransToAdmin,
+                                   Transtophysicianid = rs.TransToPhysicianId
+                               }).ToList();
+            var cancelbyprovider = _context.RequestStatusLogs.Where(E => E.RequestId == RequestId && (E.TransToAdmin != null));
+            var cancel = _context.RequestStatusLogs.Where(E => E.RequestId == RequestId && (E.Status == 7 || E.Status == 3));
+            var model = _context.RequestNotes.FirstOrDefault(E => E.RequestId == RequestId);
+            ViewNotes allData = new ViewNotes();
+            allData.Requestid = RequestId;
+            //allData.PatientNotes = symptoms.Notes;
+            if (model == null)
+            {
+                allData.PhysicianNotes = "-";
+                allData.AdminNotes = "-";
+            }
+            else
+            {
+                allData.Status = req.Status;
+                allData.Requestnotesid = model.RequestNotesId;
+                allData.PhysicianNotes = model.PhysicianNotes ?? "-";
+                allData.AdminNotes = model.AdminNotes ?? "-";
+            }
+
+            List<TransferNotes> transfer = new List<TransferNotes>();
+            foreach (var item in transferlog)
+            {
+                transfer.Add(new TransferNotes
+                {
+                    TransPhysician = item.TransPhysician,
+                    // Admin = item.Admin,
+                    Physician = item.Physician,
+                    Requestid = item.Requestid,
+                    Notes = item.Notes ?? "-",
+                    Status = item.Status,
+                    Physicianid = item.Physicianid,
+                    Createddate = item.Createddate,
+                    Requeststatuslogid = item.Requeststatuslogid,
+                    Transtoadmin = item.Transtoadmin,
+                    Transtophysicianid = item.Transtophysicianid
+                });
+            }
+            allData.transfernotes = transfer;
+            List<TransferNotes> cancelbyphysician = new List<TransferNotes>();
+            foreach (var item in cancelbyprovider)
+            {
+                cancelbyphysician.Add(new TransferNotes
+                {
+                    Requestid = item.RequestId,
+                    Notes = item.Notes ?? "-",
+                    Status = item.Status,
+                    Physicianid = item.PhysicianId,
+                    Createddate = item.CreatedDate,
+                    Requeststatuslogid = item.RequestStatusLogId,
+                    Transtoadmin = item.TransToAdmin,
+                    Transtophysicianid = item.TransToPhysicianId
+                });
+            }
+            allData.cancelbyphysician = cancelbyphysician;
+
+            List<TransferNotes> cancelrq = new List<TransferNotes>();
+            foreach (var item in cancel)
+            {
+                cancelrq.Add(new TransferNotes
+                {
+                    Requestid = item.RequestId,
+                    Notes = item.Notes ?? "-",
+                    Status = item.Status,
+                    Physicianid = item.PhysicianId,
+                    Createddate = item.CreatedDate,
+                    Requeststatuslogid = item.RequestStatusLogId,
+                    Transtoadmin = item.TransToAdmin,
+                    Transtophysicianid = item.TransToPhysicianId
+                });
+            }
+            allData.cancel = cancelrq;
+            allData.AdminId = admin.AdminId;
+            allData.AdminName = $"{admin.FirstName} {admin.LastName}";
+            return allData;
+        }
+        public bool ViewNotes(string? adminnotes, int RequestId)
+        {
+            try
+            {
+                RequestNote notes = _context.RequestNotes.FirstOrDefault(E => E.RequestId == RequestId);
+                if (notes != null)
+                {
+                 
+                     if (adminnotes != null)
+                    {
+                            notes.AdminNotes = adminnotes;
+                            notes.ModifiedDate = DateTime.Now;
+                            _context.RequestNotes.Update(notes);
+                            _context.SaveChangesAsync();
+                            return true;
+                      
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    RequestNote rn = new RequestNote
+                    {
+                        RequestId = RequestId,
+                        AdminNotes = adminnotes,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = "Admin"
+
+                    };
+                    _context.RequestNotes.Add(rn);
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public Order GetBusinessDetails(int VendorId)
         {
             var data = (from v in _context.HealthProffessionals where v.VendorId == VendorId select new Order

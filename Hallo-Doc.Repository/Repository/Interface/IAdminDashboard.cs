@@ -23,6 +23,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<Physician> GetPhysician(int regionId);
         List<HealthProfessionalType> GetProfession();
         List<HealthProffessional> GetBusiness(int businessId);
+        ViewNotes viewNotesData(int RequestId);
+        bool ViewNotes(string? adminnotes, int RequestId);
         Order GetBusinessDetails(int VendorId);
         bool CancleCaseInfo(int? RequestId, int CaseTagId, string Notes);
         bool BlockCaseReq(int RequestId, string Notes);

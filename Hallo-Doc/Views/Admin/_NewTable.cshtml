@@ -75,7 +75,7 @@
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#assignCaseModel" onclick="Assigncaseid('@request.RequestId')"><i class="fa fa-file-text-o" aria-hidden="true"></i> Assign Case</button>
                                     <button type="button" class="dropdown-item cancel-case" data-bs-toggle="modal" data-bs-target="#cancelCaseModel" onclick="Canclecaseid('@request.RequestId','@request.PatientName')"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Cancel Case</button>
                                     <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-file-text" aria-hidden="true"></i> View Case</a>
-                                    <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
+                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="@request.RequestId"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
                                     <button type="button" class="dropdown-item block-case" data-bs-toggle="modal" data-bs-target="#blockCaseModel" onclick="Blockcaseid('@request.RequestId','@request.PatientName')"><i class="fa fa-ban" aria-hidden="true"></i> Block patient</button>
                                 </div>
                             </div>

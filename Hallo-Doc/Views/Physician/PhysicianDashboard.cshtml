@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewData["Title"] = "Physician Dashboard";
+    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+}
+
+<body class="bg-light">
+  
+    <div class="container-fluid mt-3" style="width: 100%;">
+
+        <div class="row">
+
+            <button class="col-lg-2 col-sm-3 col-3 btn btn-p m-2 py-3 rounded text-start btn6 " data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
+                <i class="fa fa-plus-circle me-2" aria-hidden="true"></i><b>New</b>
+                <p class="h4">22</p>
+            </button>
+            <button class="col-lg-2 col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Pending" data-id="2" style="background-color:#ddfaff; border-color:#0dcaf0; color:#0dcaf0;">
+                <i class="fa fa-user me-2" aria-hidden="true"></i><b>Pending</b>
+                <p class="h4">2</p>
+            </button>
+            <button class="col-lg-2 col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Active" data-id="3" style="background-color:#ccf7d6; border-color:#28a745; color:#28a745">
+                <i class="fa fa-check-square-o me-2" aria-hidden="true"></i><b>Active</b>
+                <p class="h4">3</p>
+            </button>
+            <button class="col-lg-2 col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Conclude" data-id="4" style="background-color:rgb(245, 210, 248); border-color:rgb(201, 56, 214); color:rgb(201, 56, 214);">
+                <i class="fa fa-clock-o me-2" aria-hidden="true"></i><b>Conclude</b>
+                <p class="h4">12</p>
+            </button>
+       
+        </div>
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h3>Patients<span style="font-size:medium; color: navy;" id="cardName"></span></h3>
+            <ul>
+                <li class="d-inline">
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#sendLinkModel">
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i><span class="dash-btn"> Send Link</span>
+                    </button>
+                </li>
+                <li class="d-inline">
+                    <a class="btn btn-info text-white" asp-action="CreateRequest" asp-controller="Admin">
+                        <i class="fa fa-edit" aria-hidden="true"></i><span class="dash-btn"> Create Requests</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <div class="search-nav bg-white p-2">
+                <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
+                    
+                    <div class="form-group">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search Patients" name="searchValue">
+                    </div>
+                    <ul class="text-secondary requestType">
+                        <li class="d-inline">
+                            <button type="button" class="btn btn-outline-dark reqtype" data-id="-1">All</button>
+                        </li>
+                        <li class="d-inline">
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="2">
+                                <i class="circle" style="background-color: green;"></i> Patient
+                            </button>
+                        </li>
+                        <li class="d-inline">
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="3">
+                                <i class="circle" style="background-color: orange;"></i> Family/Friend
+                            </button>
+                        </li>
+                        <li class="d-inline">
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="1">
+                                <i class="circle" style="background-color: firebrick;"></i> Business
+                            </button>
+                        </li>
+                        <li class="d-inline">
+                            <button type="button" class="me-2 bg-white border-0 reqtype" data-id="4">
+                                <i class="circle" style="background-color: dodgerblue;"></i> Concierge
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="btnContent">  </div>
+
+
+</body>
+<script>
+    var statusidglobal = $(this).data("id");
+    var btnnameglobal = $(this).data("btn");
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Physician/GetDashboard',
+            method: 'GET',
+            data: { btnName: 'New', statusId: 1 },
+            success: function (data) {
+                $("#btnContent").html(data);
+            },
+            error: function () {
+                console.error('Error fetching default partial view.');
+            }
+        });
+
+        $(document).on("click", ".btn", function () {
+            btnnameglobal = $(this).data("btn");
+            console.log("Button clicked: " + btnnameglobal);
+            document.getElementById('cardName').innerText = "(" + btnnameglobal + ")";
+            statusidglobal = $(this).data("id");
+
+            $.ajax({
+                url: '@Url.Action("GetDashboard", "Physician")',
+
+                method: 'GET',
+                data: { btnName: btnnameglobal, statusid: statusidglobal },
+                success: function (data) {
+                    console.log("AJAX success");
+
+                    $("#btnContent").html(data);
+                    console.log("data added");
+                },
+                error: function () {
+                    console.error('Error fetching partial view.');
+                }
+            });
+        });
+    });
+</script>

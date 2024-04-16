@@ -79,7 +79,7 @@
                                 <div class="dropdown-menu" aria-labelledby="action">
                                     <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-file-text" aria-hidden="true"></i> View Case</a>
                                     <a class="dropdown-item" asp-action="View_upload" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa fa-cloud-upload" aria-hidden="true"></i> View Uploads</a>
-                                    <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
+                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="@request.RequestId"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
                                     <button type="button" class="dropdown-item transfer-case" data-bs-toggle="modal" data-bs-target="#transferCaseModel" onclick="Transfercaseid('@request.RequestId')"><i class="fa fa-right-left" aria-hidden="true"></i> Transfer</button>
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#clearCaseModel" onclick="Clearcaseid('@request.RequestId')"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Clear Case</button>
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#sendAgreementModel" onclick="SendAgreementid('@request.RequestId','@request.PatientMobile', '@request.Email')"><i class="fa fa-file-text-o" aria-hidden="true"></i> Send Agreement</button>
