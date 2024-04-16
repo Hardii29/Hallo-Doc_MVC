@@ -1,4 +1,5 @@
 ﻿using Hallo_Doc.Repository.Repository.Interface;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 {
     public class Email_SMSservices :IEmail_SMS
     {
+        private readonly IConfiguration _configuration;
+        public Email_SMSservices(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public void SendEmail(string body, string  subject, string email)
         {
             using (MailMessage message = new MailMessage())
@@ -30,9 +36,9 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public bool SendSMS(string receiverPhoneNumber, string message)
         {
-            string accountSid = "AC4bf3b374a445381a40e8d37605b8b53d";
-            string authToken = "fc1d430d4c010a13f0368824e885abb4";
-            string twilioPhoneNumber = "+12515125413";
+            string accountSid = _configuration["TwilioSettings:AccountSid"];
+            string authToken = _configuration["TwilioSettings:AuthToken"];
+            string twilioPhoneNumber = _configuration["TwilioSettings:TwilioPhoneNumber"];
 
             TwilioClient.Init(accountSid, authToken);
 
