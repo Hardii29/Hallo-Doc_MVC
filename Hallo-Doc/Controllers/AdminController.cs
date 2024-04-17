@@ -150,14 +150,22 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult Accept(int RequestID)
         {
-            _adminDashboard.SendAgreement_accept(RequestID);
-            return RedirectToAction("Admin_dashboard", "Admin");
+            bool result = _adminDashboard.SendAgreement_accept(RequestID);
+            if(result==true)
+            {
+                _notyf.Success("Agreement Accepted");
+            }
+            return RedirectToAction("Agreement");
         }
 
         public IActionResult Reject(int RequestID, string Notes)
         {
-            _adminDashboard.SendAgreement_Reject(RequestID, Notes);
-            return RedirectToAction("Admin_dashboard", "Admin");
+            bool result = _adminDashboard.SendAgreement_Reject(RequestID, Notes);
+            if(result ==true)
+            {
+                _notyf.Warning("Agreement Rejected");
+            }
+            return RedirectToAction("Agreement");
         }
         [HttpPost]
         public IActionResult SendAgreement(string email, int RequestId)

@@ -334,8 +334,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
                 _context.Physicians.Remove(user);
                 _context.SaveChanges();
-                _context.AspnetUsers.RemoveRange(id);
-                _context.SaveChanges();
+                //_context.AspnetUsers.RemoveRange(id);
+                //_context.SaveChanges();
             }
         }
     }

@@ -1,0 +1,25 @@
+﻿
+<div class="modal fade" id="acceptCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content justify-content-center" style="text-align:center;">
+
+            <form asp-action="AcceptCase" asp-controller="Physician" method="post">
+                <input type="hidden" value=" " id="RequestID_ModelAccept" name="RequestId" />
+                <div class="modal-body m-3">
+                    <img class="img-fluid m-2 mb-3" src="~/images/accept.png" alt="" width="120" height="60">
+
+                    <div class="mb-3">
+                        <h3>Confirmation for Accept case</h3>
+                        <h6>Patient name : <span class="text-success" id="PatientName_ModelAccept"> </span></h6>
+                        <p>Accept the case by clicking on accept button. Then you can proceed with patient treatment.</p>
+
+                    </div>
+                    <button type="submit" class="btn btn-success text-white">Accept</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-success">Cancel</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

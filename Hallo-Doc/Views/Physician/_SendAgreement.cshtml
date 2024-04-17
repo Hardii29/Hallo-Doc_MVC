@@ -1,0 +1,38 @@
+﻿
+<div class="modal fade" id="sendAgreementModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Send Agreement</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="sendAgreementForm" asp-action="SendAgreement" asp-controller="Physician" method="post">
+                <input type="hidden" value=" " id="RequestID_ModelSendAgreement" name="RequestId" />
+                <input type="hidden" value=" " id="Email_ModelSendAgreement" name="Email" />
+                <div class="modal-body">
+
+                    <div class="circle" style="background-color: green;"></div> Patient
+                    <p style="font-size:smaller;" class="mt-2">To Send Agreement please make sure you are updating the correct contact information below for the responsible party.</p>
+                    <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="phone" placeholder="name@example.com" >
+
+                        <label for="phone">Phone Number</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" >
+
+                        <label for="email">Email</label>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info text-white">Send</button>
+                    <button type="button" class="btn btn-outline-info text-info">Cancel</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,43 +1,81 @@
-﻿
+﻿@using Hallo_Doc.Entity.ViewModel;
+@model PaginationModel<PhysicianDash>;
 @{
     ViewData["Title"] = "_NewTable";
 }
 <table class="table desktop-view" id="new-table">
     <thead class="table-light">
         <tr class="row">
-            <th class="col">Name</th>
-            <th class="col"> </th>
-            <th class="col">Phone</th>
-            <th class="col-2">Address</th>
-            <th class="col">Action</th>
+            <th class="col-2">Name</th>
+            <th class="col-1"> </th>
+            <th class="col-2">Phone</th>
+            <th class="col-4">Address</th>
+            <th class="col-2">Chat With</th>
+            <th class="col-1">Action</th>
         </tr>
     </thead>
     <tbody>
-     
+        @foreach (var request in Model.PhysicianDash)
+                {
+                    string rows = "";
+                    var mobile = "";
+                    switch (request.RequestTypeId)
+                    {
+                        case 1:
+                            rows = "#dc3545";
+                            mobile = $"(Business)";
+                            break;
+                        case 2:
+                            rows = "#198754";
+                            break;
+                        case 3:
+                            rows = "orange;";
+                            mobile = $"(Family/Friend)";
+                            break;
+                        case 4:
+                            rows = "dodgerblue;";
+                            mobile = $"(Concierge)";
+                            break;
+                        default:
+                            rows = "";
+                            mobile = "";
+                            break;
+                    }
             <tr class="row">
-                <td class="col text-white bg-primary">PatientName</td>
-                <td class="col text-white bg-primary"><button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
-               
-                <td class="col text-white bg-primary">
-                    <button type="button" class="btn btn-outline-light">
-                        <i class="fa fa-phone" aria-hidden="true"></i>436545769
-                    </button><span>(Patient)</span>
+                <td class="col-2 text-white" style="background-color: @rows;">@request.PatientName</td>
+                <td class="col-1 text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
+
+                <td class="col-2 text-white" style="background-color: @rows;">
+                    <button type="button" class="btn btn-outline-light pr-3 pl-3">
+                        <i class="fa fa-phone me-2" aria-hidden="true"></i> @request.PatientMobile
+                    </button><div>(Patient)</div>
+                    @if (request.RequestTypeId == 1 || request.RequestTypeId == 3 || request.RequestTypeId == 4)
+                    {
+                        <button type="button" class="btn btn-outline-light">
+                            <i class="fa fa-phone" aria-hidden="true"></i> @request.RequestorPhoneNumber
+                        </button>
+
+                        <span>@mobile</span>
+                    }
                     
                 </td>
-                <td class="col-2 text-white bg-primary">Address</td>
-                <td class="col text-white bg-primary">
+                <td class="col-4 text-white" style="background-color: @rows;">@request.Address</td>
+                <td class="col-2 text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa-solid fa-user-tie me-1"></i>Admin</button></td>
+                <td class="col-1 text-white" style="background-color: @rows;">
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Action
                         </button>
                         <div class="dropdown-menu" aria-labelledby="action">
-                            <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="RequestId"><i class="fa fa-file-text" aria-hidden="true"></i> View Case</a>
-                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="RequestId"><i class="fa fa-file-o" aria-hidden="true"></i> View Notes</a>
-                            <button type="button" class="dropdown-item block-case"><i class="fa fa-ban" aria-hidden="true"></i> Block patient</button>
+                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#acceptCaseModel" onclick="Acceptcase('@request.RequestId','@request.PatientName')">
+                                <i class="fa-solid fa-clipboard-check me-2"></i> Accept</button>
+                            <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="RequestId"><i class="fa-solid fa-file-lines me-2"></i> View Case</a>
+                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>                            
                         </div>
                     </div>
                 </td>
             </tr>
+            }
     </tbody>
 </table>
 
@@ -114,3 +152,42 @@
         </div>
     
 </div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination pagination-container d-flex justify-content-end">
+        @{
+            int i;
+
+            if (Model.CurrentPage > 1)
+            {
+                <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage - 1)">&lt;</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">&lt;</a></li>
+            }
+            @for (i = 1; i <= Model.TotalPages; i++)
+            {
+
+                <li class="page-item"><a href="#" data-page="@i" class="@(i == Model.CurrentPage ? "active" : "") page-link">@i</a></li>
+            }
+            if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item"><a class="page-link" data-page="@(Model.CurrentPage + 1)">&gt;</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">&gt;</a></li>
+            }
+        }
+    </ul>
+</nav>
+<script>
+    function Acceptcase(id, patientname) {
+        var RequestId = id;
+        var patientname = patientname;
+        console.log(RequestId);
+        console.log(patientname);
+        document.getElementById('RequestID_ModelAccept').value = RequestId;
+        document.getElementById('PatientName_ModelAccept').innerText = patientname;
+    }
+</script>

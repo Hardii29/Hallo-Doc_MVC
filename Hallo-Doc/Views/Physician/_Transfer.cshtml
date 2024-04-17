@@ -1,0 +1,31 @@
+﻿
+<div class="modal fade" id="transferCaseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Transfer Request</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="TransferCase" asp-controller="Physician" method="post">
+                <input type="hidden" value=" " id="RequestID_ModelTransfer" name="RequestId" />
+                <div class="modal-body">
+                    <p>This request will be transferred to Admin.</p>
+                    <div class="form-floating mb-3">
+
+                        <textarea class="form-control" id="reason" style="height: 100px" name="Notes" placeholder="Reason"></textarea>
+                        <label for="reason">Discription</label>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info text-white">Submit</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info text-info">Cancel</button>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

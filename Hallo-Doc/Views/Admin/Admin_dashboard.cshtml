@@ -149,35 +149,33 @@
                 }
             });
                     
-                    $(document).on("click", ".btn", function () {
+            $(document).on("click", ".btn", function () {
                 btnnameglobal = $(this).data("btn");
                 console.log("Button clicked: " + btnnameglobal);
                 document.getElementById('cardName').innerText = "(" +btnnameglobal+ ")";
                 statusidglobal = $(this).data("id");
-                        if (statusidglobal == 1) { exportData = '1'; console.log("exportData:"+exportData) }
+                if (statusidglobal == 1) { exportData = '1'; console.log("exportData:"+exportData) }
                 if (statusidglobal == 2) { exportData = '2'; console.log("exportData:" + exportData) }
                 if (statusidglobal == 3) { exportData = '4,5'; console.log("exportData:" + exportData) }
                 if (statusidglobal == 4) { exportData = '6'; console.log("exportData:" + exportData) }
                 if (statusidglobal == 5) { exportData = '3,7,8'; console.log("exportData:" + exportData) }
                 if (statusidglobal == 6) { exportData = '9'; console.log("exportData:" + exportData) }
 
-                        $.ajax({
-                            url: '@Url.Action("GetPartialView", "Admin")',
-                            
-                            method: 'GET',
-                    data: { btnName: btnnameglobal, statusid:statusidglobal },
-                            success: function (data) {
-                                console.log("AJAX success");
-                        
-                                $("#btnContent").html(data);
-                                console.log("data added");
-                            },
-                            error: function () {
-                                console.error('Error fetching partial view.');
-                            }
-                        });
-                    });
+                 $.ajax({
+                      url: '@Url.Action("GetPartialView", "Admin")',
+                      method: 'GET',
+                      data: { btnName: btnnameglobal, statusid:statusidglobal },
+                      success: function (data) {
+                           console.log("AJAX success");
+                           $("#btnContent").html(data);
+                           console.log("data added");
+                      },
+                      error: function () {
+                           console.error('Error fetching partial view.');
+                      }
+                 });
             });
+        });
         var reqtypeElements = document.getElementsByClassName('reqtype');
         for (var i = 0; i < reqtypeElements.length; i++) {
             reqtypeElements[i].addEventListener('click', handleSearchClick);

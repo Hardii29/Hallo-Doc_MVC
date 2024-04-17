@@ -415,14 +415,13 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             var req = _context.Requests.FirstOrDefault(r =>r.RequestId == RequestId);
             if (req != null)
             {
-                req.Status = 2;
+                
                 req.PhysicianId = PhysicianId;
                 _context.Requests.Update(req);
                 _context.SaveChanges();
                 RequestStatusLog rsl = new RequestStatusLog
                 {
                     RequestId = RequestId,
-                    Status = 2,
                     PhysicianId = req.PhysicianId,
                     //AdminId = 1,
                     Notes = Notes,

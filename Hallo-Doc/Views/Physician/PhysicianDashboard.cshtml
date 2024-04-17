@@ -1,9 +1,11 @@
-﻿
+﻿@model Hallo_Doc.Entity.ViewModel.StatusCount;
 @{
     ViewData["Title"] = "Physician Dashboard";
     Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
 }
-
+@Html.Partial("_Accept")
+@Html.Partial("_SendAgreement")
+@Html.Partial("_Transfer")
 <body class="bg-light">
   
     <div class="container-fluid mt-3" style="width: 100%;">
@@ -12,19 +14,19 @@
 
             <button class="col-lg-2 col-sm-3 col-3 btn btn-p m-2 py-3 rounded text-start btn6 " data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
                 <i class="fa fa-plus-circle me-2" aria-hidden="true"></i><b>New</b>
-                <p class="h4">22</p>
+                <p class="h4">@Model.NewRequest</p>
             </button>
             <button class="col-lg-2 col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Pending" data-id="2" style="background-color:#ddfaff; border-color:#0dcaf0; color:#0dcaf0;">
                 <i class="fa fa-user me-2" aria-hidden="true"></i><b>Pending</b>
-                <p class="h4">2</p>
+                <p class="h4">@Model.PendingRequest</p>
             </button>
             <button class="col-lg-2 col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Active" data-id="3" style="background-color:#ccf7d6; border-color:#28a745; color:#28a745">
                 <i class="fa fa-check-square-o me-2" aria-hidden="true"></i><b>Active</b>
-                <p class="h4">3</p>
+                <p class="h4">@Model.ActiveRequest</p>
             </button>
             <button class="col-lg-2 col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Conclude" data-id="4" style="background-color:rgb(245, 210, 248); border-color:rgb(201, 56, 214); color:rgb(201, 56, 214);">
                 <i class="fa fa-clock-o me-2" aria-hidden="true"></i><b>Conclude</b>
-                <p class="h4">12</p>
+                <p class="h4">@Model.ConcludeRequest</p>
             </button>
        
         </div>
@@ -111,7 +113,7 @@
                 url: '@Url.Action("GetDashboard", "Physician")',
 
                 method: 'GET',
-                data: { btnName: btnnameglobal, statusid: statusidglobal },
+                data: { btnName: btnnameglobal, statusId: statusidglobal },
                 success: function (data) {
                     console.log("AJAX success");
 
