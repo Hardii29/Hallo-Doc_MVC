@@ -1,0 +1,100 @@
+﻿@model Hallo_Doc.Entity.ViewModel.PatientReq;
+@{
+    ViewData["Title"] = "Create Request";
+    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+}
+
+<body class="bg-light">
+
+    <div class="container">
+
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold">Submit Information</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="PhysicianDashboard" asp-controller="Physician">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <form asp-action="CreateRequest" asp-controller="Physician" method="post" enctype="multipart/form-data">
+                <div class="row g-2 first">
+
+                    <h5 class="mt-4">Patient</h5>
+
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" asp-for="FirstName" name="Firstname" class="form-control" id="First name" placeholder="First name" aria-label="First name">
+                            <label for="First name">First name</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" asp-for="LastName" name="Lastname" class="form-control" id="Last name" placeholder="Last name" aria-label="Last name">
+                            <label for="Last name">Last name</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" asp-for="DOB" name="Dob" class="form-control" placeholder="Date of Birth" id="Date of Birth" onfocus="(this.type='date')">
+                            <label for="Date of Birth">Date of Birth</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="email" asp-for="Email" name="Email" id="Email" class="form-control" placeholder="Email" required>
+                            <label for="Email">Email</label>
+                            <span id="email-msg"></span>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="tel" asp-for="Mobile" name="Mobile" class="form-control" id="mobile">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-2 first">
+                    <h5 class="mt-4">Location</h5>
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" asp-for="Street" name="Street" class="form-control" id="Street" placeholder="Street">
+                            <label for="Street">Street</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" asp-for="City" name="City" class="form-control" id="City" placeholder="City">
+                            <label for="City">City</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" asp-for="State" name="State" class="form-control" id="State" placeholder="State">
+                            <label for="State">State</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="number" asp-for="ZipCode" name="Zipcode" class="form-control" id="Zip" placeholder="ZipCode">
+                            <label for="Zip">ZipCode</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                            <input type="text" name="Optional" class="form-control" id="Room" placeholder="Room#/Suite (Optional)">
+                            <label for="Room">Room#/Suite (Optional)</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <a class="btn btn-outline-info py-3 mr-2"> Verify </a>
+                            <a class="btn btn-outline-info py-3">
+                                <i class="fa-solid fa-location-dot"></i> Map
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2 first">
+                    <h5 class="mt-4">Notes</h5>
+                    <div class="row g-2">
+                        <div class="form-group form-floating mb-2">
+                            <textarea name="Symptoms" asp-for="Symptoms" class="form-control" id="notes" placeholder="Notes" style="height:150px"></textarea>
+                            <label for="notes">Physician Notes (Optional)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="g-2 mt-4 first" style="text-align: right;">
+                    <button type="submit" class="btn btn-info text-white">Submit</button>
+                    <button type="button" class="btn btn-outline-info">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</body>

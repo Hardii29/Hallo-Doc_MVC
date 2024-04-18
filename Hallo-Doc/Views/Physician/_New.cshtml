@@ -69,8 +69,8 @@
                         <div class="dropdown-menu" aria-labelledby="action">
                             <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#acceptCaseModel" onclick="Acceptcase('@request.RequestId','@request.PatientName')">
                                 <i class="fa-solid fa-clipboard-check me-2"></i> Accept</button>
-                            <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="RequestId"><i class="fa-solid fa-file-lines me-2"></i> View Case</a>
-                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>                            
+                            <a class="dropdown-item" asp-action="ViewCase" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-lines me-2"></i> View Case</a>
+                            <a class="dropdown-item" asp-action="ViewNotes" asp-controller="Physician" asp-route-RequestId="@request.RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>
                         </div>
                     </div>
                 </td>

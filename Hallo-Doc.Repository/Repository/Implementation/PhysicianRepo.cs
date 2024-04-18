@@ -61,6 +61,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             DOB = rc != null && rc.IntYear != null && rc.StrMonth != null && rc.IntDate != null ?
                                             new DateOnly((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate) : DateOnly.MinValue,
                             Email = rc != null ? rc.Email : "",
+                            Status = req.Status,
                             PatientMobile = rc != null ? rc.PhoneNumber : "",
                             Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                             RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
@@ -128,6 +129,97 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 return true;
             }
             else { return false; }
+        }
+        public bool Housecall(int RequestId)
+        {
+            var request = _context.Requests.FirstOrDefault(req => req.RequestId == RequestId);
+            request.Status = 5;
+            request.ModifiedDate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestId;
+            rsl.CreatedDate = DateTime.Now;
+            rsl.Status = 5;
+            _context.RequestStatusLogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool Consult(int RequestId)
+        {
+            var request = _context.Requests.FirstOrDefault(req => req.RequestId == RequestId);
+            request.Status = 6;
+            request.ModifiedDate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestId;
+            rsl.CreatedDate = DateTime.Now;
+            rsl.Status = 6;
+            _context.RequestStatusLogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool ConcludeCare(int RequestId, string Notes)
+        {
+            var requestData = _context.Requests.FirstOrDefault(e => e.RequestId == RequestId);
+            requestData.Status = 8;
+            requestData.ModifiedDate = DateTime.Now;
+            _context.Requests.Update(requestData);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog
+            {
+                RequestId = RequestId,
+                Notes = Notes,
+                Status = 8,
+                CreatedDate = DateTime.Now
+            };
+            _context.RequestStatusLogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public void CreateReq(PatientReq req, int PhysicianId)
+        {
+            var admin = _context.Physicians.Where(x => x.PhysicianId == PhysicianId).FirstOrDefault();
+
+            var Request = new Entity.Models.Request();
+            var Requestclient = new Requestclient();
+            var RequestNotes = new RequestNote();
+            Request.RequestTypeId = 1;
+            Request.Status = 1;
+            //Request.UserId = Int32.Parse(UserId);
+            Request.FirstName = admin.FirstName;
+            Request.LastName = admin.LastName;
+            Request.Email = admin.Email;
+            Request.PhoneNumber = admin.Mobile;
+            Request.CreatedDate = DateTime.Now;
+            Request.PhysicianId = PhysicianId;
+            Request.IsUrgentEmailSent = new BitArray(1);
+            Request.ConfirmationNumber = req.City.Substring(0, 2) + DateTime.Now.ToString("yyyyMM") + req.LastName.Substring(0, 2) + req.FirstName.Substring(0, 2) + "002";
+            _context.Requests.Add(Request);
+            _context.SaveChanges();
+            Requestclient.RequestId = Request.RequestId;
+            Requestclient.FirstName = req.FirstName;
+            Requestclient.LastName = req.LastName;
+            Requestclient.Address = req.Street + "," + req.City + "," + req.State + "," + req.ZipCode;
+            Requestclient.Email = req.Email;
+            Requestclient.PhoneNumber = req.Mobile;
+            Requestclient.Notes = req.Symptoms;
+            Requestclient.IntDate = req.DOB.Day;
+            Requestclient.IntYear = req.DOB.Year;
+            Requestclient.StrMonth = (req.DOB.Month).ToString();
+            _context.Requestclients.Add(Requestclient);
+            _context.SaveChanges();
+            RequestNotes.RequestId = Request.RequestId;
+            RequestNotes.PhysicianNotes = req.Symptoms;
+            RequestNotes.CreatedDate = DateTime.Now;
+            RequestNotes.CreatedBy = admin.FirstName;
+            _context.RequestNotes.Add(RequestNotes);
+            _context.SaveChanges();
+
         }
     }
 }

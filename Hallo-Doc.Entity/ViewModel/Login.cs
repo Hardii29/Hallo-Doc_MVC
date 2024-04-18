@@ -15,4 +15,14 @@ namespace Hallo_Doc.Entity.ViewModel
         public int AdminId { get; set;}
         public string? AdminName { get; set;}
     }
+    public class UserInfo
+    {
+        public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Username { get; set; }
+        public string Role { get; set; }
+        public string AspNetUserId { get; set; }
+        public int RoleID { get; set; }
+    }
 }

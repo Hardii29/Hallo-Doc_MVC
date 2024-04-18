@@ -13,5 +13,9 @@ namespace Hallo_Doc.Repository.Repository.Interface
         PaginationModel<PhysicianDash> GetRequestData(int statusid, int PhysicianId, int page, int pagesize);
         bool AcceptCase(int RequestId, int PhysicianId);
         bool TransferCase(int RequestId, string Notes);
+        bool Housecall(int RequestId);
+        bool Consult(int RequestId);
+        bool ConcludeCare(int RequestId, string Notes);
+        void CreateReq(PatientReq req, int PhysicianId);
     }
 }

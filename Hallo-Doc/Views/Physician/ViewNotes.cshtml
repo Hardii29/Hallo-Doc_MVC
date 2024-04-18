@@ -1,0 +1,130 @@
+﻿@model Hallo_Doc.Entity.ViewModel.ViewNotes;
+@{
+    ViewData["Title"] = "View Note";
+    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/view-notes.css">
+
+</head>
+
+<body class="bg-light">
+
+    <div style="padding-bottom: 9%;" class="container mb-3">
+        <div class="flex-row d-flex py-3 mr-2 justify-content-between">
+
+            <div class="d-flex">
+                <h4 style="font-weight:bold">Notes</h4>
+            </div>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+
+        </div>
+
+        <div class="row px-3 justify-content-between">
+            <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
+                <div class="d-flex flex-row">
+                    <div class="my-auto">
+                        <i class="fa fa-user-tie me-3" aria-hidden="true"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="fs-6 fw-bold mb-0 ptxt">Admin Notes</p>
+                        <p class="mb-0 ptxt">@Model.AdminNotes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
+                <div class="d-flex flex-row">
+                    <div class="my-auto">
+                        <i class="fa fa-user-doctor me-3" aria-hidden="true"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="fs-6 fw-bold mb-0 ptxt">Physician Notes</p>
+                        <p class="mb-0 ptxt">@Model.PhysicianNotes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row px-3 justify-content-between">
+            @foreach (var item in @Model.cancel)
+            {
+                <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
+                    <div class="d-flex flex-row">
+                        <div class="my-auto">
+                            <i class="fa fa-user-tie me-3" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="fs-6 fw-bold mb-0 ptxt">@Enum.GetName(typeof(Hallo_Doc.Entity.ViewModel.status), item.Status)</p>
+                            <p class="mb-0 ptxt">@item.Notes</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            @foreach (var item in Model.cancelbyphysician)
+            {
+                <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
+                    <div class="d-flex flex-row">
+                        <div class="my-auto">
+                            <i class="fa fa-user-doctor me-3" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="fs-6 fw-bold mb-0 ptxt">Cancel By Physician Notes</p>
+                            <p class="mb-0 ptxt">@item.Notes</p>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+        <div class="row px-3 pb-3">
+            @if (Model.transfernotes.Count > 0)
+            {
+                <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
+                    <div class="d-flex flex-row">
+                        <div class="my-auto">
+                            <i class="fa fa-right-left me-3" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="fs-6 fw-bold mb-0">Transfer Notes</p>
+                            @{
+                                int i = 1;
+                            }
+                            @foreach (var item in Model.transfernotes)
+                            {
+                                <p>
+                                    <b>( @i ) </b>@Html.Raw(System.Web.HttpUtility.HtmlDecode(item.TransferNotesData))
+                                </p>
+                                i = i + 1;
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="bg-white px-3 pb-3 shadow mb-3 bg-white rounded">
+            <form method="post" asp-action="EditNote" asp-controller="Admin">
+                <input type="hidden" name="Requestid" value="@Model.Requestid" />
+                <div class="row pt-2 mt-2 mb-2">
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group form-floating mt-2">
+                            <textarea style="height: 150px;" class="form-control" asp-for="AdminNotes" placeholder="Patient Notes"></textarea>
+                            <label>Admin Notes</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex pt-2 justify-content-end">
+                        <button type="submit" class="btn btn-info text-white mr-2">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>

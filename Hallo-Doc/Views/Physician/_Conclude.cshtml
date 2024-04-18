@@ -8,9 +8,8 @@
         <tr class="row">
             <th class="col-2">Name</th>
             <th class="col-1"> </th>
-            <th class="col-2">Phone</th>
-            <th class="col-4">Address</th>
-            <th class="col-2">Chat With</th>
+            <th class="col-3">Phone</th>
+            <th class="col-5">Address</th>
             <th class="col-1">Action</th>
         </tr>
     </thead>
@@ -45,22 +44,21 @@
                 <td class="col-2 text-white" style="background-color: @rows;">@request.PatientName</td>
                 <td class="col-1 text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
 
-                <td class="col-2 text-white" style="background-color: @rows;">
+                <td class="col-3 text-white" style="background-color: @rows;">
                     <button type="button" class="btn btn-outline-light">
                         <i class="fa fa-phone" aria-hidden="true"></i> @request.PatientMobile
-                    </button><span>(Patient)</span>
+                    </button><div>(Patient)</div>
                     @if (request.RequestTypeId == 1 || request.RequestTypeId == 3 || request.RequestTypeId == 4)
                     {
                         <button type="button" class="btn btn-outline-light">
                             <i class="fa fa-phone" aria-hidden="true"></i> @request.RequestorPhoneNumber
                         </button>
 
-                        <span>@mobile</span>
+                        <div>@mobile</div>
                     }
 
                 </td>
-                <td class="col-4 text-white" style="background-color: @rows;">@request.Address</td>
-                <td class="col-2 text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-user-tie me-1" aria-hidden="true"></i>Admin</button></td>
+                <td class="col-5 text-white" style="background-color: @rows;">@request.Address</td>
                 <td class="col-1 text-white" style="background-color: @rows;">
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,10 +66,10 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="action">
                             <a class="dropdown-item" asp-action="ConcludeCare" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa fa-heartbeat me-2"></i> Conclude Care</a>
-                            <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="RequestId"><i class="fa-solid fa-file-lines me-2" aria-hidden="true"></i> View Case</a>
-                            <a class="dropdown-item" asp-action="View_upload" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-arrow-up me-2"></i> View Uploads</a>
-                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>
-                            <a class="dropdown-item" asp-action="Encounter" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-contract me-2"></i> Encounter</a>
+                            <a class="dropdown-item" asp-action="ViewCase" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-lines me-2" aria-hidden="true"></i> View Case</a>
+                            <a class="dropdown-item" asp-action="ViewUpload" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-arrow-up me-2"></i> View Uploads</a>
+                            <a class="dropdown-item" asp-action="ViewNotes" asp-controller="Physician" asp-route-RequestId="@request.RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>
+                            <a class="dropdown-item" asp-action="Encounter" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-contract me-2"></i> Encounter</a>
                         </div>
                     </div>
                 </td>

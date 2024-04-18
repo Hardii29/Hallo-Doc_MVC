@@ -29,7 +29,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         bool CancleCaseInfo(int? RequestId, int CaseTagId, string Notes);
         bool BlockCaseReq(int RequestId, string Notes);
         bool AssignCaseReq(int RequestId, int PhysicianId, string Notes);
-        List<ViewDocument> GetFiles(int requestId);
+        ViewDocument GetFiles(int requestId);
         void UploadFiles(int requestId, ViewDocument viewDocument);
         IActionResult? DownloadFile(int fileID);
         void DeleteFile(int fileID);

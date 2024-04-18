@@ -36,6 +36,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public bool SendSMS(string receiverPhoneNumber, string message)
         {
+            string receiver = "+91"+receiverPhoneNumber;
             string accountSid = _configuration["TwilioSettings:AccountSid"];
             string authToken = _configuration["TwilioSettings:AuthToken"];
             string twilioPhoneNumber = _configuration["TwilioSettings:TwilioPhoneNumber"];
@@ -47,7 +48,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 var smsMessage = MessageResource.Create(
                     body: message,
                     from: new Twilio.Types.PhoneNumber(twilioPhoneNumber),
-                    to: new Twilio.Types.PhoneNumber(receiverPhoneNumber)
+                    to: new Twilio.Types.PhoneNumber(receiver)
                 );
                 
                 Console.WriteLine("SMS sent successfully. SID: " + smsMessage.Sid);

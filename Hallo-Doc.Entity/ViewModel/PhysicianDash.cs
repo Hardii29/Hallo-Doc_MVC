@@ -17,6 +17,7 @@
         public int? RequestClientId { get; set; }
         public int? ProviderId { get; set; }
         public string? RequestorPhoneNumber { get; set; }
+        public int Status { get; set; }
     }
     public class StatusCount
     {

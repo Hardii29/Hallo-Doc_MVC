@@ -9,7 +9,8 @@
             <th class="col-2">Name</th>
             <th class="col-1"> </th>
             <th class="col-2">Phone</th>
-            <th class="col-4">Address</th>
+            <th class="col-3">Address</th>
+            <th class="col-1">Status</th>
             <th class="col-2">Chat With</th>
             <th class="col-1">Action</th>
         </tr>
@@ -59,19 +60,31 @@
                     }
 
                 </td>
-                <td class="col-4 text-white" style="background-color: @rows;">@request.Address</td>
-                <td class="col-2 text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-user-tie me-1" aria-hidden="true"></i>Admin</button></td>
+                <td class="col-3 text-white" style="background-color: @rows;">@request.Address</td>
+                @if (request.Status == 4)
+                {
+                    <td class="col-1 text-white" style="background-color: @rows;">-</td>
+                }
+                @if (request.Status == 5)
+                {
+                    <td class="col-1 text-white" style="background-color: @rows;"><a class="btn btn-info text-white" asp-action="Consult" asp-controller="Physician" asp-route-RequestId="@request.RequestId">HouseCall</a></td>
+                }
+                
+                
+                <td class="col-2 text-white" style="background-color: @rows;">
+                    <button type="button" class="btn btn-outline-light"><i class="fa fa-user me-1" aria-hidden="true"></i>Patient</button>
+                    <button type="button" class="btn btn-outline-light"><i class="fa fa-user-tie me-1" aria-hidden="true"></i>Admin</button></td>
                 <td class="col-1 text-white" style="background-color: @rows;">
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Action
                         </button>
                         <div class="dropdown-menu" aria-labelledby="action">
-                            <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="RequestId"><i class="fa-solid fa-file-lines me-2" aria-hidden="true"></i> View Case</a>
-                            <a class="dropdown-item" asp-action="View_upload" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-arrow-up me-2"></i> View Uploads</a>
-                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>
-                            <a class="dropdown-item" asp-action="Order" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Order</a>
-                            <a class="dropdown-item" asp-action="Encounter" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-contract me-2"></i> Encounter</a>
+                            <a class="dropdown-item" asp-action="ViewCase" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-lines me-2" aria-hidden="true"></i> View Case</a>
+                            <a class="dropdown-item" asp-action="ViewUpload" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-arrow-up me-2"></i> View Uploads</a>
+                            <a class="dropdown-item" asp-action="ViewNotes" asp-controller="Physician" asp-route-RequestId="@request.RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>
+                            <a class="dropdown-item" asp-action="Order" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Order</a>
+                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#typeOfCareModal" onclick="Encounterid('@request.RequestId')"><i class="fa-solid fa-file-contract me-2"></i> Encounter</button>
                         </div>
                     </div>
                 </td>
@@ -182,3 +195,10 @@
         }
     </ul>
 </nav>
+<script>
+    function Encounterid(id) {
+        var RequestId = id;
+        console.log(RequestId);
+        document.getElementById('RequestID_Encounter').value = RequestId;
+    }
+</script>

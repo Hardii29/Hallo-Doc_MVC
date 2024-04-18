@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Twilio.Http;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
 {
@@ -443,20 +444,25 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             }
             else { return false; }
         }
-        public List<ViewDocument> GetFiles(int requestId)
+        public ViewDocument GetFiles(int requestId)
         {
-            var files = _context.RequestWiseFiles
-                                .Where(f => f.RequestId == requestId)
-                                .Select(f => new ViewDocument
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var files = from f in _context.RequestWiseFiles
+                        where f.RequestId == requestId
+                        select new ViewDocument
                                 {
-                                    RequestId = f.RequestId,
                                     RequestWiseFileID = f.RequestWiseFileId,
                                     CreatedDate = f.CreatedDate,
                                     FileName = f.FileName
-                                })
-                                .ToList();
-
-            return files;
+                                };
+            var model = new ViewDocument()
+            {
+                RequestId = requestId,
+                documents = files.ToList(),
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}"
+            };
+            return model;
         }
         public void UploadFiles(int requestId, ViewDocument viewDocument)
         {

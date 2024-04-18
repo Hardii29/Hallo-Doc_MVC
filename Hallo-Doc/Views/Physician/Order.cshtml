@@ -1,0 +1,120 @@
+﻿@model Hallo_Doc.Entity.ViewModel.Order;
+@{
+    ViewData["Title"] = "Send Order";
+    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+}
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h3 style="font-weight:bold;">Send Order</h3>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <form asp-controller="Physician" asp-action="Order" method="post">
+                <input type="hidden" name="RequestId" asp-for="RequestId" value="@Model?.RequestId" />
+                <div class="row g-2 mb-3">
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <select class="form-select" name="HealthProfessionalTypeId" id="profession"
+                                asp-items="@(new SelectList(ViewBag.Profession,"HealthProfessionalTypeId","ProfessionName"))" onchange="FindBusiness()">
+                            <option value="">Select Profession</option>
+                        </select>
+                        <label for="profession">Select Profession</label>
+                        <span asp-validation-for="HealthProfessionalTypeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <select class="form-select" name="VendorId" asp-for="VendorId" id="business" onchange="FetchBusinessDetails()">
+                            <option value="">Select Business</option>
+
+                        </select>
+                        <label for="business">Business</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="tel" name="BusinessContact" asp-for="BusinessContact" id="contact" class="form-control" placeholder="mobile">
+                        <label for="contact">Business Contact</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="email" name="Email" asp-for="Email" id="email" class="form-control" placeholder="Email">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="form-group form-floating col-md-6 col-sm-12 mb-2">
+                        <input type="text" name="FaxNumber" asp-for="FaxNumber" id="fax" class="form-control" placeholder="fax">
+                        <label for="fax">Fax Number</label>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="form-group form-floating mb-3">
+                        <textarea name="Prescription" asp-for="Prescription" class="form-control" id="details" placeholder="OrderDetails" style="height: 100px"></textarea>
+                        <label for="details">Prescription for Order Details</label>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="form-group form-floating col-md-6 col-sm-12">
+                        <select class="form-select" name="NoOfRefill" asp-for="NoOfRefill" id="refill" aria-label="Floating label select example">
+                            <option value="0">Not Required</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        <label for="refill">Number of Refill</label>
+                    </div>
+
+                </div>
+
+                <div class="g-2 mt-4 first" style="text-align: right;">
+                    <button type="submit" class="btn btn-info text-white">Submit</button>
+                    <button type="button" class="btn btn-outline-info" onclick="window.location.href='Admin_dashboard'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    function FindBusiness() {
+        var profession = $("#profession").val();
+        console.log(profession);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("BusinessList", "Admin")?businessId=' + profession,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                var select = '<option value="">Select Business</option>';
+                for (var i = 0; i < response.length; i++) {
+                    select += '<option value="' + response[i].vendorId + '">' + response[i].vendorName + '</option>';
+                }
+
+                $("#business").html(select);
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    }
+    function FetchBusinessDetails() {
+        var vendorId = $("#business").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("BusinessDetails", "Admin")',
+            data: { vendorId: vendorId },
+            success: function (response) {
+                $("#contact").val(response.businessContact);
+                $("#email").val(response.email);
+                $("#fax").val(response.faxNumber);
+            },
+            error: function () {
+                alert("Error fetching business details");
+            }
+        });
+    }
+</script>

@@ -6,6 +6,8 @@
 @Html.Partial("_Accept")
 @Html.Partial("_SendAgreement")
 @Html.Partial("_Transfer")
+@Html.Partial("_TypeOfCare")
+@Html.Partial("_SendLink")
 <body class="bg-light">
   
     <div class="container-fluid mt-3" style="width: 100%;">
@@ -39,7 +41,7 @@
                     </button>
                 </li>
                 <li class="d-inline">
-                    <a class="btn btn-info text-white" asp-action="CreateRequest" asp-controller="Admin">
+                    <a class="btn btn-info text-white" asp-action="CreateRequest" asp-controller="Physician">
                         <i class="fa fa-edit" aria-hidden="true"></i><span class="dash-btn"> Create Requests</span>
                     </a>
                 </li>

@@ -109,7 +109,7 @@ namespace Hallo_Doc.Controllers
         public IActionResult View_upload(int RequestId, ViewDocument viewDocument)
         {
             _adminDashboard.UploadFiles(RequestId, viewDocument);
-            return RedirectToAction("View_upload");
+            return RedirectToAction("View_upload", new { RequestId = RequestId });
         }
         [HttpGet]
         public IActionResult? Download_file(int fileID)

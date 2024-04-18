@@ -12,5 +12,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public int UserId { get; set; }
         public IFormFile? File { get; set; }
         public virtual Request Request { get; set; } = null!;
+        public List<ViewDocument> documents { get; set; }
+        public int AdminId { get; set; }
+        public string AdminName { get; set; }
     }
 }

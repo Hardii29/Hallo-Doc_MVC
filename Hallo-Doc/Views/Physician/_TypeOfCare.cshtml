@@ -1,0 +1,74 @@
+﻿<div class="modal fade" id="typeOfCareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLongTitle">Select Type Of Care</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <input type="hidden" value=" " id="RequestID_Encounter" name="RequestId" />
+                    <div class="row">
+                        <div class="col" style="text-align:right;">
+                            <button type="button" id="Housecall" class="btn btn-outline-info">HouseCall</button>
+                        </div>
+                        <div class="col" style="text-align:left;">
+                            <button type="button" id="Consult" class="btn btn-outline-info">Consult</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="Save" type="button" class="btn btn-info text-white">Save</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    let Housecall = false;
+    let Consult = false;
+
+    $('#Housecall').on('click', function () {
+        Housecall = true;
+        Consult = false;
+    })
+    $('#Consult').on('click', function () {
+        Consult = true;
+        Housecall = false;
+    })
+    $('#Save').on('click', function () {
+        var RequestId = $("#RequestID_Encounter").val();
+        if (Housecall == true) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Housecall", "Physician")',
+                data: { RequestId: RequestId },
+                cache: false,
+                success: function (response) {
+                    location.reload();
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+        else if (Consult == true) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Consult", "Physician")',
+                data: { RequestId: RequestId },
+                cache: false,
+                success: function (response) {
+                    location.reload();
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+    })
+</script>

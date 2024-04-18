@@ -69,9 +69,9 @@
                         <div class="dropdown-menu" aria-labelledby="action">
                             <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#sendAgreementModel" onclick="SendAgreementid('@request.RequestId','@request.PatientMobile', '@request.Email')">
                                 <i class="fa fa-file-text-o me-2" aria-hidden="true"></i> Send Agreement</button>
-                            <a class="dropdown-item" asp-action="View_case" asp-controller="Admin" asp-route-requestId="RequestId"><i class="fa-solid fa-file-lines me-2" aria-hidden="true"></i> View Case</a>
-                            <a class="dropdown-item" asp-action="View_upload" asp-controller="Admin" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-arrow-up me-2"></i> View Uploads</a>
-                            <a class="dropdown-item" asp-action="View_notes" asp-controller="Admin" asp-route-RequestId="RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>
+                            <a class="dropdown-item" asp-action="ViewCase" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-lines me-2" aria-hidden="true"></i> View Case</a>
+                            <a class="dropdown-item" asp-action="ViewUpload" asp-controller="Physician" asp-route-requestId="@request.RequestId"><i class="fa-solid fa-file-arrow-up me-2"></i> View Uploads</a>
+                            <a class="dropdown-item" asp-action="ViewNotes" asp-controller="Physician" asp-route-RequestId="@request.RequestId"><i class="fa fa-file-o me-2" aria-hidden="true"></i> View Notes</a>
                             <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#transferCaseModel" onclick="Transfercase('@request.RequestId')">
                                 <i class="fa-solid fa-clipboard-check me-2"></i> Transfer
                             </button>
