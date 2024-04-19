@@ -1,0 +1,24 @@
+﻿
+<div class="modal fade" id="finalizeEncounterModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="text-align:center;">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Encounter Form</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="DownloadEncounter" asp-controller="Physician" method="post">
+                <input type="hidden" value=" " id="RequestID_Encounter" name="RequestId" />
+                <div class="modal-body">
+                    <h6 class="mb-3">Encounter form is finalized successfully!</h6>
+
+                    <button type="submit" class="btn btn-info text-white">Download</button>
+
+                </div>
+                
+            </form>
+
+        </div>
+    </div>
+</div>

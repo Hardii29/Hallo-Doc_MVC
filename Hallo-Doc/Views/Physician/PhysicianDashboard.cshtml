@@ -8,6 +8,7 @@
 @Html.Partial("_Transfer")
 @Html.Partial("_TypeOfCare")
 @Html.Partial("_SendLink")
+@Html.Partial("_FinalizeEncounter")
 <body class="bg-light">
   
     <div class="container-fluid mt-3" style="width: 100%;">
@@ -92,6 +93,8 @@
 <script>
     var statusidglobal = $(this).data("id");
     var btnnameglobal = $(this).data("btn");
+    var EncounterFinalModal;
+
     $(document).ready(function () {
         $.ajax({
             url: '/Physician/GetDashboard',
@@ -99,6 +102,7 @@
             data: { btnName: 'New', statusId: 1 },
             success: function (data) {
                 $("#btnContent").html(data);
+                EncounterFinalModal = new bootstrap.Modal("#finalizeEncounterModel");
             },
             error: function () {
                 console.error('Error fetching default partial view.');
@@ -128,4 +132,25 @@
             });
         });
     });
+    function isEncounterFinalized(requestId) {
+        console.log(requestId);
+        $.ajax({
+            type: "GET",
+            url: '/Physician/IsEncounterFinalized',
+            data: { requestId: requestId },
+
+            success: function (data) {
+                if (data) {
+                    EncounterFinalModal.show();
+                    $("RequestID_Encounter").val(requestId);
+                }
+                else {
+                    window.location.href = "/Physician/Encounter?RequestId=" + requestId;
+                }
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
 </script>

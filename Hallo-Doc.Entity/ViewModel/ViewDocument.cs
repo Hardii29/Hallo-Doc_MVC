@@ -9,7 +9,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public DateTime? CreatedDate { get; set; }
         public string? FileName { get; set; }
         public string? UserName { get; set; }
-        public int UserId { get; set; }
+        public string Notes { get; set; }
         public IFormFile? File { get; set; }
         public virtual Request Request { get; set; } = null!;
         public List<ViewDocument> documents { get; set; }

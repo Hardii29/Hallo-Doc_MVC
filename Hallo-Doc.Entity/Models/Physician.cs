@@ -115,6 +115,9 @@ public partial class Physician
     public virtual AspnetUser? AspNetUser { get; set; }
 
     [InverseProperty("Physician")]
+    public virtual ICollection<EncounterForm> EncounterForms { get; set; } = new List<EncounterForm>();
+
+    [InverseProperty("Physician")]
     public virtual ICollection<PhysicianLocation> PhysicianLocations { get; set; } = new List<PhysicianLocation>();
 
     [InverseProperty("Physician")]

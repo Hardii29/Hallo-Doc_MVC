@@ -915,6 +915,94 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.SaveChanges();
             return true;
         }
-                       
+        public Encounter? EncounterInfo(int RequestId)
+        {
+            var encounter = (from rc in _context.Requestclients
+                             join en in _context.EncounterForms on rc.RequestId equals en.RequestId into renGroup
+                             from subEn in renGroup.DefaultIfEmpty()
+                             where rc.RequestId == RequestId
+                             select new Encounter
+                             {
+                                 RequestId = rc.RequestId,
+                                 FirstName = rc.FirstName,
+                                 LastName = rc.LastName,
+                                 Address = rc.Address,
+                                 DOB = rc != null && rc.IntYear != null && rc.StrMonth != null && rc.IntDate != null ?
+                                            new DateOnly((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate) : DateOnly.MinValue,
+                                 Mobile = rc.PhoneNumber,
+                                 Email = rc != null ? rc.Email : "",
+                                 Injury = subEn.HistoryOfInjury,
+                                 History = subEn.MedicalHistory,
+                                 Medications = subEn.Medicatons,
+                                 Allergies = subEn.Allergies,
+                                 Temp = subEn.Temp,
+                                 HR = subEn.Hr,
+                                 RR = subEn.Rr,
+                                 Bp = subEn.BloodPressureSystolic,
+                                 Bpd = subEn.BloodPressureDiastolic,
+                                 O2 = subEn.O2,
+                                 Pain = subEn.Pain,
+                                 Heent = subEn.Heent,
+                                 CV = subEn.Cv,
+                                 Chest = subEn.Chest,
+                                 ABD = subEn.Abd,
+                                 Extr = subEn.Extremeties,
+                                 Skin = subEn.Skin,
+                                 Neuro = subEn.Neuro,
+                                 Other = subEn.Other,
+                                 Diagnosis = subEn.Diagnosis,
+                                 Treatment = subEn.TreatmentPlan,
+                                 MDispensed = subEn.MedicationDispensed,
+                                 Procedures = subEn.Procedures,
+                                 Followup = subEn.FollowUp
+                             }).FirstOrDefault();
+            return encounter;
+        }
+        public void EditEncounterinfo(Encounter ve)
+        {
+            var RC = _context.Requestclients.FirstOrDefault(rc => rc.RequestId == ve.RequestId);
+            RC.FirstName = ve.FirstName;
+            RC.LastName = ve.LastName;
+            RC.Address = ve.Address;
+            RC.StrMonth = ve.DOB.Month.ToString();
+            RC.IntDate = ve.DOB.Day;
+            RC.IntYear = ve.DOB.Year;
+            RC.PhoneNumber = ve.Mobile;
+            RC.Email = ve.Email;
+            _context.Update(RC);
+
+            var E = _context.EncounterForms.FirstOrDefault(e => e.RequestId == ve.RequestId);
+            if (E == null)
+            {
+                E = new EncounterForm { RequestId = (int)ve.RequestId };
+                _context.EncounterForms.Add(E);
+            }
+            E.MedicalHistory = ve.History;
+            E.HistoryOfInjury = ve.Injury;
+            E.Medicatons = ve.Medications;
+            E.Allergies = ve.Allergies;
+            E.Temp = ve.Temp;
+            E.Hr = ve.HR;
+            E.Rr = ve.RR;
+            E.BloodPressureSystolic = ve.Bp;
+            E.BloodPressureDiastolic = ve.Bpd;
+            E.O2 = ve.O2;
+            E.Pain = ve.Pain;
+            E.Heent = ve.Heent;
+            E.Cv = ve.CV;
+            E.Chest = ve.Chest;
+            E.Abd = ve.ABD;
+            E.Extremeties = ve.Extr;
+            E.Skin = ve.Skin;
+            E.Neuro = ve.Neuro;
+            E.Other = ve.Other;
+            E.Diagnosis = ve.Diagnosis;
+            E.TreatmentPlan = ve.Treatment;
+            E.MedicationDispensed = ve.MDispensed;
+            E.Procedures = ve.Procedures;
+            E.FollowUp = ve.Followup;
+            E.IsFinalize = false;
+            _context.SaveChanges();
+        }
     }
 }

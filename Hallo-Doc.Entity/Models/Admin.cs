@@ -72,6 +72,9 @@ public partial class Admin
     public virtual AspnetUser AspNetUser { get; set; } = null!;
 
     [InverseProperty("Admin")]
+    public virtual ICollection<EncounterForm> EncounterForms { get; set; } = new List<EncounterForm>();
+
+    [InverseProperty("Admin")]
     public virtual ICollection<RequestStatusLog> RequestStatusLogs { get; set; } = new List<RequestStatusLog>();
 
     [InverseProperty("Admin")]

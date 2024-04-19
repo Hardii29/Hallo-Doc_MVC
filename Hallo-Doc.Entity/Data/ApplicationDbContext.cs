@@ -38,6 +38,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<EmailLog> EmailLogs { get; set; }
 
+    public virtual DbSet<EncounterForm> EncounterForms { get; set; }
+
     public virtual DbSet<HealthProfessionalType> HealthProfessionalTypes { get; set; }
 
     public virtual DbSet<HealthProffessional> HealthProffessionals { get; set; }
@@ -167,6 +169,19 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<EmailLog>(entity =>
         {
             entity.HasKey(e => e.EmailLogId).HasName("EmailLog_pkey");
+        });
+
+        modelBuilder.Entity<EncounterForm>(entity =>
+        {
+            entity.HasKey(e => e.EncounterFormId).HasName("EncounterForm_pkey");
+
+            entity.HasOne(d => d.Admin).WithMany(p => p.EncounterForms).HasConstraintName("EncounterForm_AdminId_fkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.EncounterForms).HasConstraintName("EncounterForm_PhysicianId_fkey");
+
+            entity.HasOne(d => d.Request).WithMany(p => p.EncounterForms)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("EncounterForm_RequestId_fkey");
         });
 
         modelBuilder.Entity<HealthProfessionalType>(entity =>

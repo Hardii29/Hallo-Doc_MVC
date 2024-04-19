@@ -10,6 +10,7 @@ using Hallo_Doc.Repository.Repository.Implementation;
 using NuGet.Protocol.Plugins;
 using OfficeOpenXml;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Twilio.Http;
 
 namespace Hallo_Doc.Controllers
 {
@@ -218,8 +219,14 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult Encounter(int requestId)
         {
-            var model = _adminDashboard.GetView(requestId);
+            var model = _adminDashboard.EncounterInfo(requestId);
             return View(model);
+        }
+        [HttpPost]
+        public IActionResult Encounter(Encounter encounter)
+        {
+            _adminDashboard.EditEncounterinfo(encounter);
+            return RedirectToAction("Encounter", new { requestId = encounter.RequestId });
         }
         public IActionResult AdminProfile(int adminId)
         {

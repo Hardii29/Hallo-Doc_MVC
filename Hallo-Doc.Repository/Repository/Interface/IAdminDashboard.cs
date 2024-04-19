@@ -50,8 +50,9 @@ namespace Hallo_Doc.Repository.Repository.Interface
         void CreateReq(PatientReq req);
         List<AdminDash> Export(string status, int? Region, int? requesttype);
         bool SendLink(string email, string firstName, string lastName);
-        
-        
-        
+        Encounter EncounterInfo(int RequestId);
+
+        void EditEncounterinfo(Encounter ve);
+
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration.Provider;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -220,6 +221,64 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.RequestNotes.Add(RequestNotes);
             _context.SaveChanges();
 
+        }
+        public bool Finalizeform(int RequestId)
+        {
+            var E = _context.EncounterForms.FirstOrDefault(e => e.RequestId == RequestId);
+            E.IsFinalize = true;
+            _context.SaveChanges();
+            return true;
+        }
+        public bool IsEncounterFinalized(int requestId)
+        {
+            return _context.EncounterForms.Any(e => e.RequestId == requestId && e.IsFinalize == true);
+        }
+        public List<Schedule> ShiftList(int PhysicianId)
+        {
+            List<Schedule> allData = (from s in _context.Shifts
+                                      join shiftDetail in _context.ShiftDetails
+                                      on s.ShiftId equals shiftDetail.ShiftId into shiftGroup
+                                      from sd in shiftGroup.DefaultIfEmpty()
+                                      where s.PhysicianId == PhysicianId
+                                      select new Schedule
+                                      {
+                                          ShiftId = s.ShiftId,
+                                          ShiftDate = s.StartDate,
+                                          StartTime = sd.StartTime,
+                                          EndTime = sd.EndTime,
+                                          Start = new DateTime(s.StartDate.Year, s.StartDate.Month, s.StartDate.Day, sd.StartTime.Hour, sd.StartTime.Minute, sd.StartTime.Second),
+                                          End = new DateTime(s.StartDate.Year, s.StartDate.Month, s.StartDate.Day, sd.EndTime.Hour, sd.EndTime.Minute, sd.EndTime.Second),
+                                          Status = sd.Status,
+                                          Color = sd.Status == 2 ? "pink" : "lightgreen",
+                                          Border = sd.Status == 2 ? "deeppink" : "darkgreen",
+                                      }).ToList();
+            return allData;
+        }
+        public bool RequestAdmin(int PhysicianId, string Message)
+        {
+            var res = _context.Physicians.FirstOrDefault(e => e.PhysicianId == PhysicianId);
+            string email = "hardi.jayani@etatvasoft.com";
+            var subject = "Request To Admin";
+            var body = $"Hello Admin ,\n\nThis is Doctor {res.FirstName} : \n{Message}";
+            _services.SendEmail(body, subject, email);
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, true);
+            EmailLog em = new EmailLog
+            {
+                EmailTemplate = body,
+                SubjectName = subject,
+                EmailId = email,
+                CreateDate = DateTime.Now,
+                SentDate = DateTime.Now,
+                IsEmailSent = bitArray,
+                AdminId = 1,
+                SentTries = 1,
+                Action = 3,
+                RoleId = 1,
+            };
+            _context.EmailLogs.Add(em);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

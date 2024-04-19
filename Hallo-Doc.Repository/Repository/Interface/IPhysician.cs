@@ -17,5 +17,9 @@ namespace Hallo_Doc.Repository.Repository.Interface
         bool Consult(int RequestId);
         bool ConcludeCare(int RequestId, string Notes);
         void CreateReq(PatientReq req, int PhysicianId);
+        bool Finalizeform(int RequestId);
+        bool IsEncounterFinalized(int requestId);
+        List<Schedule> ShiftList(int PhysicianId);
+        bool RequestAdmin(int PhysicianId, string Message);
     }
 }

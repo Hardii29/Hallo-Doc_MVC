@@ -1,0 +1,281 @@
+﻿@model Hallo_Doc.Entity.ViewModel.Schedule;
+@{
+    ViewData["Title"] = "Scheduling";
+    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+}
+<style>
+    thead {
+        text-decoration: none;
+        background-color: #343a40;
+        color: white;
+    }
+
+    th a {
+        text-decoration: none;
+        color: white;
+    }
+
+    td a {
+        text-decoration: none;
+        color: black;
+    }
+</style>
+
+    @Html.Partial("_CreateShift")
+
+<body class="bg-light" id="tableContent">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Scheduling</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="PhysicianDashboard" asp-controller="Physician">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        
+        <div class="flex-row d-flex mt-3 mb-3">
+            <h5 id="caldate"></h5>
+        </div>
+        <div class="g-2" style="display:flex; justify-content:flex-end;">
+            <button type="button" class="me-2 bg-light border-0" style="display:flex; align-items:center">
+                <i class="shift" style="background-color: pink; border-color: deeppink"></i>
+                <span style="margin-left:5px"> Panding Shifts</span>
+            </button>
+            <button type="button" class="me-2 bg-light border-0" style="display:flex; align-items:center">
+                <i class="shift" style="background-color: lightgreen; border-color: darkgreen"></i>
+                <span style="margin-left:5px"> Approved Shifts</span>
+            </button>
+        </div>
+        <div class="flex-row d-flex mt-3 mb-3 justify-content-between">
+            <ul>
+                <li class="d-inline">
+                    <button type="button" id="prev" class="btn btn-info text-white" style="border-radius:50%">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </button>
+                </li>
+                <li class="d-inline">
+                    <button class="btn" id="calendarIconBtn" onclick="picker.show(); return false;">
+                        <i class="fa-solid fa-calendar-days" id="calendar-icon" style="color:gray"></i>
+                    </button>
+                </li>
+                <li class="d-inline">
+                    <button type="button" id="nxt" class="btn btn-info text-white" style="border-radius:50%">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </li>
+            </ul>
+            <button type="button" class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#shiftcreateModel">
+                <span class="dash-btn">Add New Shift</span>
+            </button>
+        </div>
+        <div id="calendar"></div>
+    </div>
+    <div class="modal fade" id="viewShiftModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background-color:#0dcaf0">
+                    <h5 class="modal-title" id="exampleModalLabel">View Shift</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="shiftId" value=" " name="ShiftId" class="shiftId" />
+                    <div class="form-floating mb-3">
+                        <select class="form-select region" id="region" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))" disabled>
+                            <option value="">Select Region</option>
+
+                        </select>
+                        <label for="region">Region</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" id="shiftDate" name="ShiftDate" class="form-control shiftDate" placeholder="ShiftDate" disabled>
+                        <label for="ShiftDate">ShiftDate</label>
+                    </div>
+                    <div class="row g-2">
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="time" id="start" name="StartTime" class="form-control start" placeholder="start" disabled>
+                            <label for="start">Start</label>
+                        </div>
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="time" id="end" name="EndTime" class="form-control end" placeholder="end" disabled>
+                            <label for="end">End</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-info text-white">Return</button>
+                    <button type="button" id="editButton" class="btn btn-info text-white">Edit</button>
+                    <button type="button" id="saveButton" class="btn btn-success text-white" style="display: none;">Save</button>
+                    <button type="button" id="deleteButton" class="btn btn-danger">Delete</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+<script src='https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js'></script>
+<script src="~/js/index.global.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.11/index.global.min.js'></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            themeSystem: 'bootstrap5',
+            initialView: 'dayGridMonth',
+            aspectRatio: 1.8,
+            scrollTime: '00:00',
+            headerToolbar: false,
+            editable: true,
+            selectable: true,
+            resourceAreaHeaderContent: 'Physicians',
+            views: {
+                resourceTimelineWeek: {
+                    slotDuration: { days: 1 },
+                    slotLabelFormat: { weekday: 'short', day: 'numeric', week: 'long' },
+                },
+            },
+            displayEventTime: true,
+            eventDisplay: 'block',
+            dayMaxEvents: 1,
+            eventClick: function (event, jsEvent, view) {
+                ViewShift(event.event.id);
+            }
+        });
+        calendar.render();
+        showDate();
+        document.getElementById('prev').addEventListener('click', function () {
+            calendar.prev();
+            showDate();
+        });
+        document.getElementById('nxt').addEventListener('click', function () {
+            calendar.next();
+            showDate();
+        });
+   
+        function showDate() {
+            var view = calendar.view;
+            document.getElementById('caldate').innerHTML = view.title;
+            EventData();
+        }
+        
+        function EventData() {
+            $.ajax({
+                type: "GET",
+                url: "EventShift",
+
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    calendar.removeAllEvents();
+                    response.forEach(function (e) {
+                        var event = {
+                            id: e.shiftId,
+                            title: "Shift" + "\n" + e.startTime + "-" + e.endTime,
+                            start: e.start,
+                            end: e.end,
+                            backgroundColor: e.color,
+                            color: e.border,
+                            textColor: "Black",
+                        };
+
+                        calendar.addEvent(event);
+                    });
+                },
+            });
+            calendar.setOption('eventContent', function (arg) {
+                var status = arg.event.extendedProps.status;
+
+                var content = document.createElement('div');
+
+                if (calendar.view.type === 'dayGridMonth') {
+                    content.innerText = arg.event.title;
+                }
+               
+                return { domNodes: [content] };
+            });
+        }
+        function ViewShift(eventId) {
+            $.ajax({
+                url: 'ViewShift',
+                type: 'GET',
+                data: { ShiftId: eventId },
+                success: function (data) {
+                    console.log(data);
+                    $('#viewShiftModel #region').val(data.regionId);
+                    $('#viewShiftModel #physician').val(data.physicianId);
+                    $('#viewShiftModel #shiftDate').val(data.shiftDate);
+                    $('#viewShiftModel #start').val(data.startTime);
+                    $('#viewShiftModel #end').val(data.endTime);
+                    $('#viewShiftModel #shiftId').val(data.shiftId);
+                    toggleEditMode(false);
+                    $('#viewShiftModel').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+        $('#editButton').click(function () {
+            toggleEditMode(true);
+        });
+
+        $('#saveButton').click(function () {
+            var shiftId = $('.shiftId').val();
+            var regionId = $('.region').val();
+            var physicianId = $('.physician').val();
+            var shiftDate = $('.shiftDate').val();
+            var startTime = $('.start').val();
+            var endTime = $('.end').val();
+            toggleEditMode(false);
+            $.ajax({
+
+                url: 'EditShift',
+                type: 'POST',
+                data: { ShiftId: shiftId, RegionId: regionId, PhysicianId: physicianId, ShiftDate: shiftDate, StartTime: startTime, EndTime: endTime },
+                success: function (data) {
+                    console.log(data);
+                    $('#viewShiftModel').modal('hide');
+                    EventData();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+        $('#deleteButton').click(function () {
+            var shiftId = $('#shiftId').val();
+            console.log(shiftId);
+            $.ajax({
+
+                url: '@Url.Action("DeleteShift","Physician")',
+                type: 'POST',
+                data: { ShiftId: shiftId },
+                success: function (data) {
+                    $('#viewShiftModel').modal('hide');
+                    EventData();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+        function toggleEditMode(editMode) {
+            $('#viewShiftModel input, #viewShiftModel select').prop('disabled', !editMode);
+            if (editMode) {
+                $('#editButton').hide();
+                $('#saveButton').show();
+            } else {
+                $('#editButton').show();
+                $('#saveButton').hide();
+            }
+        }
+    });
+</script>
