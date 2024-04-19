@@ -372,5 +372,15 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("PhysicianProfile");
         }
+        [HttpPost]
+        public IActionResult EditNote(string? PhysicianNotes, int RequestId)
+        {
+            bool model = _adminDashboard.ViewNotes(PhysicianNotes, RequestId);
+            if (model == false)
+            {
+                return NotFound();
+            }
+            return RedirectToAction("ViewNotes", new { RequestId = RequestId });
+        }
     }
 }

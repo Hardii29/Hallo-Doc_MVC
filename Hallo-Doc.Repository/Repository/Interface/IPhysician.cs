@@ -21,5 +21,6 @@ namespace Hallo_Doc.Repository.Repository.Interface
         bool IsEncounterFinalized(int requestId);
         List<Schedule> ShiftList(int PhysicianId);
         bool RequestAdmin(int PhysicianId, string Message);
+        bool ViewNotes(string? PhysicianNotes, int RequestId);
     }
 }

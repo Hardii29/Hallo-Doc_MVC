@@ -280,5 +280,47 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.SaveChanges();
             return true;
         }
+        public bool ViewNotes(string? PhysicianNotes, int RequestId)
+        {
+            try
+            {
+                RequestNote notes = _context.RequestNotes.FirstOrDefault(E => E.RequestId == RequestId);
+                if (notes != null)
+                {
+
+                    if (PhysicianNotes != null)
+                    {
+                        notes.PhysicianNotes = PhysicianNotes;
+                        notes.ModifiedDate = DateTime.Now;
+                        _context.RequestNotes.Update(notes);
+                        _context.SaveChangesAsync();
+                        return true;
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    RequestNote rn = new RequestNote
+                    {
+                        RequestId = RequestId,
+                        PhysicianNotes = PhysicianNotes,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = "Physician"
+
+                    };
+                    _context.RequestNotes.Add(rn);
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }
