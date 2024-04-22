@@ -15,18 +15,32 @@
     margin: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.nav-tabs .nav-item .nav-link {
-    background-color: white;
-    color: black;
+.nav-link:active {
+    color: #17a2b8;
 }
-.nav-link .active a {
-    text-decoration: none;
-    color: #0dcaf0;
-}
+
 .navbar-toggler {
     color: #17a2b8;
 }
 
+.nav-tog-btn {
+    border: 1px solid #17a2b8;
+    height: 40px;
+    width: 40px;
+}
+
+.dnone {
+    display: none;
+}
+
+.offcanvas-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000 !important;
+    opacity: 0.3 !important;
+}
 h3{
     font-weight: bold;
 }

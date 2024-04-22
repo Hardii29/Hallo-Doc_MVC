@@ -25,12 +25,18 @@ namespace Hallo_Doc.Controllers
         public async Task<IActionResult> Login(Login login)
         {
             var result = await _login.Login(login);
-            if (result != null)
+            if (result != null && result.AspNetUserRoles.FirstOrDefault().RoleId == "Admin")
             {
                 /* SessionUtils.SetLoggedInUser(HttpContext.Session, user);*/
                 var jwtToken = _jwtService.GenerateToken(result);
                 Response.Cookies.Append("jwt", jwtToken);
                 return RedirectToAction("Admin_dashboard", "Admin");
+            }
+            else if (result != null && result.AspNetUserRoles.FirstOrDefault().RoleId == "Physician")
+            {
+                var jwtToken = _jwtService.GenerateToken(result);
+                Response.Cookies.Append("jwt", jwtToken);
+                return RedirectToAction("PhysicianDashboard", "Physician");
             }
             else
             {

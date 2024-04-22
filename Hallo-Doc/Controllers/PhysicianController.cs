@@ -338,10 +338,10 @@ namespace Hallo_Doc.Controllers
             return Json(view);
         }
         [HttpPost]
-        public IActionResult CreateShift(int RegionId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime)
+        public IActionResult CreateShift(Schedule schedule)
         {
-            int PhysicianId = 9;
-            _adminNav.CreateShift(RegionId, PhysicianId, ShiftDate, StartTime, EndTime);
+            schedule.PhysicianId = 9;
+            _adminNav.CreateShift(schedule);
             return RedirectToAction("Schedule");
         }
         [HttpPost]

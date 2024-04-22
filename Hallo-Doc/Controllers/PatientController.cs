@@ -45,7 +45,7 @@ namespace Hallo_Doc.Controllers
                     {
                         RequestId = request.RequestId,
                         CreatedDate= (DateTime)request.CreatedDate,
-                        Status = request.Status,
+                        Status = (status)request.Status,
                         fileId = fileId,
                     },
                     HasFiles = HasFiles 
@@ -58,7 +58,7 @@ namespace Hallo_Doc.Controllers
                 {
                     RequestId = r.RequestId,
                     CreatedDate = (DateTime)r.CreatedDate,
-                    Status = r.Status,
+                    Status = (status)r.Status,
                    
                 }).ToList(),
                 UserName = username,

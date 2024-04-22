@@ -26,7 +26,7 @@ namespace Hallo_Doc.Entity.ViewModel
     {
         public int? RequestId { get; set; }
         public DateTime CreatedDate { get; set; }
-        public short? Status { get; set; }
+        public status Status { get; set; }
         public int UserId { get; set; }
         public int fileId { get; set; }
     }

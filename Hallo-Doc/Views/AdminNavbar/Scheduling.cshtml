@@ -19,9 +19,122 @@
         color: black;
     }
 </style>
-<div>
-    @Html.Partial("_CreateShift")
+
+<div class="modal fade" id="createShiftModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#0dcaf0">
+                <h5 class="modal-title" id="exampleModalLabel">Create Shift</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="CreateShift" asp-controller="AdminNavbar" method="post">
+                <div class="modal-body">
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="region" name="RegionId" asp-for="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))" onchange="AssignPhysician()">
+                            <option value="">Select Region</option>
+
+                        </select>
+                        <label for="region">Region</label>
+                        <span asp-validation-for="RegionId" class="text-danger"></span>
+
+                    </div>
+
+                    <input type="hidden" id="physician" name="physician">
+                    <div class="form-floating mb-3">
+                        <select class="form-select" asp-for="PhysicianId" name="PhysicianId" id="provider">
+                            <option value="">Select Physician</option>
+                        </select>
+                        <label for="physician">Select</label>
+                        <span asp-validation-for="PhysicianId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" id="ShiftDate" asp-for="ShiftDate" name="ShiftDate" class="form-control" placeholder="ShiftDate">
+                        <label for="ShiftDate">ShiftDate</label>
+                        <span asp-validation-for="ShiftDate" class="text-danger"></span>
+                    </div>
+                    <div class="row g-2">
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="time" id="start" asp-for="StartTime" name="StartTime" class="form-control" placeholder="start">
+                            <label for="start">Start</label>
+                        </div>
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="time" id="end" name="EndTime" asp-for="EndTime" class="form-control" placeholder="end">
+                            <label for="end">End</label>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="repeat">
+                        <label class="form-check-label" for="repeat">Repeat</label>
+                    </div>
+                    <div class="form-group form-floating">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" name="repeatDay" value="1" id="rg1">
+                            <label class="form-check-label" for="rg1">
+                                Every Sunday
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" name="repeatDay" value="2" id="rg2">
+                            <label class="form-check-label" for="rg2">
+                                Every Monday
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" name="repeatDay" value="3" id="rg3">
+                            <label class="form-check-label" for="rg3">
+                                Every Tuesday
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" name="repeatDay" value="4" id="rg4">
+                            <label class="form-check-label" for="rg4">
+                                Every WednesDay
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" name="repeatDay" value="5" id="rg5">
+                            <label class="form-check-label" for="rg5">
+                                Every Thursday
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" name="repeatDay" value="6" id="rg6">
+                            <label class="form-check-label" for="rg6">
+                                Every Friday
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input mt-1" type="checkbox" name="repeatDay" value="7" id="rg7">
+                            <label class="form-check-label" for="rg7">
+                                Every Saturday
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" asp-for="RepeatCount" name="RepeatEnd" id="repeatEnd">
+                            <option value="0">0-times</option>
+                            <option value="1">1-times</option>
+                            <option value="2">2-times</option>
+                            <option value="3">3-times</option>
+                        </select>
+                        <label for="repeatEnd">Repeat End</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info text-white">Save</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-outline-info">Cancel</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
 </div>
+
+
 <body class="bg-light" id="tableContent">
 
     <div class="container mt-5">
@@ -356,4 +469,27 @@
             }
         }
     });
+</script>
+<script type="text/javascript">
+    function AssignPhysician() {
+        var region = $("#region").val();
+        console.log(region);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("PhysicianList", "Admin")?RegionId=' + region,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                var select = '<option value="">Select Physician</option>';
+                for (var i = 0; i < response.length; i++) {
+                    select += '<option value="' + response[i].physicianId + '">' + response[i].firstName + " " + response[i].lastName + '</option>';
+                }
+
+                $("#provider").html(select);
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    }
 </script>

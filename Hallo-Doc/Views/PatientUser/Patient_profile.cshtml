@@ -91,9 +91,9 @@
                     </div>
                 </div>
                 <div class="g-2 mt-4 first" style="text-align: right;">
-                    <a id="editButton" class="btn btn-info text-white" onclick="editMode()">Edit</a>
+                    <button type="button" id="editButton" class="btn btn-info text-white" onclick="editMode()">Edit</button>
                   
-                    <button type="submit" id="submitButton" class="btn btn-info text-white" style="display: none;">save</button>
+                    <button type="submit" id="submitButton" class="btn btn-success" style="display: none;">save</button>
                 </div>
 </form>
 </div>
@@ -103,20 +103,23 @@
             var element = document.body;
             element.classList.toggle("darkMode");
         }
+        function formatDate(dateString) {
+            const parts = dateString.split('-');
+            const formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+            return formattedDate;
+        }
+        const dobElement = document.getElementById('Date Of Birth');
+        dobElement.value = formatDate('@Model?.DOB');
+
         function editMode() {
             var formFields = document.querySelectorAll('input, select');
             formFields.forEach(function (field) {
                 field.disabled = !field.disabled;
             });
             var submitButton = document.getElementById('submitButton');
-            submitButton.style.display = submitButton.style.display === 'none' ? 'block' : 'none';
-            // var editButton = document.getElementById('editbutton');
-            // if (editButton.innerHTML === 'Edit') {
-
-            // }
-            // else {
-            //     editButton.innerHTML = 'Edit';
-            // }
+            var editButton = document.getElementById('editButton');
+            submitButton.style.display = submitButton.style.display === 'none' ? 'inline' : 'none';
+            editButton.style.display = 'none';
         }
     </script>
 </body>

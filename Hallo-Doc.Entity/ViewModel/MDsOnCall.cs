@@ -22,6 +22,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public TimeOnly EndTime { get; set; }
         public DateTime Start {  get; set; }
         public DateTime End { get; set; }
+        public int? onCallStatus { get; set; } = 0;
     }
    
 }

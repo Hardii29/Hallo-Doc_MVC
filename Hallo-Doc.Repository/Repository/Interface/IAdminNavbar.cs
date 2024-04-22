@@ -26,13 +26,15 @@ namespace Hallo_Doc.Repository.Repository.Interface
         Schedule Schedule();
         List<Physician> AllPhysician();
         List<Physician> PhysicianCalender(int? regionId);
-        void CreateShift(int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime);
+        void CreateShift(Schedule schedule);
         List<Schedule> ShiftList();
         Schedule GetShiftDetails(int ShiftId);
         void EditShift(int ShiftId, int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime);
         void DeleteShift(int ShiftId);
         MDsOnCall MDsOnCall();
-        RequestedShift RequestedShift();
+        RequestedShift RequestedShift(int? regionId);
+        Task<bool> DeleteReqShift(string s);
+        Task<bool> UpdateStatusShift(string s);
         VendorMenu VendorMenu(string searchValue, int Profession);
         VendorMenu AddBusiness();
         void AddVendor(VendorMenu model);
@@ -48,6 +50,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         ProviderLocation ProviderLocation();
         Logs EmailLog(Logs el);
         SMSLog SMSLog(SMSLog sl);
+        AdminProfile CreateAdmin();
+        void AddAdmin(AdminProfile admin);
 
     }
 }

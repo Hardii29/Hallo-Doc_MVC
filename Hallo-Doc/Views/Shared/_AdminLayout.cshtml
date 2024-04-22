@@ -91,7 +91,7 @@
                             <a class="nav-link @(path.StartsWith("/Admin/AdminProfile") ? "active" : "")" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model.AdminId">My Profile</a>
                     </li>
                         <li class="nav-item mx-2 dropdown">
-                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderMenu") || path.StartsWith("/AdminNavbar/Scheduling") ? "active" : "")">Providers</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderMenu") || path.EndsWith("Scheduling") || path.EndsWith("MDsOnCall") || path.EndsWith("RequestedShift") || path.EndsWith("CreateProvider") ? "active" : "")">Providers</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="ProviderMenu">Provider</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="Scheduling">Scheduling</a>
@@ -102,7 +102,7 @@
                             <a class="nav-link @(path.StartsWith("/AdminNavbar/VendorMenu") ? "active" : "")" asp-controller="AdminNavbar" asp-action="VendorMenu">Partners</a>
                     </li>
                         <li class="nav-item mx-2 dropdown">
-                            <a class="nav-link @(path.StartsWith("/AdminNavbar/AccountAccess") || path.StartsWith("/AdminNavbar/UserAccess") ? "active" : "")">Access</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/AccountAccess") || path.StartsWith("/AdminNavbar/UserAccess") || path.EndsWith("CreateAdmin") ? "active" : "")">Access</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="AccountAccess">Account Access</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="UserAccess">User Access</a>

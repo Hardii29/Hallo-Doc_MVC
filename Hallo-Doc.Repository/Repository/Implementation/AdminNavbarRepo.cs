@@ -288,7 +288,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             };
         }
-        public void CreateShift(int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime)
+        public void CreateShift(Schedule schedule)
         {
             BitArray bitArray = new BitArray(1);
             bitArray.Set(0, false);
@@ -296,8 +296,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             ShiftDetail sd = new ShiftDetail();
             ShiftDetailRegion sdr = new ShiftDetailRegion();
 
-            s.PhysicianId = PhysicianId;
-            s.StartDate = ShiftDate;
+            s.PhysicianId = schedule.PhysicianId;
+            s.StartDate = schedule.ShiftDate;
             s.IsRepeat = bitArray;
             s.CreatedBy = "Admin";
             s.CreatedDate = DateTime.Now;
@@ -305,17 +305,17 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.SaveChanges();
 
             sd.ShiftId = s.ShiftId;
-            sd.ShiftDate = new DateTime(ShiftDate.Year, ShiftDate.Month, ShiftDate.Day, StartTime.Hour, StartTime.Minute, StartTime.Second);
-            sd.RegionId = RegionId;
-            sd.StartTime = StartTime;
-            sd.EndTime = EndTime;
+            sd.ShiftDate = new DateTime(schedule.ShiftDate.Year, schedule.ShiftDate.Month, schedule.ShiftDate.Day, schedule.StartTime.Hour, schedule.StartTime.Minute, schedule.StartTime.Second);
+            sd.RegionId = schedule.RegionId;
+            sd.StartTime = schedule.StartTime;
+            sd.EndTime = schedule.EndTime;
             sd.Status = 2;
             sd.IsDeleted = bitArray;
             _context.ShiftDetails.Add(sd);
             _context.SaveChanges();
 
             sdr.ShiftDetailId = sd.ShiftDetailId;
-            sdr.RegionId = RegionId;
+            sdr.RegionId = schedule.RegionId;
             sdr.IsDeleted = bitArray;
             _context.ShiftDetailRegions.Add(sdr);
             _context.SaveChanges();
@@ -341,6 +341,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public List<Schedule> ShiftList()
         {
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, false);
             List<Schedule> allData = (from s in _context.Shifts
                                       join shiftDetail in _context.ShiftDetails
                                       on s.ShiftId equals shiftDetail.ShiftId into shiftGroup
@@ -348,6 +350,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                                       join p in _context.Physicians
                                       on s.PhysicianId equals p.PhysicianId into phyShift
                                       from ps in phyShift.DefaultIfEmpty()
+                                      where sd.IsDeleted == bitArray
                                       select new Schedule
                                       {
                                           PhysicianId = s.PhysicianId,
@@ -379,7 +382,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                         where s.ShiftId == ShiftId
                         select new Schedule
                         {
-                            RegionId = sd.RegionId,
+                            RegionId = (int)sd.RegionId,
                             RegionName = rs.Name,
                             PhysicianId = s.PhysicianId,
                             PhysicianName = ps.FirstName + " " + ps.LastName,
@@ -442,45 +445,50 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         public MDsOnCall MDsOnCall()
         {
             var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
-
-            var query = (from p in _context.Physicians
-                         join s in _context.Shifts
-                         on p.PhysicianId equals s.PhysicianId into physicianShifts
-                         from ps in physicianShifts.DefaultIfEmpty()
-                         join sd in _context.ShiftDetails
-                         on ps.ShiftId equals sd.ShiftId into shiftDetails
-                         from sd in shiftDetails.DefaultIfEmpty()
-                         join r in _context.Regions
-                         on sd.RegionId equals r.RegionId into shiftRegions
-                         from sr in shiftRegions.DefaultIfEmpty()
-                         select new MDsOnCall
+            DateTime currentDateTime = DateTime.Now;
+            TimeOnly currentTimeOfDay = TimeOnly.FromDateTime(DateTime.Now);
+            List<MDsOnCall> query = (from p in _context.Physicians
+                                     select new MDsOnCall
                          {
-                             RegionId = sd != null ? sd.RegionId : null,
-                             RegionName = sr != null ? sr.Name : null,
                              PhysicianId = p.PhysicianId,
                              PhysicianName = p.FirstName + " " + p.LastName,
-                             ShiftId = ps != null ? ps.ShiftId : 0,
-                             ShiftDate = ps != null ? ps.StartDate : DateOnly.MinValue,
-                             StartTime = sd != null ? sd.StartTime : TimeOnly.MinValue,
-                             EndTime = sd != null ? sd.EndTime : TimeOnly.MinValue,
-                             Start = ps != null && sd != null ? new DateTime(ps.StartDate.Year, ps.StartDate.Month, ps.StartDate.Day, sd.StartTime.Hour, sd.StartTime.Minute, sd.StartTime.Second) : DateTime.MinValue,
-                             End = ps != null && sd != null ? new DateTime(ps.StartDate.Year, ps.StartDate.Month, ps.StartDate.Day, sd.EndTime.Hour, sd.EndTime.Minute, sd.EndTime.Second) : DateTime.MinValue,
-                             Photo = p.Photo
-                         }).GroupBy(md => md.PhysicianId).Select(g => g.First());
+                              Photo = p.Photo
+                         }).ToList();
+            foreach (var item in query)
+            {
+                List<int> shiftIds = (from s in _context.Shifts
+                                      where s.PhysicianId == item.PhysicianId
+                                      select s.ShiftId).ToList();
 
+                foreach (var shift in shiftIds)
+                {
+                    var shiftDetail = (from sd in _context.ShiftDetails
+                                       where sd.ShiftId == shift &&
+                                             sd.ShiftDate.Date == currentDateTime.Date &&
+                                             sd.StartTime <= currentTimeOfDay &&
+                                             currentTimeOfDay <= sd.EndTime
+                                       select sd).FirstOrDefault();
+
+                    if (shiftDetail != null)
+                    {
+                        item.onCallStatus = 1;
+                    }
+                }
+            }
 
             var model = new MDsOnCall()
             {
-                data = query.ToList(),
+                data = query,
                 AdminId = admin.AdminId,
                 AdminName = $"{admin.FirstName} {admin.LastName}"
             };
             return model;
         }
-        public RequestedShift RequestedShift()
+        public RequestedShift RequestedShift(int? regionId)
         {
             var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
-
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, false);
             var query = from s in _context.Shifts
                         join shiftDetail in _context.ShiftDetails
                         on s.ShiftId equals shiftDetail.ShiftId into shiftGroup
@@ -491,6 +499,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                         join r in _context.Regions
                         on sd.RegionId equals r.RegionId into shiftRegion
                         from rs in shiftRegion.DefaultIfEmpty()
+                        where (regionId == null || regionId == -1 || sd.RegionId == regionId) && sd.Status == 2 && sd.IsDeleted == bitArray
                         orderby s.StartDate descending
                         select new RequestedShift
                         {
@@ -510,6 +519,62 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 AdminName = $"{admin.FirstName} {admin.LastName}"
             };
             return model;
+        }
+        public async Task<bool> DeleteReqShift(string s)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach (int i in shidtID)
+                {
+                    ShiftDetail sd = _context.ShiftDetails.FirstOrDefault(sd => sd.ShiftDetailId == i);
+                    if (sd != null)
+                    {
+                        sd.IsDeleted[0] = true;
+                        sd.ModifiedBy = "Admin";
+                        sd.ModifiedDate = DateTime.Now;
+                        _context.ShiftDetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> UpdateStatusShift(string s)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach (int i in shidtID)
+                {
+                    ShiftDetail sd = _context.ShiftDetails.FirstOrDefault(sd => sd.ShiftDetailId == i);
+                    if (sd != null)
+                    {
+                        sd.Status = (short)(sd.Status == 2 ? 4 : 2);
+                        sd.ModifiedBy = "Admin";
+                        sd.ModifiedDate = DateTime.Now;
+                        _context.ShiftDetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
         public VendorMenu VendorMenu(string searchValue, int Profession)
         {
@@ -898,6 +963,54 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             model.AdminName = $"{admin.FirstName} {admin.LastName}";
 
             return model;
+        }
+        public AdminProfile CreateAdmin()
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            return new AdminProfile
+            {
+
+                AdminId = admin.AdminId,
+                AdminName = $"{admin.FirstName} {admin.LastName}",
+
+            };
+        }
+        public void AddAdmin(AdminProfile admin)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, false);
+            var user = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(admin.Password);
+
+            var Aspnetuser = new AspnetUser();
+            var Admin = new Admin();
+            Aspnetuser.Id = Guid.NewGuid().ToString();
+            Aspnetuser.Username = admin.FirstName;
+            Aspnetuser.Email = admin.Email;
+            Aspnetuser.Passwordhash = hashedPassword;
+            Aspnetuser.Phonenumber = admin.Mobile;
+            Aspnetuser.Createddate = DateTime.Now;
+            _context.AspnetUsers.Add(Aspnetuser);
+            _context.SaveChanges();
+
+            Admin.AspNetUserId = Aspnetuser.Id;
+            Admin.FirstName = admin.FirstName;
+            Admin.LastName = admin.LastName;
+            Admin.Email = admin.Email;
+            Admin.Mobile = admin.Mobile;
+            Admin.Address1 = admin.Address1;
+            Admin.Address2 = admin.Address2;
+            Admin.City = admin.City;
+            Admin.Zip = admin.ZipCode;
+            Admin.AltPhone = admin.AltPhone;
+            Admin.CreatedBy = user.FirstName;
+            Admin.CreatedDate = DateTime.Now;
+            Admin.IsDeleted = bitArray;
+            Admin.Status = 2;
+            Admin.RegionId = admin.RegionId;
+            Admin.RoleId = admin.RoleId;
+            _context.Admins.Add(Admin);
+            _context.SaveChanges();
         }
     }
 }

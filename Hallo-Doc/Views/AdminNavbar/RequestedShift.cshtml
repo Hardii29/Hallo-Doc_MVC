@@ -8,7 +8,7 @@
         <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
             <h4 style="font-weight:bold;">Requested Shifts</h4>
 
-            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+            <a class="btn btn-outline-info out back" asp-action="Scheduling" asp-controller="AdminNavbar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
@@ -17,34 +17,38 @@
         <div class="content">
             <div class="flex-row d-flex mt-3 mb-3 justify-content-between">
                 <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <select class="form-select" id="SelectedRegion" name="RegionId">
+                    <select class="form-select" id="SelectedRegion" name="RegionId" asp-items="@(new SelectList(ViewBag.Region,"RegionId","Name"))" onchange="getDatabyRegion()">
                         <option value="">All Regions</option>
                     </select>
                 </div>
-                <ul>
-                    <li class="d-inline">
+                <div class ="d-flex align-self-center">
+                    <div class="mx-2">
                         <a class="btn text-white" asp-action="Scheduling" asp-controller="AdminNavbar" style="background-color: darkgreen;">
-                            <span class="dash-btn">View current Month Shifts</span>
+                            View Current Month Shift
                         </a>
-                    </li>
-                    <li class="d-inline">
-                        <button type="button" class="btn btn-success text-white">
-                            <span class="dash-btn">Approved Selected</span>
+                    </div>
+                    <form asp-action="_ApprovedShifts" id="approvedform" asp-controller="AdminNavbar" class="mx-2">
+                        <input type="hidden" id="approved" name="shiftids" />
+                        <button type="submit" class="btn btn-success shadow" id="approvedbtn">
+                            Approved Selected Shift
                         </button>
-                    </li>
-                    <li class="d-inline">
-                        <button type="button" class="btn btn-danger text-white">
-                            <span class="dash-btn">Delete Seleced</span>
+                    </form>
+                    <form asp-action="_DeleteShifts" id="deletedform" asp-controller="AdminNavbar" class="mx-2">
+                        <input type="hidden" id="deleted" name="shiftids" />
+                        <button type="submit" class="btn btn-danger shadow" id="deletedbtn">
+                            Delete Selected
                         </button>
-                    </li>
-                </ul>
+                    </form>
+                </div>
+                        
+                  
             </div>
             <table class="table table-hover" style="width:100%">
                 <thead class="table-light">
                     <tr style="padding:10px;">
                         <th class="col-1" style="text-align:center">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
                             </div>
                         </th>
                         <th class="col-3">Staff</th>
@@ -53,13 +57,13 @@
                         <th class="col-2">Region</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="shiftbody">
                      @foreach (var item in Model.data)
                         {
                     <tr class=" mt-2">
                         <td class="col-1" style="text-align:center">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" value="@item.ShiftId">
                                 <input type="hidden" />
                             </div>
                         </td>
@@ -74,3 +78,45 @@
         </div>
     </div>
 </body>
+<script>
+    $(document).ready(function () {
+        // Event listener for checkbox changes
+        $(document).on('change', '.table tbody input[type="checkbox"]', function () {
+            var checkedValues = [];
+            $('.table tbody input[type="checkbox"]:checked').each(function () {
+                checkedValues.push($(this).val());
+            });
+            $('#approved').val(checkedValues.join(','));
+            $('#deleted').val(checkedValues.join(','));
+            console.log($('#approved').val());
+            console.log($('#deleted').val());
+            var allChecked = $('.table tbody input[type="checkbox"]').length === $('.table tbody input[type="checkbox"]:checked').length;
+            $('#topflexCheckDefault').prop('checked', allChecked);
+        });
+        $(document).on('change', '#topflexCheckDefault', function () {
+            var checked = $(this).is(':checked');
+            $('.table tbody input[type="checkbox"]').prop('checked', checked).change();
+        });
+    });
+
+    function getDatabyRegion() {
+        var region = $("#SelectedRegion").val();
+        if (region == '-1') {
+            region = null;
+            location.reload();
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RequestedShift", "AdminNavbar")?regionId=' + region,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                var bodyContent = $(response).find('tbody').html();
+                $('#shiftbody').html(bodyContent);
+            },
+            error: function () {
+                alert("Error while Loading data.");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,135 @@
+﻿@model Hallo_Doc.Entity.ViewModel.AdminProfile;
+@{
+    ViewData["Title"] = "Creaye Admin Account";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
+            <h4 style="font-weight:bold;">Create Admin Account</h4>
+
+            <a class="btn btn-outline-info out back" asp-action="UserAccess" asp-controller="AdminNavbar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+        </div>
+        <div class="content">
+            <form asp-controller="AdminNavbar" asp-action="CreateAdmin" method="post">
+
+                <div class="row">
+                    <h6 class="mt-2">Account Information</h6>
+
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="text" name="UserName" id="UserName" asp-for="UserName" class="form-control" placeholder="UserName" disabled>
+                            <label for="UserName">UserName</label>
+                        </div>
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <input type="text" name="Password" id="Password" asp-for="Password" class="form-control" placeholder="Password">
+                            <label for="Password">Password</label>
+                        </div>
+                   
+                        <div class="form-group form-floating col-lg-4 col-md-6 col-sm-12">
+                            <select class="form-select" id="role" name="RoleId" asp-for="RoleId">
+                                <option value="1">Admin</option>
+                                <option value="2">Master Admin</option>
+                            </select>
+                            <label for="role">Role</label>
+                        </div>
+                    </div>
+                 
+                </div>
+
+                <div class="row">
+                    <h6 class="mt-2">Administrator Information</h6>
+                    <div class="row g-2">
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="FirstName" id="firstName" asp-for="FirstName" class="form-control" placeholder="First name">
+                            <label for="firstName">FirstName</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="text" name="LastName" id="lastName" asp-for="LastName" class="form-control" placeholder="Last name">
+                            <label for="lastName">Lastname</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="email" name="Email" id="email" asp-for="Email" class="form-control" placeholder="Email">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="email" name="Email" id="confirmEmail" class="form-control" placeholder="Email">
+                            <label for="confirmEmail">Confirm Email</label>
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <input type="tel" name="Mobile" id="mobile" asp-for="Mobile" class="form-control" placeholder="123-45-67">
+
+                        </div>
+                        <div class="form-group form-floating col-md-6 col-sm-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input mt-1" type="checkbox" value="1" asp-for="RegionId" id="rg1">
+                                <label class="form-check-label" for="rg1">
+                                    Ahmedabad
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input mt-1" type="checkbox" value="2" asp-for="RegionId" id="rg2">
+                                <label class="form-check-label" for="rg2">
+                                    New Delhi
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input mt-1" type="checkbox" value="3" asp-for="RegionId" id="rg3">
+                                <label class="form-check-label" for="rg3">
+                                    Mumbai
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input mt-1" type="checkbox" value="4" asp-for="RegionId" id="rg4">
+                                <label class="form-check-label" for="rg4">
+                                    Kolkata
+                                </label>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    <div class="row">
+                        <h6 class="mt-2">Mailing & Billing Information</h6>
+                        <div class="row g-2">
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="Address1" id="address1" asp-for="Address1" class="form-control" placeholder="Address1">
+                                <label for="address1">Address1</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="Address2" id="address2" asp-for="Address2" class="form-control" placeholder="Address2">
+                                <label for="address2">Address2</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="City" id="city" asp-for="City" class="form-control" placeholder="City">
+                                <label for="city">City</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="text" name="State" id="state" asp-for="State" class="form-control" placeholder="State">
+                                <label for="state">State</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="number" name="ZipCode" id="zipCode" asp-for="ZipCode" class="form-control" placeholder="ZipCode">
+                                <label for="zipCode">ZipCode</label>
+                            </div>
+                            <div class="form-group form-floating col-md-6 col-sm-12">
+                                <input type="tel" name="AltPhone" id="mobile2" asp-for="AltPhone" class="form-control" placeholder="123-45-67">
+
+                            </div>
+                        </div>
+                     
+                    </div>
+                    <div class="g-2 mt-4 first" style="text-align: right;">
+                        <button type="submit" id="submitButton" class="btn btn-success text-white">Create Account</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>

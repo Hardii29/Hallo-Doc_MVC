@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using System.Web;
 using System.Net.Http;
+using Hallo_Doc.Entity.Models;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
 {
@@ -44,11 +45,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 }
                 requestWithFiles.Add(new RequestWithFile
                 {
-                    Request = new Request
+                    Request = new Entity.ViewModel.Request
                     {
                         RequestId = request.RequestId,
                         CreatedDate = (DateTime)request.CreatedDate,
-                        Status = request.Status,
+                        Status = (status)request.Status,
                         fileId = fileId,
                     },
                     HasFiles = HasFiles
@@ -57,11 +58,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             var model = new DashboardList
             {
                 RequestWithFiles = requestWithFiles,
-                Requests = userRequests.Select(r => new Request
+                Requests = userRequests.Select(r => new Entity.ViewModel.Request
                 {
                     RequestId = r.RequestId,
                     CreatedDate = (DateTime)r.CreatedDate,
-                    Status = r.Status,
+                    Status = (status)r.Status,
                     
                 }).ToList(),
                 UserName = username,
@@ -126,7 +127,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                          {
                             FirstName = u.Firstname, 
                             LastName = u.Lastname,
-                            DOB = u.Dob,
+                            DOB = u != null && u.Intyear != null && u.Strmonth != null && u.Intdate != null ?
+                            new DateOnly((int)u.Intyear, int.Parse(u.Strmonth), (int)u.Intdate) : DateOnly.MinValue,
                             Mobile = u.Mobile,
                             Email = u.Email,
                             State = u.State,
@@ -152,9 +154,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             user.City = patientProfile.City;
             user.State = patientProfile.State;
             user.Zipcode = patientProfile.ZipCode;
-            user.Dob = patientProfile.DOB;
+            user.Intyear = patientProfile.DOB.Value.Year;
+            user.Strmonth = patientProfile.DOB.Value.Month.ToString();
+            user.Intdate = patientProfile.DOB.Value.Day;
 
-            //_context.Users.Update(user);
+            _context.Users.Update(user);
             _context.SaveChanges();
 
             

@@ -81,7 +81,8 @@
 
 
 <div class="accordion accordion-flush mobile-view lo-btn" style="width: 100%;">
- 
+    @foreach (var request in Model.PhysicianDash)
+                {
         <div class="accordion-item">
             <button style="padding-right: 0;" class="accordion-button collapsed bg-info-subtle"
                     type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive"
@@ -90,14 +91,14 @@
                 <div style="font-size: small;" class="row w-100">
 
                     <div class="col-4 p-0">
-                        <p>PatientName</p>
+                        <p>@request.PatientName</p>
                     </div>
                     <div class="col-4"></div>
                     <div style="text-align: right;" class="col-4">
                         <div class="circle" style="background-color: green;"></div> Patient
                     </div>
                     <div class="col-6 p-0">
-                        <p>Address</p>
+                        <p>@request.Address</p>
                     </div>
                     <div style="text-align: right;" class="col-6">
                         <span style="font-size: small;" type="button"
@@ -106,11 +107,7 @@
                             Location
                         </span>
                     </div>
-                    <div class="col-12 p-0">
-                        <p>
-                            <i class="fa-regular fa-clock text-info"></i> wait Time: <span style="font-weight:bold">Dec 5, 2023 08:52 AM(641:59)</span>
-                        </p>
-                    </div>
+                  
 
                 </div>
 
@@ -120,37 +117,42 @@
                  aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
 
                 <div style="text-align: right;" class="col-11">
-                    <a style="font-size: small;" asp-action="View_case" asp-controller="Admin" class="btn btn-outline-dark rounded-4">View Case</a>
+                    <a style="font-size: small;" asp-action="ViewCase" asp-controller="Physician" asp-route-requestId="@request.RequestId" class="btn btn-outline-dark rounded-4">View Case</a>
                 </div>
 
                 <div class="accordion-body">
                     <div class="row">
-                       
+                        <div class="col-12 px-0 pb-1">
+                            <i class="fa-solid fa-calendar-days border border-info rounded-circle p-1"></i>
+                            Date of Birth: @request.DOB
+                        </div>
                         <div class="col-12 px-0 pb-1">
                             <i class="fa-solid fa-envelope border border-info rounded-circle p-1"></i>
-                            Email: Email
+                            Email: @request.Email
                         </div>
                         <div class="col-12 px-0 pb-1">
                             <i class="fa-solid fa-phone border border-info rounded-circle p-1"></i>
-                            Patient: PatientMobile
+                            Patient: @request.PatientMobile
                         </div>
                      
                         <div class="col-6 px-0 my-1">
-                            <a style="font-size: x-small;" asp-action="View_notes" asp-controller="Admin" class="btn btn-success ml-1 py-1 border rounded-4 w-75">View Notes</a>
+                            <button type="button" style="font-size: x-small; background-color:purple" class="btn text-white ml-1 py-1 border rounded-4 w-75" data-bs-toggle="modal" data-bs-target="#acceptCaseModel" onclick="Acceptcase('@request.RequestId','@request.PatientName')">Accept</button>
                         </div>
                         <div class="col-6 px-0 pb-1 my-1">
-                            <button style="font-size: x-small;" data-bs-toggle="modal" data-bs-target="#blockCaseModel" type="button" class="btn btn-danger ml-1 py-1 border rounded-4 w-75">Block Patient</button>
+                            <a style="font-size: x-small;" class="btn btn-success ml-1 py-1 border rounded-4 w-75" asp-action="ViewNotes" asp-controller="Physician" asp-route-RequestId="@request.RequestId">View Notes</a>
                         </div>
                         <div class="col-6 px-0 my-1">
                             <a style="font-size: x-small;" href="" class="btn btn-success ml-1 py-1 border rounded-4 w-75">Email</a>
                         </div>
-
+                        <div class="col-6 px-0 my-1">
+                        Chat With: <button type="button" class="btn btn-outline-info"><i class="fa-solid fa-user-tie me-1"></i>Admin</button>
+                       </div>
                     </div>
 
                 </div>
             </div>
         </div>
-    
+    }
 </div>
 <nav aria-label="Page navigation example">
     <ul class="pagination pagination-container d-flex justify-content-end">

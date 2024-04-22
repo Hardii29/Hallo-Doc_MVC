@@ -119,9 +119,10 @@ namespace Hallo_Doc.Controllers
             return Json(physicians);
         }
         [HttpPost]
-        public IActionResult CreateShift(int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime)
+        public IActionResult CreateShift(Schedule schedule)
         {
-            _adminNav.CreateShift(RegionId, PhysicianId, ShiftDate, StartTime, EndTime);
+            var check = Request.Form["repeatDay"].ToList();
+            _adminNav.CreateShift(schedule);
             return RedirectToAction("Scheduling");
         }
         public IActionResult EventShift()
@@ -166,10 +167,28 @@ namespace Hallo_Doc.Controllers
                 return NotFound();
             }
         }
-        public IActionResult RequestedShift()
+        public IActionResult RequestedShift(int? regionId)
         {
-            var model = _adminNav.RequestedShift();
+            ViewBag.Region = _adminNav.GetRegions();
+            var model = _adminNav.RequestedShift(regionId);
             return View(model);
+        }
+        public async Task<IActionResult> _ApprovedShifts(string shiftids)
+        {
+            if (await _adminNav.UpdateStatusShift(shiftids))
+            {
+                _notyf.Success("Shifts Approved Successfully..");
+            }
+            return RedirectToAction("RequestedShift");
+        }
+
+        public async Task<IActionResult> _DeleteShifts(string shiftids)
+        {
+            if (await _adminNav.DeleteReqShift(shiftids))
+            {
+                _notyf.Success("Shifts Deleted Successfully..");
+            }
+            return RedirectToAction("RequestedShift");
         }
         public IActionResult VendorMenu(string searchValue, int Profession)
         {
@@ -264,6 +283,17 @@ namespace Hallo_Doc.Controllers
             var model = _adminNav.SMSLog(logs);
             return View(model);
         }
-        
+        public IActionResult CreateAdmin()
+        {
+            var model = _adminNav.CreateAdmin();
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult CreateAdmin(AdminProfile admin)
+        {
+            _adminNav.AddAdmin(admin);
+            _notyf.Success("Admin Account Created Successfully..");
+            return RedirectToAction("UserAccess");
+        }
     }
 }

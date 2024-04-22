@@ -9,7 +9,7 @@
         <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
             <h4 style="font-weight:bold;">MDs On Call</h4>
 
-            <a class="btn btn-outline-info out back" asp-action="Admin_Dashboard" asp-controller="Admin">
+            <a class="btn btn-outline-info out back" asp-action="Scheduling" asp-controller="AdminNavbar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
@@ -24,7 +24,7 @@
             </div>
             <ul>
                 <li class="d-inline">
-                    <a class="btn btn-info text-white" asp-action="MDOnCall" asp-controller="AdminNavbar">
+                    <a class="btn btn-info text-white" asp-action="Scheduling" asp-controller="AdminNavbar">
                         <span class="dash-btn">Calender View</span>
                     </a>
                 </li>
@@ -41,12 +41,12 @@
                 <div class="row g-2">
                     @foreach (var item in Model.data)
                     {
-                        if (item.Start <= DateTime.Now && item.End >= DateTime.Now)
+                        if (item.onCallStatus == 1)
                         {
                             if (!string.IsNullOrEmpty(item.Photo))
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-12">
-                                    <img class="img-fluid mt-3" src="@Url.Action("GetImage", "Admin", new {fileName = item.Photo})" alt="" width="100">
+                                    <img class="img-fluid mt-3" src="@Url.Action("GetImage", "Admin", new {fileName = item.Photo})" alt="Physician Profile" width="100">
                                     <span>@item.PhysicianName</span>
                                 </div>
                             }
@@ -67,12 +67,12 @@
                 <div class="row g-2">
                     @foreach (var item in Model.data)
                     {
-                        if (!(item.Start <= DateTime.Now && item.End >= DateTime.Now))
+                        if (item.onCallStatus == 0)
                         {
                             if (!string.IsNullOrEmpty(item.Photo))
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-12">
-                                    <img class="img-fluid mt-3" src="@Url.Action("GetImage", "AdminNavbar", new {fileName = item.Photo})" alt="" width="100">
+                                    <img class="img-fluid mt-3" src="@Url.Action("GetImage", "AdminNavbar", new {fileName = item.Photo})" alt="physician profile" width="100">
                                     <span>@item.PhysicianName</span>
                                 </div>
                             }

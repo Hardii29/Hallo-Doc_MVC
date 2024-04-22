@@ -43,7 +43,7 @@ namespace Hallo_Doc.Controllers
         public IActionResult Patient_profile(int userId, [Bind("FirstName", "LastName", "DOB", "Mobile", "Email", "Street", "City", "State", "Zipcode")]PatientProfile patientProfile)
         {
             _user.EditProfile(userId, patientProfile);
-            return RedirectToAction("Patient_profile", new {userId=userId});
+            return RedirectToAction("Patient_profile", new { userId = userId });
         }
         public IActionResult Submit_req_Me()
         {

@@ -1,57 +1,87 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string path = Context.Request.Path;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="~/css/patient_dashboard.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/a07e852713.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/Hallo_Doc.styles.css" asp-append-version="true" />
+    <link href="~/css/patient_dashboard.css" rel="stylesheet">
+@*     <link rel="stylesheet" href="~/Hallo_Doc.styles.css" asp-append-version="true" /> *@
+    <style>
+        .navbar {
+            background-color: white !important;
+        }
+        .nav-link {
+            color:black;
+        }
+        .nav-link.active {
+            background-color: white !important;
+            color: #17a2b8 !important;
+            border-bottom: 2px solid #17a2b8 !important;
+        }
+    </style>
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white flex-column">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="./../images/logo.png" height="65" width="100">
-                </a>
-
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item d-inline">
-                        <p class="navbar-text">Welcome <span style="font-weight: bold;">@Model.UserName</span></p>
+        <nav class="navbar navbar-expand-lg navbar-toggler shadow pb-3 mb-2 bg-body">
+            <div class="container-fluid flex-column">
+                <ul class="navbar-nav flex-row w-100 justify-content-between">
+                    <button class="navbar-toggler navbar-light nav-tog-btn px-0 mb-2 mt-5" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <li class="nav-item">
+                        <img class="img-fluid m-2" src="./../images/logo.png" alt="" width="150" height="70">
                     </li>
-                    <li class="nav-item d-inline">
-                        <form class="form-inline my-2 my-lg-0 ">
-                            <a class="btn btn-outline-info out back" asp-action="Logout" asp-controller="Login">Logout</a>
 
-                            <a class="btn btn-outline-info mode" onclick="darkMode()">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
-                                    <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" />
-                                </svg>
-                            </a>
+                    <li class="nav-item navbar-right d-flex flex-row ml-auto mt-5 h-25">
 
-                        </form>
+                        <span class="dblock mt-2">Welcome <span class="fw-bold">@Model.UserName</span></span>
+
+                        <a href="index.html" type="button" class="btn btn-outline-info mx-2 h-25 dblock">Logout</a>
+
+                        <a href="index.html" type="button" class="btn btn-outline-info mx-2 dnone">
+                            <i class="fa fa-right-from-bracket"></i>
+                        </a>
+
+                        <button type="button" class="btn btn-outline-info moon-img" onclick="myFunctions()">
+                            <i class="fa fa-moon"></i>
+                        </button>
+
                     </li>
                 </ul>
 
-            </div>
-            <hr>
-            <div class="container-fluid">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active"
-                           aria-current="page" asp-controller="PatientUser" asp-action="Patient_dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="PatientUser" asp-action="Patient_profile">Profile</a>
-                    </li>
+                <hr class="border border-dark border-1 w-100 m-0 dblock">
 
-                </ul>
+                <div class="w-50 dash-nav offcanvas offcanvas-start mr-auto" id="navbarSupportedContent">
+                    <ul class="navbar-nav nav-underline offcanvas-body">
+
+                        <li class="nav-item mx-2 d-flex">
+                            <a class="nav-link dashboard @(path.StartsWith("/PatientUser/Patient_dashboard") || path.EndsWith("CreateRequest")  ? "active" : "")" asp-controller="PatientUser" asp-action="Patient_dashboard">Dashboard</a>
+                        </li>
+                        
+                        <li class="nav-item mx-2">
+                            <a class="nav-link @(path.StartsWith("/PatientUser/Patient_profile") ? "active" : "")" asp-controller="PatientUser" asp-action="Patient_profile">Profile</a>
+                        </li>
+                       
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
