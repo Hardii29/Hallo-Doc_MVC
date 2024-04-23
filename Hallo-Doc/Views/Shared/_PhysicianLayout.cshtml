@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     string path = Context.Request.Path;
 }
 <!DOCTYPE html>
@@ -48,7 +49,7 @@
 <body>
     <header>
 
-        <nav class="navbar navbar-expand-lg navbar-toggler shadow pb-3 mb-2 bg-body">
+        <nav class="navbar navbar-expand-lg navbar-toggler shadow mb-2 bg-body">
             <div class="container-fluid flex-column">
                 <ul class="navbar-nav flex-row w-100 justify-content-between">
                     <button class="navbar-toggler navbar-light nav-tog-btn px-0 mb-2 mt-5" type="button"
@@ -63,9 +64,9 @@
 
                         <span class="dblock mt-2">Welcome <span class="fw-bold">Dr. Hardi</span></span>
 
-                        <a href="index.html" type="button" class="btn btn-outline-info mx-2 h-25 dblock">Logout</a>
+                        <a class="btn btn-outline-info mx-2 h-25 dblock" asp-controller="AdminLogin" asp-action="Logout">Logout</a>
 
-                        <a href="index.html" type="button" class="btn btn-outline-info mx-2 dnone">
+                        <a class="btn btn-outline-info mx-2 dnone" asp-controller="AdminLogin" asp-action="Logout">
                             <i class="fa fa-right-from-bracket"></i>
                         </a>
 

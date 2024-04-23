@@ -14,6 +14,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Security.Policy;
 using System.Web;
+using Twilio.TwiML.Messaging;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
 {
@@ -21,10 +22,12 @@ namespace Hallo_Doc.Repository.Repository.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly IDictionary<string, string> _reset;
-        public LoginRepo(ApplicationDbContext context)
+        private readonly IEmail_SMS _services;
+        public LoginRepo(ApplicationDbContext context, IEmail_SMS services)
         {
             _context = context;
             _reset = new Dictionary<string, string>();
+            _services = services;
         }
 
         public async Task<AspnetUser?> Check(Login login, HttpContext httpContext)
@@ -64,61 +67,25 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 return false;
             }
             else
-            {
-                var token = Guid.NewGuid().ToString();
-                SavePasswordResetToken(email, token);
-                var resetLink = $"{baseUrl}/{controller}/{Action}?email={HttpUtility.UrlEncode(email)}&token={HttpUtility.UrlEncode(token)}";
-                SendEmail(email, resetLink);
+            { 
+                var resetLink = $"{baseUrl}/{controller}/{Action}";
+                var subject = "Password Reset";
+                var body = $"Please reset your password by clicking the following link: \n{resetLink}";
+                _services.SendEmail(body, subject, email);
                 return true;
             }
-        }
-        private void SavePasswordResetToken(string email, string token)
-        {
-            _reset[email] = token;
-        }
-        private void SendEmail(string email, string resetLink)
-        {
-            var smtpServer = "mail.etatvasoft.com";
-            var smtpPort = 587;
-            var smtpUsername = "hardi.jayani";
-            var smtpPassword = "LHV0@}YOA?)M";
-            var senderEmail = "hardi.jayani@etatvasoft.com";
-
-            using (var client = new SmtpClient(smtpServer, smtpPort))
-            {
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
-                client.EnableSsl = true;
-
-                var mail = new MailMessage
-                {
-                    From = new MailAddress(senderEmail),
-                    Subject = "Password Reset",
-                    Body = $"Please reset your password by clicking the following link: <a href=\"{resetLink}\">{resetLink}</a>",
-                    IsBodyHtml = true
-                };
-                mail.To.Add(email);
-                client.Send(mail);
-            }
-        }
-        public bool ValidateResetToken(string email, string token)
-        {
-            var savedToken = _reset.TryGetValue(email, out string storedToken) ? storedToken : null;
-            
-                return savedToken != null && HttpUtility.UrlDecode(token).Equals(savedToken);
-          
-        }
-        public async Task<bool> Reset_password(string email, string token, string newPassword)
+        }        
+ 
+        public async Task<bool> Reset_password(ForgotPassword model)
         {
             try
             {
-                if (!ValidateResetToken(email, token))
-                    return false;
-                var user = _context.AspnetUsers.FirstOrDefault(x => x.Email == email);
+               
+                var user = _context.AspnetUsers.FirstOrDefault(x => x.Email == model.Email);
                 if (user == null)
                     return false;
                 
-                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
                     user.Passwordhash = hashedPassword;
                     _context.Update(user);
                     await _context.SaveChangesAsync();

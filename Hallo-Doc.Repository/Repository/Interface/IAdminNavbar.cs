@@ -16,7 +16,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         bool SendMailPhy(string email, string Message, string ProviderName);
         bool SendSMS(string Mobile, string Message, string ProviderName);
         AccountAccess Access();
-        UserAccess UserAccess();
+        List<AspNetRole> GetNetRoles();
+        UserAccess UserAccess(string AccountType);
         AccountAccess CreateAccess();
         List<Menu> GetMenuList(AccountType accountType);
         void CreateRole(AccountAccess access);

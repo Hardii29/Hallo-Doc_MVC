@@ -1,4 +1,5 @@
-﻿@model Hallo_Doc.Entity.ViewModel.UserAccess;
+﻿@using Hallo_Doc.Entity.ViewModel;
+@model Hallo_Doc.Entity.ViewModel.UserAccess;
 @{
     ViewData["Title"] = "User Access";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -19,7 +20,7 @@
         <div class="content">
             <div class="flex-row d-flex mt-2 mb-1 justify-content-between">
                 <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <select class="form-select" id="SelectedRegion" name="RoleId">
+                    <select class="form-select" id="SelectRole" onchange="searchRole(event)" asp-items="@(new SelectList(ViewBag.AspNetRole,"Name","Name"))">
                         <option value=" ">All</option>
                     </select>
                 </div>
@@ -34,38 +35,35 @@
                         <th class="col-2">Account POC</th>
                         <th class="col-2">Phone</th>
                         <th class="col-2">Status</th>
-                        <th class="col-2">Open Requests</th>
-                        <th class="col-2">Actions</th>
+                        <th class="col-2" style="text-align:center">Open Requests</th>
+                        <th class="col-2" style="text-align:center">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="rolebody">
                     @foreach (var item in Model.data)
                         {
-                        string status = "";
-                        switch(item.Status)
-                        {                         
-                            case 2:
-                                status = "Pending";
-                                break;
-                            
-                            case 4:
-                                status = "Active";
-                                break;
-                            case 5:
-                                status = "Active";
-                                break;
-                            default:
-                                status = "";
-                                break;
-                        }
+                     
                   
                         <tr class=" mt-2">
-                            <td class="col-2">@Enum.GetName(typeof(Hallo_Doc.Entity.ViewModel.AccountType), item.AccountType)</td>
+                            <td class="col-2">@item.AccountType</td>
                         <td class="col-2">@item.UserName</td>
                         <td class="col-2">@item.Phone</td>
-                        <td class="col-2">@status</td>
-                        <td class="col-2">@item.RequestCount</td>
-                        <td class="col-2"><a class="btn btn-outline-info">Edit</a></td>
+                            <td class="col-2">@Enum.GetName(typeof(state),item.Status)</td>
+                        <td class="col-2" style="text-align:center">@item.RequestCount</td>
+                            <td class="col-2" style="text-align:center">
+                                @if (item.AccountType == "Admin")
+                                {
+                                    <a class="btn btn-sm  btn-outline-info" asp-action="AdminProfile" asp-controller="Admin" asp-route-adminId="@item.Id">
+                                        Edit
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-sm  btn-outline-info" asp-action="EditPhysician" asp-controller="Provider" asp-route-ProviderId="@item.Id">
+                                        Edit
+                                    </a>
+                                }
+                            </td>
                     </tr>
                     }
                 </tbody>
@@ -73,3 +71,23 @@
         </div>
     </div>
 </body>
+<script>
+    function searchRole(event) {
+        var role = $("#SelectRole").val();
+        console.log(role);
+       
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("UserAccess", "AdminNavbar")',
+            data: { AccountType: role },
+            success: function (data) {
+                console.log("AJAX success");
+                var bodyContent = $(data).find('tbody').html();
+                $('#rolebody').html(bodyContent);
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+</script>

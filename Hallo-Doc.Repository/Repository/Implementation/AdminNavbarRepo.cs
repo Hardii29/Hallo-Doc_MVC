@@ -2,7 +2,9 @@
 using Hallo_Doc.Entity.Models;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
+using iText.Layout.Element;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections;
@@ -152,30 +154,42 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             };
             return model;
         }
-        public UserAccess UserAccess()
+        public List<AspNetRole> GetNetRoles()
         {
-            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
-
-            var query = from r in _context.Roles
-                        select new UserAccess
+            return _context.AspNetRoles.ToList();
+        }
+        public UserAccess UserAccess(string AccountType)
+        {
+            var u = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            BitArray bitArray = new BitArray(1);
+            bitArray.Set(0, false);
+            var query = (from aspuser in _context.AspnetUsers
+                         join admin in _context.Admins
+                         on aspuser.Id equals admin.AspNetUserId into AdminGroup
+                         from admin in AdminGroup.DefaultIfEmpty()
+                         join physician in _context.Physicians
+                         on aspuser.Id equals physician.AspNetUserId into PhyGroup
+                         from physician in PhyGroup.DefaultIfEmpty()
+                         where (admin != null || physician != null) && (admin.IsDeleted == new BitArray(1) || physician.IsDeleted == new BitArray(1))
+                         select new UserAccess
                         {
-                            RoleId = r.RoleId,
-                            RoleName = r.Name,
-                            AccountType = r.AccountType,
-                            UserName = r.AccountType == 1 ? admin.FirstName + " " + admin.LastName :
-                                       r.AccountType == 2 ? $"{_context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).FirstName} {_context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).LastName}" : null,
-                            Phone = r.AccountType == 1 ? admin.Mobile :
-                                    r.AccountType == 2 ? _context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).Mobile : null,
-                            Status = (short)(r.AccountType == 1 ? admin.Status :
-                                     r.AccountType == 2 ? _context.Physicians.FirstOrDefault(p => p.RoleId == r.RoleId).Status : null),
-                            RequestCount = r.AccountType == 1 ? _context.Requests.Count() : 0,
-                        };
-
+                             Id = admin != null ? admin.AdminId : (physician != null ? physician.PhysicianId : 0),
+                             AccountType = admin != null ? "Admin" : (physician != null ? "Physician" : null),
+                             UserName = admin != null ? admin.FirstName + " " + admin.LastName : (physician != null ? physician.FirstName + " " + physician.LastName : null),
+                             Status = (short)(admin != null ? admin.Status : (physician != null ? physician.Status : null)),
+                             Phone = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
+                             RequestCount = _context.Requests.Count(r => r.PhysicianId == physician.PhysicianId),
+                             
+                         }).ToList();
+            if (AccountType != null)
+            {
+                query = query.Where(r => r.AccountType == "All" || r.AccountType == AccountType).ToList();
+            }
             var model = new UserAccess()
             {
-                data = query.ToList(),
-                AdminId = admin.AdminId,
-                AdminName = $"{admin.FirstName} {admin.LastName}"
+                data = query,
+                AdminId = u.AdminId,
+                AdminName = $"{u.FirstName} {u.LastName}"
             };
             return model;
         }
@@ -1007,9 +1021,19 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             Admin.CreatedDate = DateTime.Now;
             Admin.IsDeleted = bitArray;
             Admin.Status = 2;
-            Admin.RegionId = admin.RegionId;
             Admin.RoleId = admin.RoleId;
             _context.Admins.Add(Admin);
+            _context.SaveChanges();
+            foreach (var regionId in admin.SelectRegion)
+            {
+                var pr = new AdminRegion
+                {
+                    AdminId = Admin.AdminId,
+                    RegionId = regionId,
+                };
+                _context.AdminRegions.Add(pr);
+
+            }
             _context.SaveChanges();
         }
     }

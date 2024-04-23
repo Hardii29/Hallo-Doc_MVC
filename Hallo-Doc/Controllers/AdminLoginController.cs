@@ -49,9 +49,9 @@ namespace Hallo_Doc.Controllers
             if (Response.Cookies != null)
             {
                 Response.Cookies.Delete("jwt");
-                return RedirectToAction("AdminLogin", "Login");
+                
             }
-            return View();
+            return RedirectToAction("AdminLogin", "AdminLogin");
         }
       
     }

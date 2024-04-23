@@ -23,7 +23,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress("hardi.jayani@etatvasoft.com");
-                message.To.Add(email);
+                message.To.Add("hardi.jayani@etatvasoft.com");
                 message.Body = body;
                 message.Subject = subject;
                 using (SmtpClient smtp = new SmtpClient("mail.etatvasoft.com", 587))

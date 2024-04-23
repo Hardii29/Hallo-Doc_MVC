@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Hallo_Doc.Repository.Repository.Implementation;
-
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace Hallo_Doc.Controllers
 {
@@ -23,11 +23,13 @@ namespace Hallo_Doc.Controllers
         private readonly ILogin _login;
         private readonly ILogger<LoginController> _logger;
         private readonly IJWTService _jwtService;
-        public LoginController(ILogger<LoginController> logger, ILogin login, IJWTService jwtService)
+        private readonly INotyfService _notyf;
+        public LoginController(ILogger<LoginController> logger, ILogin login, IJWTService jwtService, INotyfService notyf)
         {
             _logger = logger;
             _login = login;
             _jwtService = jwtService;
+            _notyf = notyf;
         }
         public IActionResult Login()
         {
@@ -58,11 +60,10 @@ namespace Hallo_Doc.Controllers
             if (Response.Cookies != null)
             {
                 Response.Cookies.Delete("jwt");
-                return RedirectToAction("Login", "Login");
+                
             }
-            return View();
+            return RedirectToAction("Login", "Login");
         }
-        [AllowAnonymous, HttpGet]
         public IActionResult ForgotPassword()
         {
             return View("~/Views/PatientUser/ForgotPassword.cshtml");
@@ -72,51 +73,35 @@ namespace Hallo_Doc.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPassword fp)
         {
 
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+            var baseUrl = "http://localhost:5203";
             var Action = "Reset_password";
             var controller = "Login";
             var result = await _login.ForgotPassword(fp.Email, Action, controller, baseUrl);
-            if (result)
+            if (result == true)
             {
-                return RedirectToAction("Login");
+                _notyf.Success("Please Check your Mail..");
             }
-
-
-            return View(fp);
+            return RedirectToAction("ForgotPassword", "Login");
         }
-        [AllowAnonymous, HttpGet]
-        public IActionResult Reset_password(string email, string token)
+        public IActionResult Reset_password()
         {
-            if (!_login.ValidateResetToken(email, token))
-            {
-                return RedirectToAction(nameof(ForgotPassword));
-            }
-            var model = new ForgotPassword { Email = email, Token = token };
-            return View(model);
+            return View("~/Views/PatientUser/Reset_password.cshtml");
         }
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reset_password(ForgotPassword model)
         {
-            if (ModelState.IsValid)
-            {
+          
+                var passwordUpdate = await _login.Reset_password(model);
+                if (passwordUpdate == true)
+                {
+                    _notyf.Success("Password Updated Successfully..");
+                    
+                }
+                return RedirectToAction("Login", "Login");
                 
-                if (!_login.ValidateResetToken(model.Email, model.Token))
-                {
-                    return RedirectToAction("ForgotPassword");
-                }
-                var passwordUpdate = await _login.Reset_password(model.Email, model.Token, model.Password);
-                if (passwordUpdate)
-                {
-                    return RedirectToAction("Login", "Login");
-                }
-                else
-                {
-                    return RedirectToAction("ForgotPassword");
-                }
-            }
-            return View(model);
+            
         }
     }
 }

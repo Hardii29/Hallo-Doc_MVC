@@ -27,18 +27,18 @@
             switch (request.RequestTypeId)
             {
                 case 1:
-                    rows = "#dc3545";
+                    rows = "#cd697b";
                     mobile = $"(Business)";
                     break;
                 case 2:
-                    rows = "#198754";
+                    rows = "#5fbc61";
                     break;
                 case 3:
-                    rows = "orange;";
+                    rows = "#ed9124";
                     mobile = $"(Family/Friend)";
                     break;
                 case 4:
-                    rows = "dodgerblue;";
+                    rows = "#0a7cb9";
                     mobile = $"(Concierge)";
                     break;
                 default:
@@ -49,10 +49,10 @@
             <tr class="row">
                 <td class="col text-white" style="background-color: @rows;">@request.PatientName</td>
                 <td class="col text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
-                <td class="col text-white" style="background-color: @rows;">@request.DOB</td>
+                <td class="col text-white" style="background-color: @rows;">@string.Format("{0:MMM dd, yyyy}", request.DOB)</td>
                 <td class="col text-white" style="background-color: @rows;">@request.Region</td>
                 <td class="col text-white" style="background-color: @rows;">@request.ProviderName</td>
-                <td class="col text-white" style="background-color: @rows;">@request.RequestedDate</td>
+                <td class="col text-white" style="background-color: @rows;">@string.Format("{0:MMM dd, yyyy h:mm tt}", request.RequestedDate)</td>
                 
                 <td class="col-2 text-white" style="background-color: @rows;">@request.Address</td>
                 <td class="col text-white" style="background-color: @rows;">@request.Notes</td>

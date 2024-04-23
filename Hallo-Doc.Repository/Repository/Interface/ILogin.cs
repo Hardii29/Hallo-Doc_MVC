@@ -14,7 +14,6 @@ namespace Hallo_Doc.Repository.Repository.Interface
     {
         Task<AspnetUser?> Check(Login login, HttpContext httpContext);
         Task<bool> ForgotPassword(string email, string Action, string controller, string baseUrl);
-        bool ValidateResetToken(string email, string token);
-        Task<bool> Reset_password(string email, string token, string newPassword);
+        Task<bool> Reset_password(ForgotPassword model);
     }
 }

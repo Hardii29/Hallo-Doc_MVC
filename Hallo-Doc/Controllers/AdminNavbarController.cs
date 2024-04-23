@@ -3,6 +3,7 @@ using Hallo_Doc.Entity.Data;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hallo_Doc.Controllers
@@ -60,9 +61,10 @@ namespace Hallo_Doc.Controllers
             var model = _adminNav.Access();
             return View(model);
         }
-        public IActionResult UserAccess()
+        public IActionResult UserAccess(string AccountType)
         {
-            var model = _adminNav.UserAccess();
+            ViewBag.AspNetRole = _adminNav.GetNetRoles();
+            var model = _adminNav.UserAccess(AccountType);
             return View(model);
         }
         public IActionResult CreateAccess()
@@ -285,7 +287,9 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult CreateAdmin()
         {
+            var region = _adminNav.GetRegions();
             var model = _adminNav.CreateAdmin();
+            model.Regions = region.Select(r => new RegionList { RegionId = r.RegionId, Name = r.Name }).ToList();
             return View(model);
         }
         [HttpPost]
