@@ -1,6 +1,9 @@
 ﻿body {
 }
-.student-nav
-{
-    background-color: chocolate;
+.container-custom {
+    padding: 10px;
+    margin: 1rem 4rem 1rem 4rem;
+}
+.edit{
+    background-color:chocolate;
 }

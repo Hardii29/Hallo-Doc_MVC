@@ -1,7 +1,15 @@
+using Assignment.Entity.Data;
+using Assignment.Repository.Repository.Interface;
+using Assignment.Repository.Repository.Repository;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+options.UseNpgsql(builder.Configuration.GetConnectionString("ApplicationDbContext")));
+builder.Services.AddScoped<IStudent, StudentRepo>();
 
 var app = builder.Build();
 

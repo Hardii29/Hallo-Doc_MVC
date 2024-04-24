@@ -1,0 +1,72 @@
+﻿<div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:chocolate">
+                <h5 class="modal-title" id="exampleModalLabel">Student Form</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" style="background-color:chocolate">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="AddStudent" asp-controller="Home" method="post">
+                <div class="modal-body">
+
+                    <div class="row g-2">
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="text" id="firstName" name="FirstName" class="form-control" placeholder="FirstName">
+                            <label for="firstName">FirstName</label>
+                            
+                        </div>
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="text" id="lastName" name="LastName" class="form-control" placeholder="LastName">
+                            <label for="lastName">LastName</label>
+                        </div>
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="text" id="email" name="Email" class="form-control" placeholder="Email">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="date" id="birth" name="BirthDate" class="form-control" placeholder="Birth">
+                            <label for="birth">Date Of Birth</label>
+                        </div>
+                        
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input class="form-check-input" type="radio" name="Gender" id="male" value="Male">
+                        <label class="form-check-label" for="male">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input class="form-check-input" type="radio" name="Gender" id="female" value="Female">
+                        <label class="form-check-label" for="female">Female</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input class="form-check-input" type="radio" name="Gender" id="others" value="Others">
+                        <label class="form-check-label" for="others">Others</label>
+                    </div>
+                    <div class="row g-2">
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <select class="form-select" name="Grade" id="grade">
+                                <option value="">Grade</option>
+                                <option value="1st-3rd">1st-3rd</option>
+                                <option value="4th-6th">4th-6th</option>
+                                <option value="7th-9th">7th-9th</option>
+                                <option value="10th-12th">10th-12th</option>
+                            </select>
+                            <label for="grade">Grade</label>
+                        </div>
+                        <div class="form-floating col-md-6 col-sm-12 mb-3">
+                            <input type="text" id="course" name="Course" class="form-control" placeholder="Course">
+                            <label for="course">Course</label>
+                        </div>
+                        <div style="text-align:center">
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-light">Cancel</button>
+                            <button type="submit" class="btn btn-primary text-white">Save</button>
+                        </div>
+       
+                    </div>
+                </div>
+            
+            </form>
+
+        </div>
+    </div>
+</div>

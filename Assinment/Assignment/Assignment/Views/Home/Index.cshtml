@@ -1,35 +1,102 @@
-﻿@{
+﻿@model List<Assignment.Entity.ViewModel.StudentInfo>;
+@{
     ViewData["Title"] = "Student Data";
 }
+@Html.Partial("_AddStudent")
+@Html.Partial("_EditStudent")
+<div class="container-custom">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search">
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">StudentId</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Course</th>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="studentbody">
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@item.StudentId</td>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td>@item.Age</td>
+                        <td>@item.Gender</td>
+                        <td>@item.CourseName</td>
+                        <td>@item.Grade</td>
+                        <td>
+                            <button type="button" class="btn btn-sm text-white mr-1 edit" data-bs-toggle="modal" data-bs-target="#editStudentModal" onclick="StudentData('@item.StudentId','@item.FirstName', '@item.LastName', '@item.Email', '@item.Age', '@item.Gender', '@item.Grade', '@item.CourseName')">Edit</button>
+                            <a class="btn btn-dark btn-sm" asp-action="DeleteRecord" asp-controller="Home" asp-route-StudentId="@item.StudentId">Delete</a>
+                        </td>
+                    </tr>
+                }
+                
 
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">StudentId</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Age</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Course</th>
-                <th scope="col">Grade</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>dgfc@fdfg</td>
-                <td>4</td>
-                <td>Male</td>
-                <td>English</td>
-                <td>1th-3rd</td>
-                <td><button type="button" class="btn btn-dark">Dark</button></td>
-            </tr>
-         
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
+<script>
+    function StudentData(id, firstName, lastname, Email, Age, Gender, Grade, CourseName) {
+        var StudentId = id;
+        var fname = firstName;
+        var lname = lastname;
+        var email = Email;
+        var gender = Gender;
+        var grade = Grade;
+        var course = CourseName;
+        const today = new Date();
+        const birthDate = new Date(today.getFullYear() - Age, today.getMonth(), today.getDate());
+        const day = birthDate.getDate();
+        const month = birthDate.getMonth() + 1;
+        const year = birthDate.getFullYear();
+        const formattedDate = `${day}-0${month}-${year}`;
+        console.log(formattedDate);
+        document.getElementById('Student_edit').value = StudentId;
+        console.log(StudentId);
+        document.getElementById('firstName_edit').value = fname;
+        document.getElementById('lastName_edit').value = lname;
+        document.getElementById('email_edit').value = email;
+        document.getElementById('birth_edit').value = formattedDate;
+        document.getElementById('grade_edit').value = grade;
+        document.getElementById('course_edit').value = course;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('searchInput').addEventListener('keyup', function (evt) {
+            if (evt.key === 'Enter') {
+                evt.preventDefault();
+                handleSearch();
+            }
+        });
+    });
+    function handleSearch() {
+        var searchValue = document.getElementById('searchInput').value;
+        console.log(searchValue);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Index", "Home")',
+            data: { searchValue: searchValue },
+            success: function (data) {
+                console.log("AJAX success");
+
+                var bodyContent = $(data).find('tbody').html();
+                $('#studentbody').html(bodyContent);
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+</script>
