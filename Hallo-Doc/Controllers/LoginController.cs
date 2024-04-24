@@ -72,15 +72,19 @@ namespace Hallo_Doc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPassword fp)
         {
-
-            var baseUrl = "http://localhost:5203";
-            var Action = "Reset_password";
-            var controller = "Login";
-            var result = await _login.ForgotPassword(fp.Email, Action, controller, baseUrl);
-            if (result == true)
+            if (fp.Email != null)
             {
-                _notyf.Success("Please Check your Mail..");
+                var baseUrl = "http://localhost:5203";
+                var Action = "Reset_password";
+                var controller = "Login";
+                var result = await _login.ForgotPassword(fp.Email, Action, controller, baseUrl);
+                if (result == true)
+                {
+                    _notyf.Success("Please Check your Mail..");
+                    return RedirectToAction("ForgotPassword", "Login");
+                }
             }
+            _notyf.Error("Please enter Email");
             return RedirectToAction("ForgotPassword", "Login");
         }
         public IActionResult Reset_password()
@@ -92,16 +96,17 @@ namespace Hallo_Doc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reset_password(ForgotPassword model)
         {
-          
+            if (ModelState.IsValid)
+            {
                 var passwordUpdate = await _login.Reset_password(model);
                 if (passwordUpdate == true)
                 {
                     _notyf.Success("Password Updated Successfully..");
-                    
+                    return RedirectToAction("Login", "Login");
                 }
-                return RedirectToAction("Login", "Login");
-                
-            
+            }
+            _notyf.Error("Enter Valid Values");
+            return RedirectToAction("ForgotPassword", "Login");
         }
     }
 }

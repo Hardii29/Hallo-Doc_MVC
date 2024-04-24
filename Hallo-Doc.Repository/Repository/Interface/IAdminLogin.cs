@@ -12,6 +12,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
     public interface IAdminLogin
     {
         Task<AspnetUser?> Login(Login login);
-        
+        Task<bool> ForgotPassword(string email, string Action, string controller, string baseUrl);
+        Task<bool> Reset_password(ForgotPassword model);
     }
 }
