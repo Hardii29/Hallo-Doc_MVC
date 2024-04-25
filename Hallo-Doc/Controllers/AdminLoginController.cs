@@ -34,18 +34,20 @@ namespace Hallo_Doc.Controllers
                 /* SessionUtils.SetLoggedInUser(HttpContext.Session, user);*/
                 var jwtToken = _jwtService.GenerateToken(result);
                 Response.Cookies.Append("jwt", jwtToken);
+                _notyf.Success("Login Successfully..");
                 return RedirectToAction("Admin_dashboard", "Admin");
             }
             else if (result != null && result.AspNetUserRoles.FirstOrDefault().RoleId == "Physician")
             {
                 var jwtToken = _jwtService.GenerateToken(result);
                 Response.Cookies.Append("jwt", jwtToken);
+                _notyf.Success("Login Successfully..");
                 return RedirectToAction("PhysicianDashboard", "Physician");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid username or password.");
-                return View();
+                _notyf.Error("Invalid Credentials...");
+                return RedirectToAction("AdminLogin", "AdminLogin");
             }
         }
         public IActionResult Logout()

@@ -19,7 +19,7 @@
        
             <div class="row justify-content-between">
 
-            <button class="col-lg col-sm-3 col-3 btn btn-p m-2 py-3 rounded text-start btn6 " data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
+            <button class="col-lg col-sm-3 col-3 btn btn-p m-2 py-3 rounded text-start btn6" id="newButton" data-btn="New" data-id="1" style="background-color:#dae9ff; border-color:#0d6efd; color:#0d6efd;">
                 <i class="fa fa-plus-circle me-2" aria-hidden="true"></i><b>New</b>
                 <p class="h3 mb-0">@Model.NewRequest</p>
             </button>
@@ -33,15 +33,15 @@
             </button>
             <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Conclude" data-id="4" style="background-color:rgb(245, 210, 248); border-color:rgb(201, 56, 214); color:rgb(201, 56, 214);">
                 <i class="fa fa-clock-o me-2" aria-hidden="true"></i><b>Conclude</b>
-                <p class="h3 mb-0">@Model.ConcludeRequest</p>
+                <p class="h3 mb-0">@Model.ConcludeRequest</p>    
             </button>
             <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="ToClose" data-id="5" style="background-color:rgb(229, 229, 252); border-color:rgba(14, 14, 252, 0.822); color:rgba(14, 14, 252, 0.822);">
                 <i class="fa fa-user-times me-2" aria-hidden="true"></i><b>ToClose</b>
-                <p class="h3 mb-0">@Model.ToCloseRequest</p>
+                <p class="h3 mb-0">@Model.ToCloseRequest</p> 
             </button>
             <button class="col-lg col-sm-3 col-3 btn m-2 py-3 rounded text-start btn6" data-btn="Unpaid" data-id="6" style="background-color:rgba(242, 219, 255, 0.822); border-color:rgba(139, 5, 216, 0.822); color:rgba(139, 5, 216, 0.822);">
                 <i class="fa fa-money me-2" aria-hidden="true"></i><b>Unpaid</b>
-                <p class="h3 mb-0">@Model.UnpaidRequest</p>
+                <p class="h3 mb-0">@Model.UnpaidRequest</p>  
             </button>
             </div>
             <div class="flex-row d-flex mt-5 mb-3 justify-content-between">
@@ -135,6 +135,7 @@
         var exportData = '0';
         $(document).ready(function () {
             console.log("Document ready");
+            document.getElementById('newButton').focus();
             exportData = '1';
             console.log(exportData);
             $.ajax({

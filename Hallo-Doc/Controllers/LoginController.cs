@@ -46,12 +46,13 @@ namespace Hallo_Doc.Controllers
                 /* SessionUtils.SetLoggedInUser(HttpContext.Session, user);*/
                 var jwtToken = _jwtService.GenerateToken(result);
                 Response.Cookies.Append("jwt", jwtToken);
+                _notyf.Success("Login Successfully..");
                 return RedirectToAction("Patient_dashboard", "PatientUser");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid username or password.");
-                return View();
+                _notyf.Error("Invalid Username and Password");
+                return RedirectToAction("Login", "Login");
             }
 
         }

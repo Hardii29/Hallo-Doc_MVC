@@ -35,28 +35,15 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             var User = await _context.AspnetUsers.Include(x => x.AspNetUserRoles)
                 .FirstOrDefaultAsync(m => m.Email == login.Email);
             bool pass = BCrypt.Net.BCrypt.Verify(login.Password, User.Passwordhash);
-            if (User == null && !pass )
+            if (User != null && pass == true )
             {
-                return null;
+                var userDetails = await _context.Users.FirstOrDefaultAsync(m => m.Aspnetuserid == User.Id);
+                httpContext.Session.SetInt32("UserId", userDetails.Userid);
+                httpContext.Session.SetString("UserName", $"{userDetails.Firstname} {userDetails.Lastname}");
+                return User;
             }
-
-
-            var userDetails = await _context.Users.FirstOrDefaultAsync(m => m.Aspnetuserid == User.Id);
-            if (userDetails == null)
-            {
-                return null;
-            }
-            //    var aspNetUser = new AspnetUser {
-            //        Id = User.Id,
-            //    Username = User.Username,
-            //    Email = User.Email,
-            //    Passwordhash = User.Passwordhash,
-            //    //AspNetUserRoles = User.AspNetUserRoles,
-            //};
-            httpContext.Session.SetInt32("UserId", userDetails.Userid);
-            httpContext.Session.SetString("UserName", $"{userDetails.Firstname} {userDetails.Lastname}");
-            return User;
-
+  
+            return null;
         }
         public async Task<bool> ForgotPassword(string email, string Action, string controller, string baseUrl)
         {

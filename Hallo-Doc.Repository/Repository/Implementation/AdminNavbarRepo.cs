@@ -456,6 +456,26 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             _context.Shifts.RemoveRange(shift);
             _context.SaveChanges();
         }
+        public void ChangeStatus(int ShiftId)
+        {
+            ShiftDetail sd = _context.ShiftDetails.FirstOrDefault(sd => sd.ShiftId == ShiftId);
+            if (sd.Status == 2)
+            {
+                sd.Status = 4;
+                sd.ModifiedBy = "Admin";
+                sd.ModifiedDate = DateTime.Now;
+                _context.ShiftDetails.Update(sd);
+                _context.SaveChanges();
+            }
+            else
+            {
+                sd.Status = 2;
+                sd.ModifiedBy = "Admin";
+                sd.ModifiedDate = DateTime.Now;
+                _context.ShiftDetails.Update(sd);
+                _context.SaveChanges();
+            }
+        }
         public MDsOnCall MDsOnCall()
         {
             var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
@@ -801,7 +821,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                               RequestedDate = req.CreatedDate,
                               Confirmation = req.ConfirmationNumber,
                               Physician = p.FirstName + " " + p.LastName,
-                              ConcludedDate = req.CreatedDate,
+                              ConcludedDate = req.ModifiedDate,
                               Status = (status)req.Status,
                               RequestTypeId = req.RequestTypeId,
                               RequestId = req.RequestId
@@ -1036,5 +1056,6 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             }
             _context.SaveChanges();
         }
+
     }
 }

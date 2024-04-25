@@ -57,7 +57,7 @@
                     </div>
                     <div class="row g-2">
                         <div class="form-floating col-md-6 col-sm-12 mb-3">
-                            <input type="time" id="start" asp-for="StartTime" name="StartTime" class="form-control" placeholder="start">
+                            <input type="time" id="start" asp-for="StartTime" name="StartTime" class="form-control" placeholder="start" onblur="checkAvailability()">
                             <label for="start">Start</label>
                         </div>
                         <div class="form-floating col-md-6 col-sm-12 mb-3">
@@ -257,7 +257,7 @@
                         </div>  
                     </div>
                     <div class="modal-footer">
-                        <button type="button" data-bs-dismiss="modal" class="btn btn-info text-white">Return</button>
+                        <button type="button" id="returnButton" class="btn btn-info text-white">Return</button>
                         <button type="button" id="editButton" class="btn btn-info text-white">Edit</button>
                         <button type="button" id="saveButton" class="btn btn-success text-white" style="display: none;">Save</button>
                         <button type="button" id="deleteButton" class="btn btn-danger">Delete</button>
@@ -458,6 +458,24 @@
                 }
             });
         });
+        $('#returnButton').click(function () {
+            var shiftId = $('#shiftId').val();
+            console.log(shiftId);
+            $.ajax({
+
+                url: 'ChangeStatus',
+                type: 'POST',
+                data: { ShiftId: shiftId },
+                success: function (data) {
+                    $('#viewShiftModel').modal('hide');
+                    EventData();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
         function toggleEditMode(editMode) {
             $('#viewShiftModel input, #viewShiftModel select').prop('disabled', !editMode);
             if (editMode) {
@@ -492,4 +510,31 @@
             }
         });
     }
+
+    function checkAvailability() {
+        var physicianId = document.getElementById('provider').value;
+        var shiftDate = document.getElementById('ShiftDate').value;
+        var startTime = document.getElementById('start').value;
+       
+        var data = {
+            PhysicianId: physicianId,
+            ShiftDate: shiftDate,
+            StartTime: startTime
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/AdminNavbar/CheckShift',
+            data: data,
+            success: function (response) {
+                if (!response.isAvailable) {
+                    alert('This physician is already assigned at the selected date and time. Please select another time or physician.');
+                }
+            },
+            error: function () {
+                alert('An error occurred while checking physician availability. Please try again later.');
+            }
+        });
+    }
+
 </script>

@@ -18,6 +18,7 @@ namespace Hallo_Doc.Entity.ViewModel
         [Required(ErrorMessage = "Patient First name is required")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        [Required(ErrorMessage = "BirthDate is required")]
         public DateOnly DOB { get; set; }
         [Required(ErrorMessage = "Patient Email is required")]
         [EmailAddress(ErrorMessage = "Please enter valid Email Address.")]
@@ -30,4 +31,5 @@ namespace Hallo_Doc.Entity.ViewModel
         [RegularExpression(@"([0-9]{6})", ErrorMessage = "It must be of 6 numerics")]
         public string? ZipCode { get; set; }
     }
+
 }

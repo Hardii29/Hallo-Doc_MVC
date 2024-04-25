@@ -118,6 +118,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public ViewCase GetView(int requestId)
         {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
             var data = (from req in _context.Requests
                         join reqClient in _context.Requestclients
                         on req.RequestId equals reqClient.RequestId into reqClientGroup
@@ -136,7 +137,9 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                             Mobile = rc != null ? rc.PhoneNumber : "",
                             Email = rc != null ? rc.Email : "",
-                            Region = rg != null ? rg.Name : ""
+                            Region = rg != null ? rg.Name : "",
+                            AdminId = admin.AdminId,
+                            AdminName = $"{admin.FirstName} {admin.LastName}"
                         }).FirstOrDefault();
             return data;
         }
@@ -647,6 +650,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             if (request != null)
             {
                 request.Status = 7;
+                request.PhysicianId = null;
                 _context.Requests.Update(request);
                 _context.SaveChanges();
                 RequestStatusLog rsl = new RequestStatusLog();

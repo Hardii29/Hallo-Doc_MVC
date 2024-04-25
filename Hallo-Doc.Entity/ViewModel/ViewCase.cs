@@ -21,5 +21,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public DateTime? CreatedDate { get; set; }
         public string? FileName { get; set; }
         public IFormFile? File { get; set; }
+        public int AdminId { get; set; }
+        public string AdminName { get; set; }
     }
 }

@@ -224,19 +224,17 @@ namespace Hallo_Doc.Controllers
                     var pdf = new PdfDocument(writer);
                     var document = new Document(pdf);
 
-                    // Add a title
                     var title = new Paragraph("Medical Report")
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetFontSize(20);
                     document.Add(title);
-                    // Add a table
+                   
                     var table = new iText.Layout.Element.Table(new float[] { 4, 6 });
                     table.SetWidth(UnitValue.CreatePercentValue(100));
 
                     table.AddHeaderCell("Property");
                     table.AddHeaderCell("Value");
 
-                    // Add properties
                     table.AddCell("RequestId");
                     table.AddCell(model.RequestId.ToString());
                     table.AddCell("FirstName");
@@ -303,10 +301,8 @@ namespace Hallo_Doc.Controllers
                     table.AddCell(model.Followup ?? "");
                     document.Add(table);
 
-                    // Close the document
                     document.Close();
 
-                    // Return the PDF as a file
                     byte[] pdfBytes = ms.ToArray();
                     string filename = "Medical-Report-" + RequestId + DateTime.Now.ToString("_dd-MM-yyyy-hh-mm-ss-fff") + ".pdf";
                     return File(pdfBytes, "application/pdf", filename);

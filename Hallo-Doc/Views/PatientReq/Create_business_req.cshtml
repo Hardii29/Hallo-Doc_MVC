@@ -70,7 +70,7 @@
                             <label for="Last name">Last name</label>
                     </div>
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            <input type="text" asp-for="DOB" class="form-control" id="Date of Birth" placeholder="Date of Birth" onfocus="(this.type='date')">
+                            <input type="date" asp-for="DOB" class="form-control" id="Date of Birth" placeholder="Date of Birth" max="@DateTime.Now.ToString("yyyy-MM-dd")">
                             <label for="Date of Birth">Date of Birth</label>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ namespace Hallo_Doc.Entity.ViewModel
         [Required(ErrorMessage = "First name is required")]
         public string FirstName { get; set; }
         public string? LastName { get; set; }
+        [Required(ErrorMessage = "BirthDate is required")]
         public DateOnly DOB { get; set; }
         [Required(ErrorMessage = "Symptoms is required")]
         public string Symptoms { get; set; }
@@ -34,4 +35,5 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? AdminName { get; set; }
         public int AdminId { get; set; } = 0;
     }
+
 }

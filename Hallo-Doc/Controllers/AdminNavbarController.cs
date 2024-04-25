@@ -3,6 +3,10 @@ using Hallo_Doc.Entity.Data;
 using Hallo_Doc.Entity.ViewModel;
 using Hallo_Doc.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,13 +17,15 @@ namespace Hallo_Doc.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IAdminNavbar _adminNav;
         private readonly INotyfService _notyf;
+        private readonly IAdminDashboard _adminDashboard;
         private readonly ILogger<AdminNavbarController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminNavbarController(ILogger<AdminNavbarController> logger, IAdminNavbar adminNav, INotyfService notyf, IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
+        public AdminNavbarController(ILogger<AdminNavbarController> logger, IAdminNavbar adminNav, INotyfService notyf, IAdminDashboard adminDashboard, IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
         {
             _logger = logger;
             _adminNav = adminNav;
             _notyf = notyf;
+            _adminDashboard = adminDashboard;
             _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
@@ -149,6 +155,22 @@ namespace Hallo_Doc.Controllers
         {
             _adminNav.DeleteShift(ShiftId);
             return RedirectToAction("Scheduling");
+        }
+        [HttpPost]
+        public IActionResult ChangeStatus(int ShiftId)
+        {
+            _adminNav.ChangeStatus(ShiftId);
+            return RedirectToAction("Scheduling");
+        }
+        [HttpPost]
+        public async Task<IActionResult> CheckShift(int PhysicianId, DateTime ShiftDate, TimeOnly StartTime)
+        {
+            bool exist = await _context.ShiftDetails.AnyAsync(s => s.Shift.PhysicianId == PhysicianId && s.ShiftDate.Date == ShiftDate.Date && s.StartTime == StartTime);
+            if (!exist)
+            {
+                return Json(new { isAvailable = true });
+            }
+            return Json(new {isAvailable = false});
         }
         public IActionResult MDsOnCall()
         {
@@ -298,6 +320,115 @@ namespace Hallo_Doc.Controllers
             _adminNav.AddAdmin(admin);
             _notyf.Success("Admin Account Created Successfully..");
             return RedirectToAction("UserAccess");
+        }
+        public IActionResult DownloadEncounter(int RequestId)
+        {
+            try
+            {
+                if (RequestId == 0 || RequestId < 0)
+                {
+                    throw new Exception("Invalid Request");
+                }
+                Encounter model = _adminDashboard.EncounterInfo(RequestId);
+                if (model == null) throw new Exception("Medical Report Not Exist For this Request");
+                using (var ms = new MemoryStream())
+                {
+                    var writer = new PdfWriter(ms)
+    ;
+                    var pdf = new PdfDocument(writer);
+                    var document = new Document(pdf);
+
+                    var title = new Paragraph("Medical Report")
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetFontSize(20);
+                    document.Add(title);
+                  
+                    var table = new iText.Layout.Element.Table(new float[] { 4, 6 });
+                    table.SetWidth(UnitValue.CreatePercentValue(100));
+
+                    table.AddHeaderCell("Property");
+                    table.AddHeaderCell("Value");
+
+                    table.AddCell("RequestId");
+                    table.AddCell(model.RequestId.ToString());
+                    table.AddCell("FirstName");
+                    table.AddCell(model.FirstName);
+                    table.AddCell("LastName");
+                    table.AddCell(model.LastName);
+                    table.AddCell("Location");
+                    table.AddCell(model.Address ?? "");
+                    table.AddCell("DateOfBirth");
+                    table.AddCell(model.DOB.ToString());
+                    table.AddCell("DateOfService");
+                    table.AddCell(model.DOS.ToString());
+                    table.AddCell("Mobile");
+                    table.AddCell(model.Mobile);
+                    table.AddCell("Email");
+                    table.AddCell(model.Email);
+                    table.AddCell("HistoryOfPresentIllness");
+                    table.AddCell(model.Injury ?? "");
+                    table.AddCell("MedicalHistory");
+                    table.AddCell(model.History ?? "");
+                    table.AddCell("Medication");
+                    table.AddCell(model.Medications ?? "");
+                    table.AddCell("Allergies");
+                    table.AddCell(model.Allergies ?? "");
+                    table.AddCell("Temprature");
+                    table.AddCell(model.Temp ?? "");
+                    table.AddCell("HeartRate");
+                    table.AddCell(model.HR ?? "");
+                    table.AddCell("RespiratoryRate");
+                    table.AddCell(model.RR ?? "");
+                    table.AddCell("BloodPressureDiastolic");
+                    table.AddCell(model.Bpd ?? "");
+                    table.AddCell("BloodPressureSystolic");
+                    table.AddCell(model.Bp ?? "");
+                    table.AddCell("O2Level");
+                    table.AddCell(model.O2 ?? "");
+                    table.AddCell("Pain");
+                    table.AddCell(model.Pain ?? "");
+                    table.AddCell("HEENT");
+                    table.AddCell(model.Heent ?? "");
+                    table.AddCell("CvReading");
+                    table.AddCell(model.CV ?? "");
+                    table.AddCell("Chest");
+                    table.AddCell(model.Chest ?? "");
+                    table.AddCell("ABD");
+                    table.AddCell(model.ABD ?? "");
+                    table.AddCell("Extr");
+                    table.AddCell(model.Extr ?? "");
+                    table.AddCell("Skin");
+                    table.AddCell(model.Skin ?? "");
+                    table.AddCell("Neuro");
+                    table.AddCell(model.Neuro ?? "");
+                    table.AddCell("Other");
+                    table.AddCell(model.Other ?? "");
+                    table.AddCell("Diagnosis");
+                    table.AddCell(model.Diagnosis ?? "");
+                    table.AddCell("TreatmentPlan");
+                    table.AddCell(model.Treatment ?? "");
+                    table.AddCell("MedicationDispensed");
+                    table.AddCell(model.MDispensed ?? "");
+                    table.AddCell("Procedures");
+                    table.AddCell(model.Procedures ?? "");
+                    table.AddCell("FollowUp");
+                    table.AddCell(model.Followup ?? "");
+                    document.Add(table);
+
+                    document.Close();
+
+                    byte[] pdfBytes = ms.ToArray();
+                    string filename = "Medical-Report-" + RequestId + DateTime.Now.ToString("_dd-MM-yyyy-hh-mm-ss-fff") + ".pdf";
+                    return File(pdfBytes, "application/pdf", filename);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = ex.Message })
+                {
+                    StatusCode = 500
+                };
+            }
         }
     }
 }

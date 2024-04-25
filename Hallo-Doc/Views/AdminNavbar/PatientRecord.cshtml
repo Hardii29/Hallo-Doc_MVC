@@ -40,7 +40,11 @@
                             <td scope="row">@string.Format("{0:MMM dd, yyyy}", item.ConcludedDate)</td>
                             <td scope="row">@item.Status</td>
                             <td scope="row" style="text-align:center">
-                                <a class="btn btn-outline-info btn-sm">View</a>
+                                @if (item.ConcludedDate != null )
+                                {
+                                    <a class="btn btn-outline-info btn-sm" asp-action="DownloadEncounter" asp-controller="AdminNavbar" asp-route-requestId="@item.RequestId">View</a>
+                                }
+                                
                             </td>
                             <td scope="row" style="text-align:center">
                                 <a class="dropdown btn btn-sm btn-outline-info " role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

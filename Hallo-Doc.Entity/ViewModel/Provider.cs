@@ -55,6 +55,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public bool IsHIPAA { get; set;}
         public bool IsNonDisclosure { get; set;}
         public bool IsLicense { get; set;}
+        public string? Photo {  get; set; }
+        public string? Sign {  get; set; }
         public List<RegionModel> Regions { get; set; }
         public List<int> SelectRegion {  get; set; }
     }

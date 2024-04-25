@@ -46,7 +46,7 @@
                             if (!string.IsNullOrEmpty(item.Photo))
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-12">
-                                    <img class="img-fluid mt-3" src="@Url.Action("GetImage", "Admin", new {fileName = item.Photo})" alt="Physician Profile" width="100">
+                                    <img class="img-fluid mt-3" src="@Url.Action("GetImage", "AdminNavbar", new {fileName = item.Photo})" alt="Physician Profile" width="100">
                                     <span>@item.PhysicianName</span>
                                 </div>
                             }

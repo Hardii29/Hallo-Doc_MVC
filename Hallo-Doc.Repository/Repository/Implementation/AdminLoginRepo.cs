@@ -26,7 +26,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         {
             var User = await _context.AspnetUsers.Include(x => x.AspNetUserRoles)
                 .FirstOrDefaultAsync(m => m.Email == login.Email);
-            if (User != null)
+            bool pass = BCrypt.Net.BCrypt.Verify(login.Password, User.Passwordhash);
+            if (User != null && pass == true)
             {
                 
                 return User;

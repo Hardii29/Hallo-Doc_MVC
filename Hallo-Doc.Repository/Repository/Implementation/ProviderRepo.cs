@@ -162,6 +162,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                              BusinessName = p.BusinessName,
                              BusinessWebsite = p.BusinessWebsite,
                              AdminNotes = p.AdminNotes,
+                             Photo = p.Photo,
+                             Sign = p.Signature,
                              IsAgreement = p != null ? (p.IsAgreementDoc == bit1): false,
                              IsBackground = p != null ? (p.IsBackgroundDoc == bit2) : false,
                              IsHIPAA = p != null ? (p.IsTrainingDoc == bit3) : false,

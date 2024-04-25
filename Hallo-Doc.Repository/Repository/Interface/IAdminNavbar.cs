@@ -32,6 +32,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         Schedule GetShiftDetails(int ShiftId);
         void EditShift(int ShiftId, int RegionId, int PhysicianId, DateOnly ShiftDate, TimeOnly StartTime, TimeOnly EndTime);
         void DeleteShift(int ShiftId);
+        void ChangeStatus(int ShiftId);
         MDsOnCall MDsOnCall();
         RequestedShift RequestedShift(int? regionId);
         Task<bool> DeleteReqShift(string s);
