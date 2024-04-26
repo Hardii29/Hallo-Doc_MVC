@@ -22,7 +22,7 @@ namespace Hallo_Doc.Entity.ViewModel
         [Required(ErrorMessage = "Phone Number is required")]
         public string? Mobile { get; set; }
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Please enter valid Email Address.")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email should be valid")]
         public string Email { get; set; }
         public string? Role { get; set; }
         [Required(ErrorMessage = "Select Anyone Role")]

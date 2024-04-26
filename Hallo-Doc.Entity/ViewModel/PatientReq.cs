@@ -14,7 +14,7 @@ namespace Hallo_Doc.Entity.ViewModel
         [Required(ErrorMessage = "Symptoms is required")]
         public string Symptoms { get; set; }
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Please enter valid Email Address.")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email should be valid")]
         public string? Email { get; set; }
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }

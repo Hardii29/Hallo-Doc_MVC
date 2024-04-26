@@ -18,7 +18,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? DOB { get; set; }
         public string? Mobile { get; set; }
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Please enter valid Email Address.")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email should be valid")]
         public string? Email { get; set; }
         [Compare("Email", ErrorMessage = "Email doesn't match.")]
         public string ConfirmEmail { get; set; }

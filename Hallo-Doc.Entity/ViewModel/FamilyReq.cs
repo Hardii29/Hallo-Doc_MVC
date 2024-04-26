@@ -21,7 +21,7 @@ namespace Hallo_Doc.Entity.ViewModel
         [Required(ErrorMessage = "BirthDate is required")]
         public DateOnly DOB { get; set; }
         [Required(ErrorMessage = "Patient Email is required")]
-        [EmailAddress(ErrorMessage = "Please enter valid Email Address.")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email should be valid")]
         public required string Email { get; set; }
         public string? Mobile { get; set; }
         public string? Street { get; set; }

@@ -9,7 +9,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? b_lastname { get; set; }
         public string? b_mobile { get; set; }
         [Required(ErrorMessage = "Your Email is required")]
-        [EmailAddress(ErrorMessage = "Please enter valid Email Address.")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email should be valid")]
         public string? b_email { get; set; }
         [Required(ErrorMessage = "Symptoms is required")]
         public string Symptoms { get; set; }
@@ -18,7 +18,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? LastName { get; set; }
         public DateOnly DOB { get; set; }
         [Required(ErrorMessage = "Patient Email is required")]
-        [EmailAddress(ErrorMessage = "Please enter valid Email Address.")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email should be valid")]
         public string? Email { get; set; }
         public string? Mobile { get; set; }
         public string? Street { get; set; }

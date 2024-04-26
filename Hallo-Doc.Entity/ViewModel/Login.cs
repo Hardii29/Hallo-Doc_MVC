@@ -7,7 +7,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public bool Success;
         public int UserId { get; set; }
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email should be valid")]
         public required string Email { get; set; }
         [Required(ErrorMessage = "Enter the Password")]
         public required string Password { get; set; }
