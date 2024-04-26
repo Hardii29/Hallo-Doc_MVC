@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hallo_Doc.Entity.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -59,6 +60,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Sign {  get; set; }
         public List<RegionModel> Regions { get; set; }
         public List<int> SelectRegion {  get; set; }
+        public List<PhysicianRegion> physicianRegions { get; set; }
+        public string regionList {  get; set; }
     }
     public class RegionModel
     {

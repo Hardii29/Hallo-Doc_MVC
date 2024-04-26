@@ -203,6 +203,7 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult IsEncounterFinalized(int requestId)
         {
+            
             var res = _physician.IsEncounterFinalized(requestId);
             return Json(res);
         }

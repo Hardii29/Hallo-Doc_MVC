@@ -51,7 +51,7 @@
                         <span asp-validation-for="PhysicianId" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="date" id="ShiftDate" asp-for="ShiftDate" name="ShiftDate" class="form-control" placeholder="ShiftDate">
+                        <input type="date" id="ShiftDate" asp-for="ShiftDate" name="ShiftDate" class="form-control" placeholder="ShiftDate" min="@DateTime.Now.ToString("yyyy-MM-dd")">
                         <label for="ShiftDate">ShiftDate</label>
                         <span asp-validation-for="ShiftDate" class="text-danger"></span>
                     </div>

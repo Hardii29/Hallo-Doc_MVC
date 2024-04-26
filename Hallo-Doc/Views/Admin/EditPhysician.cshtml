@@ -59,7 +59,7 @@
 
             <div class="row">
                 <h6 class="mt-2">Administrator Information</h6>
-                <form asp-controller="Provider" asp-action="EditPrInfo" method="post">
+                <form asp-controller="Provider" asp-action="EditPrInfo" method="post" id="prInfoForm">
                     <input type="hidden" value="@Model.AdminName" name="AdminName" />
                     <input type="hidden" value="@Model.ProviderId" name="ProviderId" />
                     <div class="row g-2">
@@ -92,22 +92,32 @@
                             <input type="email" name="SyncEmail" id="syncemail" asp-for="SyncEmail" class="form-control" value="@Model.SyncEmail" placeholder="SyncEmail" disabled>
                             <label for="syncemail">Synchronization Email Address</label>
                         </div>
+                        <input type="hidden" asp-for="regionList" id="pregion" />
                         <div class="form-group form-floating col-md-6 col-sm-12">
-                            @foreach (var region in Model.Regions)
+                            @foreach (var item in Model.Regions)
                             {
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input mt-1" name="SelectRegion" type="checkbox" value="@region.RegionId" id="@($"Region_{region.RegionId}")" disabled>
-                                    <label class="form-check-label" for="@($"Region_{region.RegionId}")">
-                                        @region.Name
-                                    </label>
-                                </div>
+                                @if (Model != null && Model.physicianRegions.Count > 0 && Model.physicianRegions.Exists(id => id.RegionId == item.RegionId))
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input mt-1 region" type="checkbox" value="@item.RegionId " checked>
+                                        <label class="form-check-label"> @item.Name </label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input mt-1 region" type="checkbox" value="@item.RegionId ">
+                                        <label class="form-check-label"> @item.Name </label>
+                                    </div>
+                                }
                             }
+                      
                         </div>
                     </div>
                     <div class="g-2 mt-4 first" style="text-align: right;">
                             <button type="button" id=" " class="btn btn-info text-white">Enter Payrate</button>
                             <button type="button" id="edtBtn2" onclick="editMode2()" class="btn btn-info text-white">Edit</button>
-                            <button type="submit" id="sbtBtn2" class="btn btn-success text-white" style="display: none;">Save</button>
+                        <button type="submit" id="sbtBtn2" class="btn btn-success text-white" style="display: none;" onclick="saveRegion()">Save</button>
                     </div>
                 </form>
             </div>
@@ -183,7 +193,7 @@
                                 </button>
                             </div>
                             <div class="input-group col-lg-4 col-md-2 col-sm-2">
-                                <button class="btn btn-info" id="create" disabled>
+                                <button class="btn btn-info" id="create" style="display:none">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                     Create
                                 </button>
@@ -319,3 +329,15 @@
         </div>
 </body>
 <script src="~/js/EditPhysician.js"></script>
+<script>
+    function saveRegion() {
+        var files = [];
+        $('input[type="checkbox"].region:checked').each(function () {
+            files.push(this.value);
+        });
+        $("#pregion").val(files.join(','));
+        console.log(files);
+        $("#prInfoForm").submit();
+
+    }
+</script>

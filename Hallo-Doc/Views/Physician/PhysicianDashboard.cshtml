@@ -141,8 +141,9 @@
 
             success: function (data) {
                 if (data) {
+                    console.log(data);
                     EncounterFinalModal.show();
-                    $("RequestID_Encounter").val(requestId);
+                    $("#RequestID_Finalize").val(requestId);
                 }
                 else {
                     window.location.href = "/Physician/Encounter?RequestId=" + requestId;

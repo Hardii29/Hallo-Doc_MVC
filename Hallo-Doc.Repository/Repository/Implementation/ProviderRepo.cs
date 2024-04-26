@@ -6,6 +6,7 @@ using Microsoft.DotNet.Scaffolding.Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -173,7 +174,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                              AdminName = $"{admin.FirstName} {admin.LastName}",
                              
                          }).FirstOrDefault();
-
+            List<PhysicianRegion> pr = _context.PhysicianRegions.Where(r => r.PhysicianId == ProviderId).ToList();
+            model.physicianRegions = pr;
             return model;
         }
         public void EditPrAccount(Provider pr)
@@ -191,6 +193,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public void EditPrInfo(Provider pr)
         {
+            List<int> selectedmenus = pr.regionList.Split(',').Select(int.Parse).ToList();
+            List<int> rolemenus = _context.PhysicianRegions.Where(r => r.PhysicianId == pr.ProviderId).Select(req => req.PhysicianRegionId).ToList();
             var user = _context.Physicians.FirstOrDefault(p => p.PhysicianId == pr.ProviderId);
             if (user != null)
             {
@@ -204,6 +208,25 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 user.ModifiedBy = $"Admin: {pr.AdminName}";
                 user.ModifiedDate = DateTime.Now;
                 _context.Physicians.Update(user);
+                _context.SaveChanges();
+            }
+            if (rolemenus.Count > 0)
+            {
+                foreach (var item in rolemenus)
+                {
+                    PhysicianRegion ar = _context.PhysicianRegions.Where(r => r.PhysicianId == pr.ProviderId).First();
+                    _context.PhysicianRegions.Remove(ar);
+                    _context.SaveChanges();
+                }
+            }
+            foreach (var item in selectedmenus)
+            {
+                PhysicianRegion ar = new()
+                {
+                    PhysicianId = pr.ProviderId,
+                    RegionId = item
+                };
+                _context.PhysicianRegions.Update(ar);
                 _context.SaveChanges();
             }
         }
