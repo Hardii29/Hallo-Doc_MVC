@@ -48,7 +48,7 @@
                     </div>
                     <div class="row g-2">
                         <div class="form-floating col-md-6 col-sm-12 mb-3">
-                            <input type="time" id="start" name="StartTime" asp-for="StartTime" class="form-control" placeholder="start">
+                            <input type="time" id="start" name="StartTime" asp-for="StartTime" class="form-control" placeholder="start" onblur="TimeValidation()">
                             <label for="start">Start</label>
                         </div>
                         <div class="form-floating col-md-6 col-sm-12 mb-3">
@@ -386,5 +386,21 @@
 <script>
     function modalreset() {
         $('#shiftForm').trigger('reset');
+    }
+    function TimeValidation() {
+        var currentDate = new Date();
+        var inputDate = new Date(document.getElementById('ShiftDate').value + "T" + document.getElementById('start').value);
+
+        if (inputDate <= currentDate) {
+            document.getElementById('start-error').innerText = "Please enter a valid date and time in the future.";
+            // document.getElementById('createShiftForm').addEventListener('submit', function (event) {
+            //     event.preventDefault();
+            // });
+            return false;
+        } else {
+            document.getElementById('start-error').innerText = "";
+            // document.getElementById('createShiftForm').removeEventListener('submit');
+            return true;
+        }
     }
 </script>

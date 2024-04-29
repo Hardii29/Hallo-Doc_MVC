@@ -59,6 +59,7 @@
                         <div class="form-floating col-md-6 col-sm-12 mb-3">
                             <input type="time" id="start" asp-for="StartTime" name="StartTime" class="form-control" placeholder="start" onblur="checkAvailability()">
                             <label for="start">Start</label>
+                            <span id="start-error" class="text-danger"></span>
                         </div>
                         <div class="form-floating col-md-6 col-sm-12 mb-3">
                             <input type="time" id="end" name="EndTime" asp-for="EndTime" class="form-control" placeholder="end">
@@ -510,12 +511,18 @@
             }
         });
     }
+    function checkAvailability()
+    {
+        if(TimeValidation()) {
+            checkShiftAvailability();
+        }
+    }
 
-    function checkAvailability() {
+    function checkShiftAvailability() {
         var physicianId = document.getElementById('provider').value;
         var shiftDate = document.getElementById('ShiftDate').value;
         var startTime = document.getElementById('start').value;
-       
+        
         var data = {
             PhysicianId: physicianId,
             ShiftDate: shiftDate,
@@ -535,6 +542,23 @@
                 alert('An error occurred while checking physician availability. Please try again later.');
             }
         });
+    }
+    function TimeValidation ()
+    {
+        var currentDate = new Date();
+        var inputDate = new Date(document.getElementById('ShiftDate').value + "T" + document.getElementById('start').value);
+
+        if (inputDate <= currentDate) {
+            document.getElementById('start-error').innerText = "Please enter a valid date and time in the future.";
+            // document.getElementById('createShiftForm').addEventListener('submit', function (event) {
+            //     event.preventDefault();
+            // });
+            return false;
+        } else {
+            document.getElementById('start-error').innerText = "";
+            // document.getElementById('createShiftForm').removeEventListener('submit');
+            return true;
+        }
     }
     function setCreateModal() {
         $('#createShiftForm').trigger('reset');
