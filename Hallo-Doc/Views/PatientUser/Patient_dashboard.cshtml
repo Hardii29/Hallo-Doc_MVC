@@ -65,7 +65,7 @@
                                 <td class="col">
                                     @if (item.HasFiles)
                                     {
-                                        <a class="btn btn-outline-info out back" asp-controller="PatientUser" asp-action="View_document" asp-route-fileId="@item.Request?.fileId">Document</a>
+                                        <a class="btn btn-outline-info out back" asp-controller="PatientUser" asp-action="View_document" asp-route-requestId="@item.Request?.RequestId">Document</a>
                                     }
                                     else
                                     {

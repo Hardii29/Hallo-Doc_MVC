@@ -478,8 +478,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 {
                     Directory.CreateDirectory(uploadsDirectory);
                 }
-
-                var fileName = Path.GetFileName(viewDocument.File.FileName);
+                var timestamp = DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss");
+                var fileName = $"{Path.GetFileNameWithoutExtension(viewDocument.File.FileName)}_{timestamp}{Path.GetExtension(viewDocument.File.FileName)}";
                 var filePath = Path.Combine(uploadsDirectory, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -599,7 +599,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         {
             var baseUrl = "http://localhost:5203";
             var Action = "Agreement";
-            var controller = "Admin";
+            var controller = "Home";
             
             string agreementPageLink = $"{baseUrl}/{controller}/{Action}?requestId={RequestId}";
             var subject = "Agreement for your request";
@@ -689,6 +689,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
         }
         public ViewCase GetClearCaseView(int requestId)
         {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
             var data = (from req in _context.Requests
                         join reqClient in _context.Requestclients
                         on req.RequestId equals reqClient.RequestId into reqClientGroup
@@ -708,7 +709,9 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             Email = rc != null ? rc.Email : "",
                             RequestWiseFileID = rf != null ? rf.RequestWiseFileId : 0,
                             CreatedDate = rf != null ? rf.CreatedDate : DateTime.MinValue,
-                            FileName = rf != null ? rf.FileName : ""
+                            FileName = rf != null ? rf.FileName : "",
+                            AdminId = admin.AdminId,
+                            AdminName = $"{admin.FirstName} {admin.LastName}"
                         }).FirstOrDefault();
             return data;
         }

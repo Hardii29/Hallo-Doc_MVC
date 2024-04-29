@@ -30,7 +30,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="CreateShift" asp-controller="Physician" method="post">
+            <form asp-action="CreateShift" asp-controller="Physician" method="post" id="shiftForm">
                 <div class="modal-body">
 
                     <div class="form-floating mb-3">
@@ -171,7 +171,7 @@
                     </button>
                 </li>
             </ul>
-            <button type="button" class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#shiftcreateModel">
+            <button type="button" class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#shiftcreateModel" onclick="modalreset()">
                 <span class="dash-btn">Add New Shift</span>
             </button>
         </div>
@@ -382,4 +382,9 @@
             }
         }
     });
+</script>
+<script>
+    function modalreset() {
+        $('#shiftForm').trigger('reset');
+    }
 </script>

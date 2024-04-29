@@ -39,7 +39,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-toggler shadow pb-3 mb-2 bg-body">
+        <nav class="navbar navbar-expand-lg navbar-toggler shadow mb-2 bg-body">
             <div class="container-fluid flex-column">
                 <ul class="navbar-nav flex-row w-100 justify-content-between">
                     <button class="navbar-toggler navbar-light nav-tog-btn px-0 mb-2 mt-5" type="button"
@@ -73,7 +73,7 @@
                     <ul class="navbar-nav nav-underline offcanvas-body">
 
                         <li class="nav-item mx-2 d-flex">
-                            <a class="nav-link dashboard @(path.StartsWith("/PatientUser/Patient_dashboard") || path.EndsWith("CreateRequest")  ? "active" : "")" asp-controller="PatientUser" asp-action="Patient_dashboard">Dashboard</a>
+                            <a class="nav-link dashboard @(path.StartsWith("/PatientUser/Patient_dashboard") || path.EndsWith("CreateRequest") || path.EndsWith("View_document")  ? "active" : "")" asp-controller="PatientUser" asp-action="Patient_dashboard">Dashboard</a>
                         </li>
                         
                         <li class="nav-item mx-2">

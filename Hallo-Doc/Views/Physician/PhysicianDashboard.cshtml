@@ -37,7 +37,7 @@
             <h3>Patients<span style="font-size:medium; color: navy;" id="cardName"></span></h3>
             <ul>
                 <li class="d-inline">
-                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#sendLinkModel">
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#sendLinkModel" onclick="SendLinkReset()">
                         <i class="fa fa-paper-plane" aria-hidden="true"></i><span class="dash-btn"> Send Link</span>
                     </button>
                 </li>
@@ -153,5 +153,8 @@
                 console.log("Error:", error);
             }
         });
+    }
+    function SendLinkReset() {
+        $('#linkSendForm').trigger('reset');
     }
 </script>

@@ -12,7 +12,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
     public interface IPatientUser
     {
         DashboardList PatientDashboard(HttpContext httpContext);
-        ViewDocument ViewDocument(int fileId, HttpContext httpContext);
+        ViewDocument ViewDocument(int RequestId, HttpContext httpContext);
         IActionResult DownloadFile(int fileID);
         PatientProfile? Edit(int userId, HttpContext httpContext);
         void EditProfile(int userId, PatientProfile patientProfile);

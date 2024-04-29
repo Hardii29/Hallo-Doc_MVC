@@ -237,6 +237,7 @@
     });
     function Transfercaseid(id) {
         var RequestId = id;
+        $('#transferCaseForm').trigger('reset');
         console.log(RequestId);
         document.getElementById('RequestID_ModelTransferCase').value = RequestId;
     }

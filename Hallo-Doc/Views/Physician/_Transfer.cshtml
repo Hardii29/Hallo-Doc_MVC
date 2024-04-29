@@ -8,7 +8,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="TransferCase" asp-controller="Physician" method="post">
+            <form asp-action="TransferCase" asp-controller="Physician" method="post" id="transferCaseForm">
                 <input type="hidden" value=" " id="RequestID_ModelTransfer" name="RequestId" />
                 <div class="modal-body">
                     <p>This request will be transferred to Admin.</p>

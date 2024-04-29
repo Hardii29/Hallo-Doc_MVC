@@ -82,7 +82,7 @@
                     <ul class="navbar-nav nav-underline offcanvas-body">
 
                     <li class="nav-item mx-2 d-flex">
-                            <a class="nav-link dashboard @(path.StartsWith("/Admin/Admin_dashboard") || path.EndsWith("CreateRequest") || path.EndsWith("View_upload") || path.EndsWith("View_notes") || path.EndsWith("View_case") || path.EndsWith("Order") ? "active" : "")" asp-controller="Admin" asp-action="Admin_dashboard">Dashboard</a>
+                            <a class="nav-link dashboard @(path.StartsWith("/Admin/Admin_dashboard") || path.EndsWith("CreateRequest") || path.EndsWith("View_upload") || path.EndsWith("View_notes") || path.EndsWith("View_case") || path.EndsWith("Order") || path.EndsWith("Close_case") ? "active" : "")" asp-controller="Admin" asp-action="Admin_dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item mx-2">
                             <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderLocation") ? "active" : "")" asp-controller="AdminNavbar" asp-action="ProviderLocation">Provider Location</a>

@@ -211,6 +211,7 @@
     }
     function Transfercase(id) {
         var RequestId = id;
+        $('#transferCaseForm').trigger('reset');
         console.log(RequestId);
         document.getElementById('RequestID_ModelTransfer').value = RequestId;
     }

@@ -212,6 +212,7 @@
     function Canclecaseid(id, patientname) {
         var RequestId = id;
         var patientname = patientname;
+        $('#cancelCaseForm').trigger('reset');
         console.log(RequestId);
         console.log(patientname);
         document.getElementById('RequestID_ModelCancelCase').value = RequestId;
@@ -219,12 +220,14 @@
     }
     function Assigncaseid(id) {
         var RequestId = id;
+        $('#assignCaseForm').trigger('reset');
         console.log(RequestId);
         document.getElementById('RequestID_ModelAssignCase').value = RequestId;
     }
     function Blockcaseid(id, patientname) {
         var RequestId = id;
         var patientname = patientname;
+        $('#blockCaseForm').trigger('reset');
         console.log(RequestId);
         console.log(patientname);
         document.getElementById('RequestID_ModelBlockCase').value = RequestId;

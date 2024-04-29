@@ -11,7 +11,7 @@
         if you do not agree simply click "Cancel".
     </h3>
     <div class="container p-5">
-            <form class="d-flex justify-content-between" asp-action="Accept" asp-controller="Admin">
+            <form class="d-flex justify-content-between" asp-action="Accept" asp-controller="Home">
                 <input type="hidden" name="RequestID" value="@TempData["RequestID"]" />
                 <button type="submit" class="btn btn-success">I Agree</button>
                 <button type="button" data-bs-toggle="modal" data-bs-target="#Reject" class="btn btn-danger">Cancel</button>
@@ -26,7 +26,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Concellation</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-action="Reject" asp-controller="Admin" class="needs-validation" novalidate>
+            <form asp-action="Reject" asp-controller="Home" class="needs-validation" novalidate>
                 <input type="hidden" value="@TempData["RequestID"]" name="RequestId" />
 
                 <div class="modal-body">

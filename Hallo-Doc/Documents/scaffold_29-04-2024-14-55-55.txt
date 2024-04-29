@@ -1,0 +1,33 @@
+https://medium.com/@ankushjain358/entity-framework-core-with-postgresql-database-first-ab03bf1079c4
+https://medium.com/@RobertKhou/getting-started-with-entity-framework-core-postgresql-c6fa09681624
+
+	Step 1: Installing PostgreSQL Server
+	
+	Step 2: Create a Database with a Table
+	
+	Step 3: Create an ASP.NET Core 6 MVC application using Visual Studio 
+	
+	Step 4: Adding Entity Framework Core to Web App
+			following packages installed for scaffold-dbcontext postgresql
+				Microsoft.EntityFrameworkCore.Design
+				Microsoft.EntityFrameworkCore.Tools.DotNet
+				Microsoft.NETCore.App
+				Npgsql.EntityFrameworkCore.PostgreSQL
+				Npgsql.EntityFrameworkCore.PostgreSQL.Design
+				
+	Step 5: Generating EF Proxies for existing database
+			Go to Visual Studio, select Tools > NuGet Package Manager > Package Manager Console
+			Run command: Scaffold-DbContext “Host=localhost;” Npgsql.EntityFrameworkCore.PostgreSQL -OutputDir Models
+			
+	Step 6: Configure .NET app to use Entity Framework
+			Go to appsettings.json file, and add the connection string
+			"ConnectionStrings":{
+									"DBString": "Host=localhost;Database=ToDoManager;Username=DBUsername;Password=DBPassword;TrustServerCertificate=True;Trusted_Connection=True;"
+								}
+								
+								
+								
+								
+								
+								
+	

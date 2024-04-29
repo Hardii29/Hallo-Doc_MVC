@@ -71,21 +71,23 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             return model;
         }
-        public ViewDocument ViewDocument(int fileId, HttpContext httpContext)
+        public ViewDocument ViewDocument(int RequestId, HttpContext httpContext)
         {
             int userId = httpContext.Session.GetInt32("UserId") ?? 0;
             string username = httpContext.Session.GetString("UserName");
-            var files = _context.RequestWiseFiles.FirstOrDefault(rwf => rwf.RequestWiseFileId == fileId);
-            if (files == null)
+            var files = from f in _context.RequestWiseFiles
+                        where f.RequestId == RequestId
+                        select new ViewDocument
+                        {
+                            RequestWiseFileID = f.RequestWiseFileId,
+                            CreatedDate = f.CreatedDate,
+                            FileName = f.FileName
+                        };
+            var model = new ViewDocument()
             {
-                return null;
-            }
-            var model = new ViewDocument
-            {
-                RequestWiseFileID = files.RequestWiseFileId,
-                CreatedDate = files.CreatedDate,
-                FileName = files.FileName,
-
+                RequestId = RequestId,
+                documents = files.ToList(),
+                UserName = username,
             };
 
             return model;

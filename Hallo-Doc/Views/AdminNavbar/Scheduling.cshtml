@@ -29,7 +29,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="CreateShift" asp-controller="AdminNavbar" method="post">
+            <form asp-action="CreateShift" asp-controller="AdminNavbar" method="post" id="createShiftForm">
                 <div class="modal-body">
 
                     <div class="form-floating mb-3">
@@ -165,7 +165,7 @@
                     </a>
                 </li>
                 <li class="d-inline">
-                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#createShiftModel">
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#createShiftModel" onclick="setCreateModal()">
                         <span class="dash-btn">Add New Shift</span>
                     </button>
                 </li>
@@ -536,5 +536,7 @@
             }
         });
     }
-
+    function setCreateModal() {
+        $('#createShiftForm').trigger('reset');
+    }
 </script>

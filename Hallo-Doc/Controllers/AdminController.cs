@@ -143,31 +143,7 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.ClearCaseReq(RequestId);
             return RedirectToAction("Admin_dashboard");
         }
-        public IActionResult Agreement(int RequestId)
-        {
-            TempData["RequestID"] = " " + RequestId;
-            TempData["PatientName"] = "Hardi";
-            return View();
-        }
-        public IActionResult Accept(int RequestID)
-        {
-            bool result = _adminDashboard.SendAgreement_accept(RequestID);
-            if(result==true)
-            {
-                _notyf.Success("Agreement Accepted");
-            }
-            return RedirectToAction("Agreement");
-        }
-
-        public IActionResult Reject(int RequestID, string Notes)
-        {
-            bool result = _adminDashboard.SendAgreement_Reject(RequestID, Notes);
-            if(result ==true)
-            {
-                _notyf.Warning("Agreement Rejected");
-            }
-            return RedirectToAction("Agreement");
-        }
+        
         [HttpPost]
         public IActionResult SendAgreement(string email, int RequestId)
         {
