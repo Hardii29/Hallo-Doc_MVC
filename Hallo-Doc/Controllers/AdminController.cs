@@ -14,7 +14,7 @@ using Twilio.Http;
 
 namespace Hallo_Doc.Controllers
 {
-    [CustomAuthorize("Admin")]
+    //[CustomAuthorize("Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminDashboard _adminDashboard;
@@ -28,7 +28,7 @@ namespace Hallo_Doc.Controllers
             _webHostEnvironment = webHostEnvironment;
             _notyf = notyf;
         }
-        
+        [CustomAuthorize("Admin", "6")]
         public IActionResult Admin_dashboard()
         {
             ViewBag.CaseReason = _adminDashboard.GetReasons();
@@ -36,14 +36,14 @@ namespace Hallo_Doc.Controllers
             var count = _adminDashboard.CountRequestData();
             return View(count);
         }
-        
+        [CustomAuthorize("Admin", "6")]
         public IActionResult GetPartialView(string btnName, int statusId, string searchValue, string sortColumn, string sortOrder, int pagesize = 5, int requesttype = -1, int Region = -1, int page = 1)
         {
             string partialView = "_" + btnName + "Table";
             var request = _adminDashboard.GetRequestData(statusId, searchValue, page, pagesize, Region, sortColumn, sortOrder, requesttype);
             return PartialView(partialView, request);
         }
-       
+        
         public IActionResult View_case(int requestId)
         {
             var model = _adminDashboard.GetView(requestId);
@@ -60,6 +60,7 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.CancelViewCase(RequestId);
             return RedirectToAction("Admin_dashboard");
         }
+        
         public IActionResult View_notes(int RequestId)
         {
             var model = _adminDashboard.viewNotesData(RequestId);
@@ -101,6 +102,7 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.BlockCaseReq(RequestId, Notes);
             return RedirectToAction("Admin_dashboard");
         }
+       
         public IActionResult View_upload(int RequestId)
         {
             var files = _adminDashboard.GetFiles(RequestId);
@@ -155,6 +157,7 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("Admin_dashboard");
         }
+        [CustomAuthorize("Admin", "17")]
         public IActionResult Order(int RequestId)
         {
             ViewBag.Profession = _adminDashboard.GetProfession();
@@ -177,6 +180,7 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.SendOrder(order);
             return RedirectToAction("Admin_dashboard");
         }
+        
         public IActionResult Close_case(int RequestId)
         {
             var model = _adminDashboard.GetClearCaseView(RequestId);
@@ -204,6 +208,7 @@ namespace Hallo_Doc.Controllers
             _adminDashboard.EditEncounterinfo(encounter);
             return RedirectToAction("Encounter", new { requestId = encounter.RequestId });
         }
+        [CustomAuthorize("Admin", "5")]
         public IActionResult AdminProfile(int adminId)
         {
             var data = _adminDashboard.Profile(adminId);

@@ -9,6 +9,7 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
+using Hallo_Doc.Repository.Repository.Implementation;
 
 namespace Hallo_Doc.Controllers
 {
@@ -29,6 +30,7 @@ namespace Hallo_Doc.Controllers
             _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
+        [CustomAuthorize("Admin", "12")]
         public IActionResult ProviderMenu(int? RegionId = null)
         {
             ViewBag.Region = _adminNav.GetRegions();
@@ -62,6 +64,7 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("ProviderMenu");
         }
+        [CustomAuthorize("Admin", "4")]
         public IActionResult AccountAccess()
         {
             var model = _adminNav.Access();
@@ -114,6 +117,7 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("AccountAccess");
         }
+        [CustomAuthorize("Admin", "2")]
         public IActionResult Scheduling()
         {
             ViewBag.Physician = _adminNav.AllPhysician();
@@ -214,6 +218,7 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("RequestedShift");
         }
+        [CustomAuthorize("Admin", "15")]
         public IActionResult VendorMenu(string searchValue, int Profession)
         {
             ViewBag.Professions = _context.HealthProfessionalTypes.ToList();
@@ -253,6 +258,7 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("VendorMenu");
         }
+        [CustomAuthorize("Admin", "29")]
         public IActionResult BlockHistory(BlockHistory history)
         {
             var model = _adminNav.BlockedHistory(history);
@@ -267,17 +273,20 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("BlockHistory");
         }
+        [CustomAuthorize("Admin", "23")]
         public IActionResult ProviderLocation()
         {
            
             var model = _adminNav.ProviderLocation();
             return View(model);
         }
+        [CustomAuthorize("Admin", "3")]
         public IActionResult PatientHistory(UserData userData)
         {
             var model = _adminNav.PatientHistory(userData);
             return View(model);
         }
+        [CustomAuthorize("Admin", "28")]
         public IActionResult PatientRecord(int UserId)
         {
             var model = _adminNav.PatientRecord(UserId);
@@ -297,11 +306,13 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("SearchRecords");
         }
+        [CustomAuthorize("Admin", "18")]
         public IActionResult EmailLogs(Logs logs)
         {
             var model = _adminNav.EmailLog(logs);
             return View(model);
         }
+        [CustomAuthorize("Admin", "32")]
         public IActionResult SMSLogs(SMSLog logs)
         {
             var model = _adminNav.SMSLog(logs);

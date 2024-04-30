@@ -11,16 +11,20 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Hallo_Doc.Entity.Data;
+using NuGet.Packaging;
+using System.Linq;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
 {
     public class JWTService : IJWTService
     {
         private readonly IConfiguration _configuration;
-
-        public JWTService(IConfiguration configuration)
+        private readonly ApplicationDbContext _context;
+        public JWTService(IConfiguration configuration, ApplicationDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         public string GenerateToken(AspnetUser user)
@@ -32,6 +36,24 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 new Claim("UserID", user.Id),
                 new Claim("Username", user.Username)
             };
+            int RoleId;
+            List<int> MenuIds = new List<int>();
+            switch(user.AspNetUserRoles.FirstOrDefault().RoleId)
+            {
+                case "Admin":
+                    RoleId = (int)_context.Admins.FirstOrDefault(r => r.AspNetUserId == user.Id).RoleId;
+                    MenuIds = _context.RoleMenus.Where(rm => rm.RoleId == RoleId).Select(rm => rm.MenuId).ToList();
+                    break;
+                case "Physician":
+                    RoleId = (int)_context.Physicians.FirstOrDefault(r => r.AspNetUserId == user.Id).RoleId;
+                    MenuIds = _context.RoleMenus.Where(rm => rm.RoleId == RoleId).Select(rm => rm.MenuId).ToList();
+                    break;
+                default:
+                    RoleId = 0;
+                    break;
+            }
+            claims.Add(new Claim("RoleId", RoleId.ToString()));
+            claims.AddRange(MenuIds.Select(id => new Claim("MenuId", id.ToString())));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToString(_configuration["Jwt:Key"])));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -88,10 +110,12 @@ namespace Hallo_Doc.Repository.Repository.Implementation
     public class CustomAuthorize : Attribute, IAuthorizationFilter
     {
         private readonly string _role;
+        private readonly string _menuId;
 
-        public CustomAuthorize(string role = "")
+        public CustomAuthorize(string role = "", string menuId = "")
         {
             _role = role;
+            _menuId = menuId;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -143,6 +167,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             }
 
             if (string.IsNullOrWhiteSpace(_role) || roleClaim.Value != _role)
+            {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AccessDenied" }));
+            }
+            var menuCliam = jwtToken.Claims.Where(claim => claim.Type == "MenuId").Select(claim => claim.Value).ToList();
+            if (_role == "Admin" && (menuCliam == null || !menuCliam.Contains(_menuId)))
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AccessDenied" }));
             }
