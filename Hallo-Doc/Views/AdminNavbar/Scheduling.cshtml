@@ -64,6 +64,7 @@
                         <div class="form-floating col-md-6 col-sm-12 mb-3">
                             <input type="time" id="end" name="EndTime" asp-for="EndTime" class="form-control" placeholder="end">
                             <label for="end">End</label>
+                            <span id="end-error" class="text-danger"></span>
                         </div>
                     </div>
                  @*    <div class="form-check form-switch">
@@ -511,14 +512,8 @@
             }
         });
     }
-    function checkAvailability()
-    {
-        if(TimeValidation()) {
-            checkShiftAvailability();
-        }
-    }
 
-    function checkShiftAvailability() {
+    function checkAvailability() {
         var physicianId = document.getElementById('provider').value;
         var shiftDate = document.getElementById('ShiftDate').value;
         var startTime = document.getElementById('start').value;
@@ -543,23 +538,33 @@
             }
         });
     }
-    function TimeValidation ()
-    {
-        var currentDate = new Date();
-        var inputDate = new Date(document.getElementById('ShiftDate').value + "T" + document.getElementById('start').value);
+    document.getElementById("createShiftForm").addEventListener("submit", function (event) {
+        var startTime = document.getElementById("start").value;
+        var endTime = document.getElementById("end").value;
+        var selectedDate = document.getElementById("ShiftDate").value;
+        var today = new Date().toISOString().split('T')[0];
 
-        if (inputDate <= currentDate) {
-            document.getElementById('start-error').innerText = "Please enter a valid date and time in the future.";
-            // document.getElementById('createShiftForm').addEventListener('submit', function (event) {
-            //     event.preventDefault();
-            // });
-            return false;
-        } else {
-            document.getElementById('start-error').innerText = "";
-            // document.getElementById('createShiftForm').removeEventListener('submit');
-            return true;
+        if (selectedDate === today) {
+            var currentTime = new Date();
+            var hours = currentTime.getHours();
+            var minutes = currentTime.getMinutes();
+            var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+
+            if (startTime < formattedTime) {
+                event.preventDefault();
+                document.getElementById("start-error").innerText = "Start time cannot be less than current time";
+            }
+            else {
+                document.getElementById("start-error").innerText = "";
+            }
         }
-    }
+
+        if (startTime >= endTime) {
+            event.preventDefault(); // Prevent form submission
+            document.getElementById("end-error").innerText = "End time must be greater than start time";
+        }
+    });
+    
     function setCreateModal() {
         $('#createShiftForm').trigger('reset');
     }
