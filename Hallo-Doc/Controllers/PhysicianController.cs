@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Hallo_Doc.Entity.ViewModel;
+using Hallo_Doc.Repository.Repository.Implementation;
 using Hallo_Doc.Repository.Repository.Interface;
 using iText.Kernel.Pdf;
 using iText.Layout;
@@ -30,12 +31,14 @@ namespace Hallo_Doc.Controllers
             _webHostEnvironment = webHostEnvironment;
             _notyf = notyf;
         }
+        [CustomAuthorize("Physician", "7")]
         public IActionResult PhysicianDashboard()
         {
             int PhysicianId = 9;
             var count = _physician.CountRequest(PhysicianId);
             return View(count);
         }
+        [CustomAuthorize("Physician", "7")]
         public IActionResult GetDashboard(string btnName, int statusId, int pagesize = 5, int page = 1)
         {
             int PhysicianId = 9;
@@ -114,6 +117,7 @@ namespace Hallo_Doc.Controllers
             var files = _adminDashboard.GetFiles(RequestId);
             return View(files);
         }
+        [CustomAuthorize("Physician", "14")]
         public IActionResult Order(int RequestId)
         {
             ViewBag.Profession = _adminDashboard.GetProfession();
@@ -150,6 +154,7 @@ namespace Hallo_Doc.Controllers
             }
             return Redirect("~/Physician/PhysicianDashboard");
         }
+        [CustomAuthorize("Physician", "10")]
         public IActionResult PhysicianProfile()
         {
             int ProviderId = 9;
@@ -317,6 +322,7 @@ namespace Hallo_Doc.Controllers
                 };
             }
         }
+        [CustomAuthorize("Physician", "9")]
         public IActionResult Schedule()
         {
             ViewBag.Region = _adminNav.GetRegions();

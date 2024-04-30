@@ -171,7 +171,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AccessDenied" }));
             }
             var menuCliam = jwtToken.Claims.Where(claim => claim.Type == "MenuId").Select(claim => claim.Value).ToList();
-            if (_role == "Admin" && (menuCliam == null || !menuCliam.Contains(_menuId)))
+            if ((_role == "Admin" || _role == "Physician") && (menuCliam == null || !menuCliam.Contains(_menuId)))
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AccessDenied" }));
             }
