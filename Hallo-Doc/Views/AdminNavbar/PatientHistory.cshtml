@@ -41,6 +41,7 @@
                 </div>
             </div>
             <input type="hidden" asp-for="CurrentPage" id="CurrentPage" />
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
         </form>
         <div class="table-responsive">
             <table class="table table-hover mt-3" style="width:100%">
@@ -72,8 +73,19 @@
             </table>
       </div>
     </div>
-    <nav aria-label="Page navigation example" class="pagenav">
-        <ul class="pagination pagination-container d-flex justify-content-end m-3" id="pagination">
+    <nav aria-label="Page navigation example" class="pagenav flex-row d-flex justify-content-between">
+
+        <div class="d-flex m-3">
+
+            <select id="pageSize" class="form-select form-select-sm" onchange="changePageSize(event)">
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
+
+        </div>
+        <ul class="pagination pagination-container d-flex m-3" id="pagination">
             @{
                 int i;
 
@@ -134,4 +146,10 @@
         searchUser(event);
 
     });
+    function changePageSize(event) {
+        var selectedPageSize = event.target.value;
+        $('#CurrentPage').val(1);
+        $('#PageSize').val(selectedPageSize); // Add an input field for PageSize in the form
+        searchUser(event);
+    }
 </script>
