@@ -385,5 +385,13 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("ViewNotes", new { RequestId = RequestId });
         }
+        public IActionResult Invoicing()
+        {
+            return View();
+        }
+        public IActionResult BiWeeklySheet()
+        { 
+            return View();
+        }
     }
 }

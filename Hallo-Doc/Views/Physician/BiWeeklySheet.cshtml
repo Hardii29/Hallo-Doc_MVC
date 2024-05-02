@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "BiWeeklySheet";
+    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+}
+<body class="bg-light">
+
+    <div style="padding-bottom: 9%;" class="container mb-3">
+        <div class="flex-row d-flex py-3 mr-2 justify-content-end">
+
+            <a class="btn btn-outline-info out back" asp-action="Invoicing" asp-controller="Physician">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+
+        </div>
+
+        <div class="row px-3">
+            
+            <div class="bg-white px-3 py-3 shadow mt-2 mb-3 bg-white rounded notdiv">
+                <div class="table-responsive">
+                <table class="table table-hover" style="width:100%">
+                    <thead class="table-light">
+                        <tr style="padding:10px;">
+                            <th>Date</th>
+                            <th>On-call Hours</th>
+                            <th>Total Hours</th>
+                            <th>Weekend/Holiday</th>
+                            <th>Number of Housecalls</th>
+                            <th>Number of Phone Consults</th>
+                    </thead>
+                    <tbody>
+
+                        <tr class=" mt-2">
+                            <td scope="row">03/01/2024</td>
+                            <td scope="row">0</td>
+                            <td scope="row"><input type="text" class="form-control" id="totalHour"></td>
+                            <td scope="row" style="text-align:center">
+                                <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="weekend">
+                                </div>
+                            </td>
+                            <td scope="row"><input type="text" class="form-control" id="totalHour"></td>
+                            <td scope="row"><input type="text" class="form-control" id="totalHour"></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                </div>
+                <div class="flex-row d-flex py-3 justify-content-end">
+
+                    <button type="submit" class="btn btn-info text-white">Submit</button>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="flex-row d-flex justify-content-start">
+
+            <button type="button" class="btn btn-info text-white" onclick="toggleReceiptsTable()">Add Receipts</button>
+
+        </div>
+        <div id="receiptsTable" class="bg-white px-3 py-3 shadow mt-4 mb-3 bg-white rounded notdiv" style="display:none">
+          
+            <div class="table-responsive">
+                <table class="table table-hover" style="width:100%">
+                    <thead class="table-light">
+                        <tr style="padding:10px;">
+                            <th>Date</th>
+                            <th>Item</th>
+                            <th>Amount</th>
+                            <th>Bill</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+
+                        <tr class=" mt-2">
+                            <td scope="row">March 1, 2024</td>
+                            <td scope="row">Medicines</td>
+                            <td scope="row">10</td>
+                            <td scope="row">bil-hfgdtg25436879634.pdf</td>
+                            <td scope="row">
+                                <a class="btn btn-outline-info btn-sm">Edit</a>
+                                <a class="btn btn-outline-info btn-sm">Delete</a>
+                                <a class="btn btn-outline-info btn-sm">View</a>
+                            </td>
+
+                        </tr>
+                        <tr class=" mt-2">
+                            <td scope="row">March 1, 2024</td>
+                            <td scope="row"><input type="text" class="form-control" id="totalHour"></td>
+                            <td scope="row"><input type="text" class="form-control" id="totalHour"></td>
+                            <td scope="row">
+                                <form method="post" enctype="multipart/form-data" asp-action="UploadBill" asp-controller="Physician">
+                                   
+                                    <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                                        <button type="button" id="choosenfile" class="col btn text-start text-secondary" onclick="document.getElementById('files').click()">
+                                            Select File
+                                        </button>
+                                        <input id="files" type="file" class="d-none form-control doc_uploder" name="File">
+
+                                        <button type="submit" class="btn btn-info text-white py-2" value="Upload">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <span class="dNone"> Upload </span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                            <td scope="row"></td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="flex-row d-flex justify-content-end">
+
+            <button type="submit" class="btn btn-info text-white">Finalize</button>
+
+        </div>
+
+    </div>
+
+</body>
+<script>
+    function toggleReceiptsTable() {
+        var table = document.getElementById("receiptsTable");
+        if (table.style.display === "none") {
+            table.style.display = "block";
+        } else {
+            table.style.display = "none";
+        }
+    }
+</script>

@@ -86,7 +86,7 @@
                             <a class="nav-link dashboard @(path.EndsWith("PhysicianDashboard") || path.EndsWith("CreateRequest") || path.EndsWith("ViewUpload") || path.EndsWith("ViewNotes") || path.EndsWith("Order") || path.EndsWith("ViewCase") || path.EndsWith("Encounter") || path.EndsWith("ConcludeCare") ? "active" : "")" asp-controller="Physician" asp-action="PhysicianDashboard">Dashboard</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="nav-link">Invoicing</a>
+                            <a class="nav-link @(path.EndsWith("Invoicing") || path.EndsWith("BiWeeklySheet") ? "active" : "")" asp-controller="Physician" asp-action="Invoicing">Invoicing</a>
                         </li>
                         <li class="nav-item mx-2">
                             <a class="nav-link @(path.StartsWith("/Physician/Schedule") ? "active" : "")" asp-controller="Physician" asp-action="Schedule">My Schedule</a>

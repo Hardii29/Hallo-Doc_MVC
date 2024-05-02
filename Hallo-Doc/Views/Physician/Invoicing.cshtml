@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "Invoicing";
+    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+}
+<body class="bg-light">
+
+    <div style="padding-bottom: 9%;" class="container mb-3">
+        <div class="flex-row d-flex py-3 mr-2 justify-content-between">
+
+            <div class="d-flex">
+                <h4 style="font-weight:bold">TimeSheets</h4>
+            </div>
+
+            <a class="btn btn-outline-info out back" asp-action="PhysicianDashboard" asp-controller="Physician">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+
+        </div>
+
+        <div class="row px-3">
+            <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
+                <div class="d-flex flex-row mb-3 justify-content-between">
+                    <div class="form-floating">
+                        <select class="form-select" id="timeDropdown">
+                            <option selected>2024/03/01 - 2024/03/14</option>
+                            <option value="1">2024/03/15 - 2024/03/30</option>
+                        </select>
+                        <label for="timeDropdown">Search by TimeSheetPeriod</label>
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-info" asp-action="BiWeeklySheet" asp-controller="Physician">Finalize Timesheet</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                <table class="table table-hover" style="width:100%">
+                    <thead class="table-light">
+                        <tr style="padding:10px;">
+                            <th>Shift Date</th>
+                            <th>Shift</th>
+                            <th>NightShift Weekend</th>
+                            <th>Housecall</th>
+                            <th>Housecall Nights Weekend</th>
+                            <th>Phone Consults</th>
+                            <th>Phone Consults Nights Weekend</th>
+                            <th>Batch Testing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                        <tr class=" mt-2">
+                            <td scope="row">March 1, 2024</td>
+                            <td scope="row">1</td>
+                            <td scope="row">0</td>
+                            <td scope="row">1</td>
+                            <td scope="row">0</td>
+                            <td scope="row">1</td>
+                            <td scope="row">0</td>
+                            <td scope="row">1</td>
+                          
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="bg-white px-3 py-3 shadow mt-2 mb-3 bg-white rounded notdiv">
+                <div class="d-flex flex-row mb-3">
+                    <h5>TimeSheet Reimbursement</h5>
+                </div>
+                <div class="table-responsive">
+                <table class="table table-hover" style="width:100%">
+                    <thead class="table-light">
+                        <tr style="padding:10px;">
+                            <th>Date</th>
+                            <th>Item</th>
+                            <th>Amount</th>
+                            <th>Bill</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+
+                        <tr class=" mt-2">
+                            <td scope="row">March 1, 2024</td>
+                            <td scope="row">Medicines</td>
+                            <td scope="row">10</td>
+                            <td scope="row">bil-hfgdtg25436879634.pdf</td>
+                            <td scope="row">
+                                <a class="btn btn-outline-info btn-sm">View</a>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>

@@ -10,15 +10,19 @@
     <link href="css\patient_login.css" rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         .darkMode {
             background-color: black;
             color: white;
         }
+        .container{
+            background-color: white;
+        }
     </style>
 </head>
 <body>
-<div class="container" id="bg-image">
+<div class="container">
 
     <div class="row justify-content-center align-items-center h-100">
 
@@ -30,18 +34,16 @@
                     <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" />
                 </svg>
             </a>
-            <div class="logo"><img src="images/logo.png"></div>
+            <div class="logo" style="text-align:center"><img src="images/logo.png"></div>
 
             <div class="login-form">
-
-                <a type="submit" class="btn btn-info btn-block btn-lg" style="width: 100%; color: white; margin-bottom: 20px;" 
+                <a class="btn btn-info btn-lg btn-block text-white mb-3 w-100" 
                 asp-action="Create_request" asp-controller="PatientReq">submit a request</a>
-                    <a type="submit" class="btn btn-primary btn-block btn-lg" style="width: 100%; color: white; background-color: rgb(12, 12, 172);"
+                    <a class="btn btn-lg text-white mt-4 w-100 btn-block" style="background-color: rgb(12, 12, 172);"
                        asp-action="Login" asp-controller="Login">
                         Registered patient
                     </a>
-                    <a type="submit" class="btn btn-info btn-block btn-lg" style="width: 100%; color: white; margin-bottom: 20px;"
-                       asp-action="AdminLogin" asp-controller="AdminLogin">Admin</a>
+                  
             </div>
 
         </div>
