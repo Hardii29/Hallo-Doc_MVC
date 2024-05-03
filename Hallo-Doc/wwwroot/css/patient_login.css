@@ -78,7 +78,7 @@ input[type=email], input[type=password] {
     color: rgb(19, 183, 224);
 }
 .logo {
-    margin-bottom: 200px;
+    margin-bottom: 180px;
 }
 
 .btn:hover {
@@ -106,7 +106,6 @@ a {
 footer {
     bottom: 0;
     text-align: center;
-    margin: 2rem auto 0 auto;
 }
 
 @media screen and (max-width:900px) {

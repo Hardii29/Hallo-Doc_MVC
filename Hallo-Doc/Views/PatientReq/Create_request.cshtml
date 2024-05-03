@@ -11,27 +11,25 @@
 
     <div class="container">
 
-        <form class="form-inline my-2 my-lg-0">
             <a type="button" class="btn btn-outline-info back" asp-action="Index" asp-controller="Home">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
-            </a>
-        </form>
+            </a>     
 
         <div class="content" style="text-align: center;">
             <h1> I am a..</h1>
-            <div class="box" style=" background-color: rgb(195, 195, 235); border-color: rgba(0, 0, 255, 0.74);">
-                <h5><a asp-action="Create_patient_req" asp-controller="PatientReq" style="color: rgba(0, 0, 255, 0.74);">Patient</a></h5>
+            <div class="box mt-4" style=" background-color: rgb(229, 229, 252); border-color: rgba(14, 14, 252, 0.822);">
+                <h5><a asp-action="Create_patient_req" asp-controller="PatientReq" style="color: rgba(14, 14, 252, 0.822);">Patient</a></h5>
             </div>
-            <div class="box" style=" background-color: rgb(167, 212, 230); border-color: rgb(15, 152, 231);">
-                <h5><a asp-action="Create_family_req" asp-controller="PatientReq" style="color: rgb(15, 152, 231);">Family/Friend</a></h5>
+            <div class="box mt-4" style=" background-color: #ddfaff; border-color: #0dcaf0;">
+                <h5><a asp-action="Create_family_req" asp-controller="PatientReq" style="color: #0dcaf0;">Family/Friend</a></h5>
             </div>
-            <div class="box" style="background-color: rgb(176, 202, 176); border-color: green;">
-                <h5><a asp-action="Create_concierge_req" asp-controller="PatientReq" style="color: green;">concierge</a></h5>
+            <div class="box mt-4" style="background-color: #ccf7d6; border-color: #28a745;">
+                <h5><a asp-action="Create_concierge_req" asp-controller="PatientReq" style="color: #28a745;">concierge</a></h5>
             </div>
-            <div class="box" style=" background-color: pink; border-color: rgb(212, 69, 117);">
-                <h5><a asp-action="Create_business_req" asp-controller="PatientReq" style="color: rgb(212, 69, 117);">business partners</a></h5>
+            <div class="box mt-4" style=" background-color: rgb(245, 210, 248); border-color: rgb(201, 56, 214);">
+                <h5><a asp-action="Create_business_req" asp-controller="PatientReq" style="color: rgb(201, 56, 214);">business partners</a></h5>
             </div>
         </div>
     </div>

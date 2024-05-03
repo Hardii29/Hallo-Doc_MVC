@@ -8,14 +8,15 @@
 .content{
     text-align: center;
 }
-.box{
-    text-transform: capitalize;
+.box {
+    text-transform: uppercase;
     border: 1px solid;
     padding: 5px 10px 5px 10px;
     margin: 10px auto 10px auto;
     text-align: center;
-    height: 50px;
-    width: 200px;
+    height: 60px;
+    width: 300px;
+    border-radius: 10px;
 }
 .mode{
     margin-right: 20px;
@@ -37,6 +38,9 @@ footer {
     text-align: right;
     padding: 20px;
     margin-top: 60px;
+    bottom:0;
+    position:fixed;
+    width:100%;
 }
 @media screen and (max-width:400px){
     .container{
