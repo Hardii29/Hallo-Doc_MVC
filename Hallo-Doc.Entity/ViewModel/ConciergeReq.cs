@@ -13,7 +13,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public string c_mobile { get; set; }
         public string c_address { get; set; }
         public string c_street { get; set; }
-        public string c_city { get; set; }
+        [Required(ErrorMessage = "Select Any of one city")]
+        public required string c_city { get; set; }
         public string c_state { get; set; }
         [StringLength(6, MinimumLength = 6, ErrorMessage = "It must be of 6 digits")]
         [RegularExpression(@"([0-9]{6})", ErrorMessage = "It must be of 6 numerics")]

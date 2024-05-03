@@ -36,6 +36,7 @@ namespace Hallo_Doc.Controllers
       
         public IActionResult Create_patient_req()
         {
+            ViewBag.Region = _request.GetRegions();
             return View();
         }
         [HttpPost]
@@ -48,6 +49,7 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult Create_family_req()
         {
+            ViewBag.Region = _request.GetRegions();
             return View();
         }
         [HttpPost]
@@ -59,6 +61,7 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult Create_concierge_req()
         {
+            ViewBag.Region = _request.GetRegions();
             return View();
         }
         [HttpPost]
@@ -70,6 +73,7 @@ namespace Hallo_Doc.Controllers
         }
         public IActionResult Create_business_req()
         {
+            ViewBag.Region = _request.GetRegions();
             return View();
         }
         [HttpPost]

@@ -11,6 +11,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
     public interface IPatientReq
     {
         public bool checkEmail(string email);
+        List<Entity.Models.Region> GetRegions();
         void AddDetails(PatientReq patientReq);
         void FamilyDetails(FamilyReq familyReq);
         void ConciergeDetails(ConciergeReq conciergeReq);

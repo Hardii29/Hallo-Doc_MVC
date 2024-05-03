@@ -22,6 +22,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Email { get; set; }
         public string? Mobile { get; set; }
         public string? Street { get; set; }
+        [Required(ErrorMessage = "Select Any of one city")]
         public string? City { get; set; }
         public string? State { get; set; }
         [StringLength(6, MinimumLength = 6, ErrorMessage = "It must be of 6 digits")]
