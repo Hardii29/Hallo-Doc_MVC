@@ -1,0 +1,86 @@
+﻿@model Hallo_Doc.Entity.ViewModel.PhysicianPayrate;
+@{
+    ViewData["Title"] = "Payrate";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    th {
+        text-align: center;
+    }
+    td {
+        text-align:center;
+    }
+</style>
+<body class="bg-light">
+
+    <div style="padding-bottom: 9%;" class="container mb-3">
+        <div class="flex-row d-flex py-3 mr-2 justify-content-between">
+            <h4 style="font-weight:bold;">Payrate</h4>
+            <a class="btn btn-outline-info out back" asp-action="EditPhysician" asp-controller="Provider" asp-route-ProviderId="@Model.PhysicianId">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+
+        </div>
+        <div class="bg-white px-3 py-3 shadow mt-2 mb-3 bg-white rounded notdiv">
+            <div class="table-responsive">
+                <form method="post" asp-action="UpdatePayrate" asp-controller="Provider">
+                    <input type="hidden" name="PhysicianId" value="@Model.PhysicianId" />
+                <table class="table table-hover" style="width:100%">
+                    <thead class="table-light">
+                        <tr style="padding:10px;">
+                            <th>Category</th>
+                            <th>Payrate</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr class=" mt-2">
+                            <td scope="row">NightShift_Weekend</td>
+                            <td scope="row"><input type="text" class="form-control" name="NightShift_Weekend" value="@Model.NightShiftWeekend"></td>
+                                <td scope="row"><button type="submit" name="category" value="NightShift_Weekend" data-value="@Model.NightShiftWeekend" class="btn btn-info text-white">Edit</button></td>
+                        </tr>
+                        <tr class=" mt-2">
+                            <td scope="row">Shift</td>
+                            <td scope="row"><input type="text" class="form-control" name="Shift" value="@Model.Shift"></td>
+                            <td scope="row"><button type="submit" name="category" value="Shift" class="btn btn-info text-white">Edit</button></td>
+                        </tr>
+                        <tr class=" mt-2">
+                            <td scope="row">HouseCalls_Nights_Weekend</td>
+                            <td scope="row"><input type="text" class="form-control" name="HouseCalls_Nights_Weekend" value="@Model.HouseCallNightWeekend"></td>
+                            <td scope="row"><button type="submit" name="category" value="HouseCalls_Nights_Weekend" class="btn btn-info text-white">Edit</button></td>
+                        </tr>
+                        <tr class=" mt-2">
+                            <td scope="row">PhoneConsults</td>
+                            <td scope="row"><input type="text" class="form-control" name="PhoneConsults" value="@Model.PhoneConsults"></td>
+                            <td scope="row"><button type="submit" name="category" value="PhoneConsults" class="btn btn-info text-white">Edit</button></td>
+                        </tr>
+                        <tr class=" mt-2">
+                            <td scope="row">PhoneConsults_Nights_Weekend</td>
+                            <td scope="row"><input type="text" class="form-control" name="PhoneConsults_Nights_Weekend" value="@Model.PhoneConsultNightWeekend"></td>
+                            <td scope="row"><button type="submit" name="category" value="PhoneConsults_Nights_Weekend" class="btn btn-info text-white">Edit</button></td>
+                        </tr>
+                        <tr class=" mt-2">
+                            <td scope="row">BatchTesting</td>
+                            <td scope="row"><input type="text" class="form-control" name="BatchTesting" value="@Model.BatchTesting"></td>
+                            <td scope="row"><button type="submit" name="category" value="BatchTesting" class="btn btn-info text-white">Edit</button></td>
+                        </tr>
+                        <tr class=" mt-2">
+                            <td scope="row">HouseCalls</td>
+                            <td scope="row"><input type="text" class="form-control" name="HouseCalls" value="@Model.Housecall"></td>
+                            <td scope="row"><button type="submit" name="category" value="HouseCalls" class="btn btn-info text-white">Edit</button></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+

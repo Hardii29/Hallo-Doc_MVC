@@ -91,7 +91,7 @@
                             <a class="nav-link @(path.StartsWith("/Admin/AdminProfile") ? "active" : "")" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model.AdminId">My Profile</a>
                     </li>
                         <li class="nav-item mx-2 dropdown">
-                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderMenu") || path.EndsWith("Scheduling") || path.EndsWith("MDsOnCall") || path.EndsWith("RequestedShift") || path.EndsWith("CreateProvider") ? "active" : "")">Providers</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderMenu") || path.EndsWith("Scheduling") || path.EndsWith("MDsOnCall") || path.EndsWith("RequestedShift") || path.EndsWith("CreateProvider") || path.EndsWith("EditPhysician") || path.EndsWith("Payrate") ? "active" : "")">Providers</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="ProviderMenu">Provider</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="Scheduling">Scheduling</a>

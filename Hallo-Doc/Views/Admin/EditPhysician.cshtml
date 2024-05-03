@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="g-2 mt-4 first" style="text-align: right;">
-                            <button type="button" id=" " class="btn btn-info text-white">Enter Payrate</button>
+                            <a class="btn btn-info text-white" asp-action="Payrate" asp-controller="Provider" asp-route-PhysicianId="@Model.ProviderId">Enter Payrate</a>
                             <button type="button" id="edtBtn2" onclick="editMode2()" class="btn btn-info text-white">Edit</button>
                         <button type="submit" id="sbtBtn2" class="btn btn-success text-white" style="display: none;" onclick="saveRegion()">Save</button>
                     </div>

@@ -21,5 +21,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         void EditPrbusiness(Provider pr);
         void EditOnbording(Provider pr);
         void DeletePrAccount(int ProviderId);
+        PhysicianPayrate GetPayRate(int PhysicianId);
+        public void EditPayrate(int PhysicianId, string category, string NightShift_Weekend, string Shift, string HouseCalls_Nights_Weekend, string PhoneConsults, string PhoneConsults_Nights_Weekend, string BatchTesting, string HouseCalls);
+
     }
 }

@@ -72,5 +72,16 @@ namespace Hallo_Doc.Controllers
             _provider.DeletePrAccount(ProviderId);
             return RedirectToAction("ProviderMenu", "Admin");
         }
+        public IActionResult Payrate(int PhysicianId)
+        {
+            var model = _provider.GetPayRate(PhysicianId);
+            return View("~/Views/Admin/Payrate.cshtml", model);
+        }
+        [HttpPost]
+        public IActionResult UpdatePayrate(int PhysicianId, string category, string NightShift_Weekend, string Shift, string HouseCalls_Nights_Weekend, string PhoneConsults, string PhoneConsults_Nights_Weekend, string BatchTesting, string HouseCalls)
+        {
+            _provider.EditPayrate(PhysicianId, category, NightShift_Weekend, Shift, HouseCalls_Nights_Weekend, PhoneConsults, PhoneConsults_Nights_Weekend, BatchTesting, HouseCalls);
+            return RedirectToAction("Payrate", "Provider", new { PhysicianId = PhysicianId });
+        }
     }
 }

@@ -363,5 +363,67 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 //_context.SaveChanges();
             }
         }
+        public PhysicianPayrate GetPayRate(int PhysicianId)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.AdminId == 1);
+            var model = (from p in _context.PayRates
+                         where p.PhysicianId == PhysicianId
+                         select new PhysicianPayrate
+                         {
+                             PhysicianId = p.PhysicianId,
+                             NightShiftWeekend = p.NightShiftWeekend,
+                             Housecall = p.Housecall,
+                             HouseCallNightWeekend = p.HouseCallNightWeekend,
+                             Shift = p.Shift,
+                             PhoneConsultNightWeekend = p.PhoneConsultNightWeekend,
+                             PhoneConsults = p.PhoneConsults,
+                             BatchTesting = p.BatchTesting,
+                             AdminId = admin.AdminId,
+                             AdminName = $"{admin.FirstName} {admin.LastName}",
+                         }).FirstOrDefault();
+
+            return model;
+                       
+        }
+        public void EditPayrate(int PhysicianId, string category, string NightShift_Weekend, string Shift, string HouseCalls_Nights_Weekend, string PhoneConsults, string PhoneConsults_Nights_Weekend, string BatchTesting, string HouseCalls)
+        {
+            var pr = _context.PayRates.FirstOrDefault(p => p.PhysicianId == PhysicianId);
+            if (category == "NightShift_Weekend")
+            {
+                pr.NightShiftWeekend = NightShift_Weekend;
+                _context.PayRates.Update(pr);
+            }
+            else if (category == "Shift")
+            {
+                pr.Shift = Shift;
+                _context.PayRates.Update(pr);
+            }
+            else if (category == "HouseCalls_Nights_Weekend")
+            {
+                pr.HouseCallNightWeekend = HouseCalls_Nights_Weekend;
+                _context.PayRates.Update(pr);
+            }
+            else if (category == "PhoneConsults")
+            {
+                pr.PhoneConsults = PhoneConsults;
+                _context.PayRates.Update(pr);
+            }
+            else if (category == "PhoneConsults_Nights_Weekend")
+            {
+                pr.PhoneConsultNightWeekend = PhoneConsults_Nights_Weekend;
+                _context.PayRates.Update(pr);
+            }
+            else if (category == "BatchTesting")
+            {
+                pr.BatchTesting = BatchTesting;
+                _context.PayRates.Update(pr);
+            }
+            else if (category == "HouseCalls")
+            {
+                pr.Housecall = HouseCalls;
+                _context.PayRates.Update(pr);
+            }
+            _context.SaveChanges();
+        }
     }
 }

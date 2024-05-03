@@ -81,4 +81,18 @@ namespace Hallo_Doc.Entity.ViewModel
         public List<ProviderLocation> Locations { get; set; }
 
     }
+    public class PhysicianPayrate
+    {
+        public int PhysicianId { get; set; }
+        public string? NightShiftWeekend { get; set; }
+        public string? Shift { get; set; }
+        public string? HouseCallNightWeekend { get; set; }
+        public string? PhoneConsults { get; set; }
+        public string? PhoneConsultNightWeekend { get; set; }
+        public string? BatchTesting { get; set; }
+        public string? Housecall { get; set; }
+        public string? AdminName { get; set; }
+        public int AdminId { get; set; }
+
+    }
 }
