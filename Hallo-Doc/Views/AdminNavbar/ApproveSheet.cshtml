@@ -1,14 +1,14 @@
 ﻿@model Hallo_Doc.Entity.ViewModel.TimesheetData;
 @{
-    ViewData["Title"] = "BiWeeklySheet";
-    Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
+    ViewData["Title"] = "Approve BiWeeklySheet";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <body class="bg-light">
 
     <div style="padding-bottom: 9%;" class="container mb-3">
         <div class="flex-row d-flex py-3 mr-2 justify-content-end">
 
-            <a class="btn btn-outline-info out back" asp-action="Invoicing" asp-controller="Physician">
+            <a class="btn btn-outline-info out back" asp-action="Invoice" asp-controller="Admin">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
@@ -21,35 +21,35 @@
             <input type="hidden" asp-for="endDate" value="@Model.endDate" id="endDate" />
             <div class="bg-white px-3 py-3 shadow mt-2 mb-3 bg-white rounded notdiv">
                 <div class="table-responsive">
-                <table class="table table-hover" style="width:100%">
-                    <thead class="table-light">
-                        <tr style="padding:10px;">
-                            <th>Date</th>
-                            <th>On-call Hours</th>
-                            <th>Total Hours</th>
-                            <th>Weekend/Holiday</th>
-                            <th>Number of Housecalls</th>
-                            <th>Number of Phone Consults</th>
-                    </thead>
-                    <tbody>
-                         @for (var i = Model.startDate; i <= Model.endDate; i = i.AddDays(1))
-                {
+                    <table class="table table-hover" style="width:100%">
+                        <thead class="table-light">
+                            <tr style="padding:10px;">
+                                <th>Date</th>
+                                <th>On-call Hours</th>
+                                <th>Total Hours</th>
+                                <th>Weekend/Holiday</th>
+                                <th>Number of Housecalls</th>
+                                <th>Number of Phone Consults</th>
+                        </thead>
+                        <tbody>
+                            @for (var i = Model.startDate; i <= Model.endDate; i = i.AddDays(1))
+                            {
                                 var item = (Model.TimeSheetInfo != null) ? Model.TimeSheetInfo.FirstOrDefault(id => id.Date == i) : null;
-                            <tr class=" mt-2">
+                                <tr class=" mt-2">
                                     <td scope="row">@i.ToString("dd/MM/yyyy")</td>
-                                <td scope="row">0</td>
+                                    <td scope="row">0</td>
                                     <td scope="row"><input type="text" class="form-control" name="TotalHours" value="@(item != null && item.TotalHours !=null ? item.TotalHours : "")"></td>
-                                <td scope="row" style="text-align:center">
-                                    <div class="form-check">
+                                    <td scope="row" style="text-align:center">
+                                        <div class="form-check">
                                             <input type="checkbox" class="form-check-input" name="IsWeekend" @(item != null && item.Holiday == true ? "checked" : "")>
-                                    </div>
-                                </td>
+                                        </div>
+                                    </td>
                                     <td scope="row"><input type="text" class="form-control" name="NoOfHousecall" value="@(item != null && item.NoOfHouseCall!=null ? item.NoOfHouseCall : "")"></td>
                                     <td scope="row"><input type="text" class="form-control" name="NoOfPhoneConsult" value="@(item != null && item.NoOfPhoneCall!=null ? item.NoOfPhoneCall : "")"></td>
-                            </tr>   
+                                </tr>
                             }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="flex-row d-flex py-3 justify-content-end">
 
@@ -65,7 +65,7 @@
 
         </div>
         <div id="receiptsTable" class="bg-white px-3 py-3 shadow mt-4 mb-3 bg-white rounded notdiv" style="display:none">
-          
+
             <div class="table-responsive">
                 <table class="table table-hover" style="width:100%">
                     <thead class="table-light">

@@ -118,6 +118,9 @@ public partial class Physician
     public virtual ICollection<EncounterForm> EncounterForms { get; set; } = new List<EncounterForm>();
 
     [InverseProperty("Physician")]
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+
+    [InverseProperty("Physician")]
     public virtual ICollection<PayRate> PayRates { get; set; } = new List<PayRate>();
 
     [InverseProperty("Physician")]

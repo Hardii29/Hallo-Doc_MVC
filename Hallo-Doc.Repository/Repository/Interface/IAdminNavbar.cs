@@ -54,6 +54,7 @@ namespace Hallo_Doc.Repository.Repository.Interface
         SMSLog SMSLog(SMSLog sl);
         AdminProfile CreateAdmin();
         void AddAdmin(AdminProfile admin);
+        ShowTimeSheet GetBiWeeklySheet(DateOnly startDate, DateOnly endDate, int PhysicianId);
 
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@model Hallo_Doc.Entity.ViewModel.ShowTimeSheet;
 @{
     ViewData["Title"] = "Invoicing";
     Layout = "~/Views/Shared/_PhysicianLayout.cshtml";
@@ -24,17 +24,24 @@
             <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
                 <div class="d-flex flex-row mb-3 justify-content-between">
                     <div class="form-floating">
-                        <select class="form-select" id="timeDropdown">
-                            <option selected>2024/03/01 - 2024/03/14</option>
-                            <option value="1">2024/03/15 - 2024/03/30</option>
+                        <select class="form-select" id="timeDropdown" onchange="FindTimeSheet()">
+                            @{
+                                string date = @DateTime.Now.ToString("MM/yyyy");
+                            }
+                            <option selected>Select TimePeriod</option>
+                            <option value="01-@date - 14-@date"> 01-@date - 14-@date</option>
+                            <option value="15-@date - @DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)-@date"> 15-@date - @DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)-@date</option>
                         </select>
                         <label for="timeDropdown">Search by TimeSheetPeriod</label>
                     </div>
                     <div>
-                        <a class="btn btn-outline-info" asp-action="BiWeeklySheet" asp-controller="Physician">Finalize Timesheet</a>
+                        <a class="btn btn-outline-info" onclick="BiWeeklysheet()">Finalize Timesheet</a>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive" id="invoicing">
+                @if (Model.Weeklysheet != null && Model.Weeklysheet.Count > 0)
+                            {
+                    
                 <table class="table table-hover" style="width:100%">
                     <thead class="table-light">
                         <tr style="padding:10px;">
@@ -48,29 +55,39 @@
                             <th>Batch Testing</th>
                         </tr>
                     </thead>
-                    <tbody>
-                       
-                        <tr class=" mt-2">
-                            <td scope="row">March 1, 2024</td>
-                            <td scope="row">1</td>
-                            <td scope="row">0</td>
-                            <td scope="row">1</td>
-                            <td scope="row">0</td>
-                            <td scope="row">1</td>
-                            <td scope="row">0</td>
-                            <td scope="row">1</td>
-                          
-                        </tr>
-                        
+                        <tbody>
+                            
+                                @foreach (var item in Model.Weeklysheet)
+                                {
+                                    <tr class=" mt-2">
+                                        <td scope="row">@item.Date</td>
+                                        <td scope="row">@item.TotalHours</td>
+                                        <td scope="row">0</td>
+                                        <td scope="row">@item.NoofHousecall</td>
+                                        <td scope="row">0</td>
+                                        <td scope="row">@item.NoofPhoneConsult</td>
+                                        <td scope="row">0</td>
+                                        <td scope="row">1</td>
+                                    </tr>
+                                }
+                            
                     </tbody>
                 </table>
+                
+                }
+                else
+                {
+                    <h5>No Records Found</h5>
+                }
                 </div>
             </div>
             <div class="bg-white px-3 py-3 shadow mt-2 mb-3 bg-white rounded notdiv">
                 <div class="d-flex flex-row mb-3">
                     <h5>TimeSheet Reimbursement</h5>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive" id="reciepts">
+                     @if (Model.Weeklysheet != null && Model.Weeklysheet.Count > 0)
+                            {
                 <table class="table table-hover" style="width:100%">
                     <thead class="table-light">
                         <tr style="padding:10px;">
@@ -81,23 +98,79 @@
                             <th>Action</th>
                     </thead>
                     <tbody>
+                                @foreach (var item in Model.Weeklysheet)
+                                {
+                                    if (item.Item != null || item.Amount != null)
+                                    {
+                                        <tr class=" mt-2">
+                                            <td scope="row">@item.Date</td>
+                                            <td scope="row">@item.Item</td>
+                                            <td scope="row">@item.Amount</td>
+                                            <td scope="row">bil-hfgdtg25436879634.pdf</td>
+                                            <td scope="row">
+                                                <a class="btn btn-outline-info btn-sm">View</a>
+                                            </td>
 
-                        <tr class=" mt-2">
-                            <td scope="row">March 1, 2024</td>
-                            <td scope="row">Medicines</td>
-                            <td scope="row">10</td>
-                            <td scope="row">bil-hfgdtg25436879634.pdf</td>
-                            <td scope="row">
-                                <a class="btn btn-outline-info btn-sm">View</a>
-                            </td>
+                                        </tr>
+                                    }
 
-                        </tr>
-
+                                }
                     </tbody>
                 </table>
+                    }
+                    else
+                    {
+                        <h5>No Records Found</h5>
+                    }
                 </div>
             </div>
         </div>
     </div>
 
 </body>
+<script>
+    function BiWeeklysheet() {
+        var dateRange = $("#timeDropdown").val();
+        let dates = [];
+        dates = dateRange.split(" - ");
+        var startDate = dates[0];
+        var endDate = dates[1];
+        console.log(startDate);
+        console.log(endDate);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("BiWeeklySheet", "Physician")',
+            data: { startDate: startDate, endDate: endDate },
+            success: function (response) {
+                console.log(response);
+                $('body').html(response);
+            },
+            error: function (error) {
+                console.log('Error sending data', error);
+            }
+        });
+    }
+
+    function FindTimeSheet() {
+        var dateRange = $("#timeDropdown").val();
+        let dates = [];
+        dates = dateRange.split(" - ");
+        var startDate = dates[0];
+        var endDate = dates[1];
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Invoicing", "Physician")',
+            data: { startDate: startDate, endDate: endDate },
+            success: function (response) {
+                console.log(response);
+                var content = $(response).find('#invoicing').html();
+                $('#invoicing').html(content);
+                var reciept = $(response).find('#reciepts').html();
+                $('#reciepts').html(reciept);
+            },
+            error: function (error) {
+                console.log('Error sending data', error);
+            }
+        });
+    }
+</script>

@@ -7,10 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration.Provider;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Org.BouncyCastle.Utilities.Test.FixedSecureRandom;
 
 namespace Hallo_Doc.Repository.Repository.Implementation
 {
@@ -322,5 +324,226 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                 return false;
             }
         }
+        public TimesheetData TimeSheetData(DateOnly startDate, DateOnly endDate)
+        {
+            var result = _context.TimeSheets.Where(r => r.Date >= startDate && r.Date <= endDate).
+                ToList();
+            TimesheetData t = new();
+            t.TimeSheetInfo = result;
+            t.endDate = endDate;
+            t.startDate = startDate;
+            return t;
+        }
+        //public bool TimeSheetSave(TimesheetData model)
+        //{
+        //    var count = 0;
+        //    Invoice data = new Invoice();
+        //    data.PhysicianId = 9;
+        //    data.StartDate = model.startDate;
+        //    data.EndDate = model.endDate;
+        //    data.IsFinalize = false;
+        //    data.CreatedDate = DateTime.Now;
+        //    _context.Invoices.Add(data);
+        //    _context.SaveChanges();
+        //    for (var i = model.startDate; i <= model.endDate; i = i.AddDays(1))
+        //    {
+        //        TimeSheet detail = new TimeSheet();
+        //        detail.Date = default;
+        //        if (model.TotalHours[count] != null)
+        //        {
+        //            detail.Date = i;
+        //            detail.TotalHours = Convert.ToInt32(model.TotalHours[count]);
+        //        }
+        //        if (model.IsWeekend[count] != false)
+        //        {
+        //            detail.Date = i;
+        //            detail.Holiday = model.IsWeekend[count];
+        //        }
+        //        if (model.NoofPhoneConsult[count] != null)
+        //        {
+        //            detail.Date = i;
+        //            detail.NoOfPhoneCall = Convert.ToInt32(model.NoofPhoneConsult[count]);
+        //        }
+        //        if (model.NoofHousecall[count] != null)
+        //        {
+        //            detail.Date = i;
+        //            detail.NoOfHouseCall = Convert.ToInt32(model.NoofHousecall[count]);
+        //        }
+        //        if (detail.Date != default)
+        //        {
+        //            var isExist = _context.TimeSheets.Any(x => x.Date == detail.Date);
+        //            if (isExist)
+        //            {
+        //                detail.ModifiedDate = DateTime.Now;
+        //                _context.TimeSheets.Update(detail);
+        //                _context.SaveChanges();
+        //            }
+        //            else
+        //            {
+        //                detail.CreatedDate = DateTime.Now;
+        //                detail.InvoiceId = data.InvoiceId;
+        //                _context.TimeSheets.Add(detail);
+        //                _context.SaveChanges();
+        //            }
+        //        }
+        //        count++;
+        //    }
+        //    return true;
+        //}
+        public bool TimeSheetSave(TimesheetData model)
+        {
+            var count = 0;
+            try
+            {
+                var invoiceId = 0;
+                var invoice = _context.Invoices
+                .FirstOrDefault(r => r.StartDate == model.startDate && r.EndDate == model.endDate);
+                if (invoice == null)
+                {
+                    Invoice data = new Invoice();
+                    data.PhysicianId = 9;
+                    data.StartDate = model.startDate;
+                    data.EndDate = model.endDate;
+                    data.IsFinalize = false;
+                    data.CreatedDate = DateTime.Now;
+                    _context.Invoices.Add(data);
+                    _context.SaveChanges();
+                    invoiceId = data.InvoiceId;
+                }
+                else
+                {
+                    invoiceId = invoice.InvoiceId;
+                }
+                
+                for (var i = model.startDate; i <= model.endDate; i = i.AddDays(1))
+                {
+                    var detail = _context.TimeSheets.FirstOrDefault(x => x.Date == i && x.InvoiceId == invoiceId);
+                    if (detail != null)
+                    {
+                        detail.Date = default;
+                        if (model.TotalHours[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.TotalHours = Convert.ToInt32(model.TotalHours[count]);
+                        }
+                        if (model.IsWeekend[count] != false)
+                        {
+                            detail.Date = i;
+                            detail.Holiday = model.IsWeekend[count];
+                        }
+                        if (model.NoofPhoneConsult[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.NoOfPhoneCall = Convert.ToInt32(model.NoofPhoneConsult[count]);
+                        }
+                        if (model.NoofHousecall[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.NoOfHouseCall = Convert.ToInt32(model.NoofHousecall[count]);
+                        }
+                        if (model.Items[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.Item = model.Items[count];
+                        }
+                        if (model.Amount[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.Amount = model.Amount[count];
+                        }
+                        if (detail.Date != default)
+                        {
+                            detail.InvoiceId = invoiceId;
+                            detail.ModifiedDate = DateTime.Now;
+                            _context.TimeSheets.Update(detail);
+                            _context.SaveChanges();
+                        }
+
+                    }
+                    else
+                    {
+                        detail = new TimeSheet();
+                        detail.Date = default;
+                        if (model.TotalHours[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.TotalHours = Convert.ToInt32(model.TotalHours[count]);
+                        }
+                        if (model.IsWeekend[count] != false)
+                        {
+                            detail.Date = i;
+                            detail.Holiday = model.IsWeekend[count];
+                        }
+                        if (model.NoofPhoneConsult[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.NoOfPhoneCall = Convert.ToInt32(model.NoofPhoneConsult[count]);
+                        }
+                        if (model.NoofHousecall[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.NoOfHouseCall = Convert.ToInt32(model.NoofHousecall[count]);
+                        }
+                        if (model.Items[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.Item = model.Items[count];
+                        }
+                        if (model.Amount[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.Amount = model.Amount[count];
+                        }
+                        if (detail.Date != default)
+                        {
+                            detail.InvoiceId = invoiceId;
+                            detail.CreatedDate = DateTime.Now;
+                            _context.TimeSheets.Add(detail);
+                            _context.SaveChanges();
+                        }
+
+                    }
+                    
+                    count++;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+
+            }
+
+        }
+        public ShowTimeSheet GetWeeklySheet(DateOnly startDate, DateOnly endDate)
+        {
+            var exist = _context.Invoices.FirstOrDefault(i => i.StartDate == startDate && i.EndDate == endDate);
+            if (exist != null)
+            {
+                var data = (from t in _context.TimeSheets
+                            where t.InvoiceId == exist.InvoiceId
+                            select new ShowTimeSheet
+                            {
+                                Date = t.Date,
+                                OnCallHours = t.NoOfHouseCall,
+                                TotalHours = t.TotalHours,
+                                NoofHousecall = t.NoOfHouseCall,
+                                NoofPhoneConsult = t.NoOfPhoneCall,
+                                IsWeekend = t.Holiday,
+                                Item = t.Item,
+                                Amount = t.Amount,
+                                Bill = t.Bill,
+                            }).ToList();
+
+                var model = new ShowTimeSheet()
+                {
+                    Weeklysheet = data
+                };
+                return model;
+            }
+            
+            return null;
+        }
+
     }
 }

@@ -10,6 +10,7 @@ using iText.Layout.Properties;
 using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
 using Hallo_Doc.Repository.Repository.Implementation;
+using Hallo_Doc.Entity.Models;
 
 namespace Hallo_Doc.Controllers
 {
@@ -19,14 +20,16 @@ namespace Hallo_Doc.Controllers
         private readonly IAdminNavbar _adminNav;
         private readonly INotyfService _notyf;
         private readonly IAdminDashboard _adminDashboard;
+        private readonly IPhysician _physician;
         private readonly ILogger<AdminNavbarController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminNavbarController(ILogger<AdminNavbarController> logger, IAdminNavbar adminNav, INotyfService notyf, IAdminDashboard adminDashboard, IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
+        public AdminNavbarController(ILogger<AdminNavbarController> logger, IAdminNavbar adminNav, INotyfService notyf, IAdminDashboard adminDashboard, IPhysician physician, IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
         {
             _logger = logger;
             _adminNav = adminNav;
             _notyf = notyf;
             _adminDashboard = adminDashboard;
+            _physician = physician;
             _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
@@ -440,6 +443,29 @@ namespace Hallo_Doc.Controllers
                     StatusCode = 500
                 };
             }
+        }
+        public IActionResult Invoice(string startDate, string endDate, int PhysicianId)
+        {
+            ViewBag.Physician = _adminNav.AllPhysician();
+
+            ShowTimeSheet model;
+            if (startDate != null && endDate != null)
+            {
+                DateOnly sd = DateOnly.ParseExact(startDate, "dd/MM/yyyy");
+                DateOnly ed = DateOnly.ParseExact(endDate, "dd/MM/yyyy");
+                model = _adminNav.GetBiWeeklySheet(sd, ed, PhysicianId);
+
+                if (model == null)
+                {
+                    model = new ShowTimeSheet { Weeklysheet = new List<ShowTimeSheet>() };
+                }
+            }
+            else
+            {
+                model = new ShowTimeSheet { Weeklysheet = new List<ShowTimeSheet>() };
+            }
+
+            return View(model);
         }
     }
 }

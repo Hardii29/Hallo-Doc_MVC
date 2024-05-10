@@ -22,5 +22,8 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<Schedule> ShiftList(int PhysicianId);
         bool RequestAdmin(int PhysicianId, string Message);
         bool ViewNotes(string? PhysicianNotes, int RequestId);
+        TimesheetData TimeSheetData(DateOnly startDate, DateOnly endDate);
+        bool TimeSheetSave(TimesheetData model);
+        ShowTimeSheet GetWeeklySheet(DateOnly startDate, DateOnly endDate);
     }
 }

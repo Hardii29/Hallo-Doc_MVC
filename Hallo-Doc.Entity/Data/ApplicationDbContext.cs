@@ -44,6 +44,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<HealthProffessional> HealthProffessionals { get; set; }
 
+    public virtual DbSet<Invoice> Invoices { get; set; }
+
     public virtual DbSet<Menu> Menus { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -89,6 +91,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<ShiftDetailRegion> ShiftDetailRegions { get; set; }
 
     public virtual DbSet<Smslog> Smslogs { get; set; }
+
+    public virtual DbSet<TimeSheet> TimeSheets { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -196,6 +200,15 @@ public partial class ApplicationDbContext : DbContext
             entity.HasKey(e => e.VendorId).HasName("HealthProffessionals_pkey");
 
             entity.HasOne(d => d.ProfessionNavigation).WithMany(p => p.HealthProffessionals).HasConstraintName("HealthProffessionals_Profession_fkey");
+        });
+
+        modelBuilder.Entity<Invoice>(entity =>
+        {
+            entity.HasKey(e => e.InvoiceId).HasName("Invoice_pkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.Invoices)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Invoice_PhysicianId_fkey");
         });
 
         modelBuilder.Entity<Menu>(entity =>
@@ -417,6 +430,15 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<Smslog>(entity =>
         {
             entity.HasKey(e => e.SmslogId).HasName("SMSLog_pkey");
+        });
+
+        modelBuilder.Entity<TimeSheet>(entity =>
+        {
+            entity.HasKey(e => e.TimesheetId).HasName("TimeSheet_pkey");
+
+            entity.HasOne(d => d.Invoice).WithMany(p => p.TimeSheets)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("TimeSheet_InvoiceId_fkey");
         });
 
         modelBuilder.Entity<User>(entity =>

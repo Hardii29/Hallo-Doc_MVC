@@ -9,6 +9,8 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Globalization;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Hallo_Doc.Controllers
 {
@@ -385,13 +387,44 @@ namespace Hallo_Doc.Controllers
             }
             return RedirectToAction("ViewNotes", new { RequestId = RequestId });
         }
-        public IActionResult Invoicing()
+        public IActionResult Invoicing(string startDate, string endDate)
         {
-            return View();
+            ShowTimeSheet model = null;
+            if (startDate != null && endDate != null)
+            {
+                DateOnly sd = DateOnly.ParseExact(startDate, "dd/MM/yyyy");
+                DateOnly ed = DateOnly.ParseExact(endDate, "dd/MM/yyyy");
+                model = _physician.GetWeeklySheet(sd, ed);
+
+                if (model == null)
+                {
+                    model = new ShowTimeSheet { Weeklysheet = new List<ShowTimeSheet>() };
+                }
+            }
+            else
+            {
+                model = new ShowTimeSheet { Weeklysheet = new List<ShowTimeSheet>() };
+            }
+
+            return View(model);
         }
-        public IActionResult BiWeeklySheet()
-        { 
-            return View();
+
+        public IActionResult BiWeeklySheet(string startDate, string endDate)
+        {
+            DateOnly sd = DateOnly.ParseExact(startDate, "dd/MM/yyyy");
+            DateOnly ed = DateOnly.ParseExact(endDate, "dd/MM/yyyy");
+            var result = _physician.TimeSheetData(sd, ed);
+            return View(result);
         }
+        [HttpPost]
+        public IActionResult TimeSheetPost(TimesheetData sendInfo)
+        {
+            var res = _physician.TimeSheetSave(sendInfo);
+            var sd = sendInfo.startDate.ToString();
+            var ed = sendInfo.endDate.ToString();
+            return RedirectToAction("BiWeeklySheet", new { sd, ed });
+
+        }
+     
     }
 }

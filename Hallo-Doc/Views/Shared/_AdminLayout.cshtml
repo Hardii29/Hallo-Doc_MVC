@@ -1,5 +1,18 @@
-﻿@{
+﻿@using System.IdentityModel.Tokens.Jwt;
+@{
     string path = Context.Request.Path;
+    string jwtToken = Context.Request.Cookies["jwt"];
+    string adminName = "";
+    if (!string.IsNullOrEmpty(jwtToken))
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var token = handler.ReadToken(jwtToken) as JwtSecurityToken;
+
+        if (token != null)
+        {
+            adminName = token.Claims.FirstOrDefault(claim => claim.Type == "Username")?.Value ?? "";
+        }
+    }
 }
 <!DOCTYPE html>
 <html lang="en" class="w-100">
@@ -61,7 +74,7 @@
 
                 <li class="nav-item navbar-right d-flex flex-row ml-auto mt-5 h-25">
 
-                    <span class="dblock mt-2">Welcome <span class="fw-bold">@Model.AdminName</span></span>
+                        <span class="dblock mt-2">Welcome <span class="fw-bold">Admin @adminName</span></span>
 
                         <a class="btn btn-outline-info mx-2 h-25 dblock" asp-controller="AdminLogin" asp-action="Logout">Logout</a>
 
@@ -88,14 +101,14 @@
                             <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderLocation") ? "active" : "")" asp-controller="AdminNavbar" asp-action="ProviderLocation">Provider Location</a>
                     </li>
                     <li class="nav-item mx-2">
-                            <a class="nav-link @(path.StartsWith("/Admin/AdminProfile") ? "active" : "")" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="@Model.AdminId">My Profile</a>
+                            <a class="nav-link @(path.StartsWith("/Admin/AdminProfile") ? "active" : "")" asp-controller="Admin" asp-action="AdminProfile" asp-route-adminId="1">My Profile</a>
                     </li>
                         <li class="nav-item mx-2 dropdown">
-                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderMenu") || path.EndsWith("Scheduling") || path.EndsWith("MDsOnCall") || path.EndsWith("RequestedShift") || path.EndsWith("CreateProvider") || path.EndsWith("EditPhysician") || path.EndsWith("Payrate") ? "active" : "")">Providers</a>
+                            <a class="nav-link @(path.StartsWith("/AdminNavbar/ProviderMenu") || path.EndsWith("Scheduling") || path.EndsWith("MDsOnCall") || path.EndsWith("RequestedShift") || path.EndsWith("CreateProvider") || path.EndsWith("EditPhysician") || path.EndsWith("Payrate") || path.EndsWith("Invoice") ? "active" : "")">Providers</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="ProviderMenu">Provider</a>
                                 <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="Scheduling">Scheduling</a>
-                                <a class="dropdown-item" href="#">Invoicing</a>
+                                <a class="dropdown-item" asp-controller="AdminNavbar" asp-action="Invoice">Invoicing</a>
                             </div>
                         </li>
                     <li class="nav-item mx-2">

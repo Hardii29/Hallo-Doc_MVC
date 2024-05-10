@@ -1056,6 +1056,28 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             }
             _context.SaveChanges();
         }
+        public ShowTimeSheet GetBiWeeklySheet(DateOnly startDate, DateOnly endDate, int PhysicianId)
+        {
+            var exist = _context.Invoices.FirstOrDefault(i => i.StartDate == startDate && i.EndDate == endDate && i.PhysicianId == PhysicianId);
+            var provider = _context.Physicians.FirstOrDefault(p => p.PhysicianId == PhysicianId);
+            if (exist != null)
+            {
+                var data = _context.TimeSheets.Where(t=> t.InvoiceId == exist.InvoiceId).ToList();
+             
 
+                var model = new ShowTimeSheet()
+                {
+                    TimeSheetDetail = data,
+                    IsFinalize = exist.IsFinalize,
+                    IsApproved = exist.IsApproved,
+                    PhysicianName = $"{provider.FirstName} {provider.LastName}",
+                    startDate = startDate,
+                    endDate = endDate,
+                };
+                return model;
+            }
+
+            return null;
+        }
     }
 }

@@ -1,0 +1,208 @@
+﻿@model Hallo_Doc.Entity.ViewModel.ShowTimeSheet;
+@{
+    ViewData["Title"] = "Invoicing";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<body class="bg-light">
+
+    <div style="padding-bottom: 9%;" class="container mb-3">
+        <div class="flex-row d-flex py-3 mr-2 justify-content-between">
+
+            <div class="d-flex">
+                <h4 style="font-weight:bold">TimeSheets</h4>
+            </div>
+
+            <a class="btn btn-outline-info out back" asp-action="Admin_dashboard" asp-controller="Admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg> Back
+            </a>
+
+        </div>
+
+        <div class="row px-3">
+            <div class="bg-white px-3 py-3 mt-3 shadow mb-3 bg-white rounded notdiv">
+                <div class="row g-2 mb-3">
+                    <div class="form-floating col-lg-4 col-md-6 col-sm-12">
+                        <select class="form-select" id="selectProvider" asp-items="@(new SelectList(ViewBag.Physician,"PhysicianId","FirstName"))">
+
+                            <option selected>Select Physician</option>
+                        </select>
+                        <label for="selectProvider">Search by Physician</label>
+                    </div>
+                    <div class="form-floating col-lg-4 col-md-6 col-sm-12">
+                        <select class="form-select" id="timeDropdown" onchange="FindTimeSheet()">
+                            @{
+                                string date = @DateTime.Now.ToString("MM/yyyy");
+                            }
+                            <option selected>Select TimePeriod</option>
+                            <option value="01-@date - 14-@date"> 01-@date - 14-@date</option>
+                            <option value="15-@date - @DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)-@date"> 15-@date - @DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)-@date</option>
+                        </select>
+                        <label for="timeDropdown">Search by TimeSheetPeriod</label>
+                    </div>
+                    
+                </div>
+                
+                <div class="table-responsive" id="invoicing">
+                    @if (Model.TimeSheetDetail == null)
+                    {
+                        <h5>No Records Found</h5>
+                    }
+                    else
+                    {
+                        @if (Model.IsFinalize == false)
+                        {
+                            <h5>@Model.PhysicianName has not finalized the timesheet in specific time period.</h5>
+                        }
+                        @if (Model.IsFinalize == true && Model.IsApproved == null)
+                        {
+                            <div class="d-flex flex-row mb-3 mt-5">
+                                <h5>Pending Bi-Weekly timesheet</h5>
+                            </div>
+                            <table class="table table-hover" style="width:100%">
+                                <thead class="table-light">
+                                    <tr style="padding:10px;">
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                </thead>
+                                <tbody>
+
+                                    <tr class=" mt-2">
+                                        <td scope="row">@Model.startDate</td>
+                                        <td scope="row">@Model.endDate</td>
+                                        <td scope="row">Pending</td>
+                                        <td scope="row">
+                                            <button type="button" class="btn btn-outline-info btn-sm" onclick="ApproveBiWeeklysheet()">Approve</button>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                        
+                        @if (Model.IsFinalize == true && Model.IsApproved == true)
+                        {
+
+                            <table class="table table-hover" style="width:100%">
+                                <thead class="table-light">
+                                    <tr style="padding:10px;">
+                                        <th>Shift Date</th>
+                                        <th>Shift</th>
+                                        <th>NightShift Weekend</th>
+                                        <th>Housecall</th>
+                                        <th>Housecall Nights Weekend</th>
+                                        <th>Phone Consults</th>
+                                        <th>Phone Consults Nights Weekend</th>
+                                        <th>Batch Testing</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.TimeSheetDetail)
+                                    {
+                                        <tr class=" mt-2">
+                                            <td scope="row">@item.Date</td>
+                                            <td scope="row">@item.TotalHours</td>
+                                            <td scope="row">0</td>
+                                            <td scope="row">@item.NoOfHouseCall</td>
+                                            <td scope="row">0</td>
+                                            <td scope="row">@item.NoOfPhoneCall</td>
+                                            <td scope="row">0</td>
+                                            <td scope="row">1</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                            <div class="d-flex flex-row mb-3 mt-5">
+                                <h5>TimeSheet Reimbursement</h5>
+                            </div>
+                            <table class="table table-hover" style="width:100%">
+                                <thead class="table-light">
+                                    <tr style="padding:10px;">
+                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Amount</th>
+                                        <th>Bill</th>
+                                        <th>Action</th>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.TimeSheetDetail)
+                                    {
+                                        if (item.Item != null || item.Amount != null)
+                                        {
+                                            <tr class=" mt-2">
+                                                <td scope="row">@item.Date</td>
+                                                <td scope="row">@item.Item</td>
+                                                <td scope="row">@item.Amount</td>
+                                                <td scope="row">bil-hfgdtg25436879634.pdf</td>
+                                                <td scope="row">
+                                                    <a class="btn btn-outline-info btn-sm">View</a>
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    }
+                    
+                   
+                </div>
+            </div>
+         
+        </div>
+    </div>
+
+</body>
+<script>
+    function ApproveBiWeeklysheet() {
+        var dateRange = $("#timeDropdown").val();
+        var physician = $("#selectProvider").val();
+        let dates = [];
+        dates = dateRange.split(" - ");
+        var startDate = dates[0];
+        var endDate = dates[1];
+        console.log(startDate);
+        console.log(endDate);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ApproveSheet", "AdminNavbar")',
+            data: { startDate: startDate, endDate: endDate, PhysicianId: physician },
+            success: function (response) {
+                console.log(response);
+                $('body').html(response);
+            },
+            error: function (error) {
+                console.log('Error sending data', error);
+            }
+        });
+    }
+
+    function FindTimeSheet() {
+        var dateRange = $("#timeDropdown").val();
+        var physician = $("#selectProvider").val();
+        let dates = [];
+        dates = dateRange.split(" - ");
+        var startDate = dates[0];
+        var endDate = dates[1];
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Invoice", "AdminNavbar")',
+            data: { startDate: startDate, endDate: endDate, PhysicianId: physician },
+            success: function (response) {
+                console.log(response);
+                var content = $(response).find('#invoicing').html();
+                $('#invoicing').html(content);
+            },
+            error: function (error) {
+                console.log('Error sending data', error);
+            }
+        });
+    }
+</script>
