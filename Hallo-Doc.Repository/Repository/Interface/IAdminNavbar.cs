@@ -55,6 +55,9 @@ namespace Hallo_Doc.Repository.Repository.Interface
         AdminProfile CreateAdmin();
         void AddAdmin(AdminProfile admin);
         ShowTimeSheet GetBiWeeklySheet(DateOnly startDate, DateOnly endDate, int PhysicianId);
+        public TimesheetData TimeSheet(DateOnly startDate, DateOnly endDate, int PhysicianId);
+        bool TimeSheetSave(TimesheetData model);
+        bool ApproveSheet(DateOnly StartDate, DateOnly EndDate, int PhysicianId, string Bonus, string Discription);
 
     }
 }

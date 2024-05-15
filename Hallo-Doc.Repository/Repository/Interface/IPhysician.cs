@@ -25,5 +25,6 @@ namespace Hallo_Doc.Repository.Repository.Interface
         TimesheetData TimeSheetData(DateOnly startDate, DateOnly endDate);
         bool TimeSheetSave(TimesheetData model);
         ShowTimeSheet GetWeeklySheet(DateOnly startDate, DateOnly endDate);
+        bool FinalizeSheet(DateOnly startDate);
     }
 }

@@ -7,6 +7,8 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Globalization;
@@ -420,11 +422,45 @@ namespace Hallo_Doc.Controllers
         public IActionResult TimeSheetPost(TimesheetData sendInfo)
         {
             var res = _physician.TimeSheetSave(sendInfo);
-            var sd = sendInfo.startDate.ToString();
-            var ed = sendInfo.endDate.ToString();
-            return RedirectToAction("BiWeeklySheet", new { sd, ed });
+            return RedirectToAction("Invoicing");
 
         }
-     
+        [HttpPost]
+        public IActionResult UploadReceipt(IFormFile file, DateOnly date)
+        {
+            var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
+            var fileName = $"{date}_{file.FileName}";
+            var filePath = Path.Combine(uploadsDirectory, fileName); 
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return Json(new { fileName });
+        }
+        public IActionResult FinalizeTimeSheet(string StartDate)
+        {
+            DateOnly sd = DateOnly.ParseExact(StartDate, "dd/MM/yyyy");
+            bool final = _physician.FinalizeSheet(sd);
+            if(final == true)
+            {
+                _notyf.Success("TimeSheet Finalized");
+            }
+            return RedirectToAction("Invoicing");
+        }
+        public IActionResult ViewPdf(string fileName)
+        {
+            var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents", fileName);
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            var provider = new FileExtensionContentTypeProvider();
+            string contentType;
+            if (!provider.TryGetContentType(fileName, out contentType))
+            {
+                contentType = "application/octet-stream"; // Default to binary data if content type is not found
+            }
+
+            return File(fileStream, contentType);
+        }
+
     }
 }

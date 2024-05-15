@@ -8,7 +8,7 @@
     <div style="padding-bottom: 9%;" class="container mb-3">
         <div class="flex-row d-flex py-3 mr-2 justify-content-end">
 
-            <a class="btn btn-outline-info out back" asp-action="Invoice" asp-controller="Admin">
+            <a class="btn btn-outline-info out back" asp-action="Invoice" asp-controller="AdminNavbar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                 </svg> Back
@@ -19,6 +19,7 @@
         <div class="row px-3">
             <input type="hidden" asp-for="startDate" value="@Model.startDate" id="startdate" />
             <input type="hidden" asp-for="endDate" value="@Model.endDate" id="endDate" />
+            <input type="hidden" asp-for="PhysicianId" value="@Model.PhysicianId" id="PhysicianId" />
             <div class="bg-white px-3 py-3 shadow mt-2 mb-3 bg-white rounded notdiv">
                 <div class="table-responsive">
                     <table class="table table-hover" style="width:100%">
@@ -30,6 +31,7 @@
                                 <th>Weekend/Holiday</th>
                                 <th>Number of Housecalls</th>
                                 <th>Number of Phone Consults</th>
+                                <th>Total</th>
                         </thead>
                         <tbody>
                             @for (var i = Model.startDate; i <= Model.endDate; i = i.AddDays(1))
@@ -48,6 +50,24 @@
                                     <td scope="row"><input type="text" class="form-control" name="NoOfPhoneConsult" value="@(item != null && item.NoOfPhoneCall!=null ? item.NoOfPhoneCall : "")"></td>
                                 </tr>
                             }
+                            <tr class="mt-2">
+                                <td scope="row">PayRate</td>
+                                <td scope="row"></td>
+                                <td scope="row"><input type="text" class="form-control" value="@(Model.PayRateInfo[0].Shift)" disabled></td>
+                                <td scope="row"><input type="text" class="form-control" value="@(Model.PayRateInfo[0].NightShiftWeekend)" disabled></td>
+                                <td scope="row"><input type="text" class="form-control" value="@(Model.PayRateInfo[0].Housecall)" disabled></td>
+                                <td scope="row"><input type="text" class="form-control" value="@(Model.PayRateInfo[0].PhoneConsults)" disabled></td>
+                                <td scope="row"></td>
+                            </tr>
+                            <tr class="mt-2">
+                                <td scope="row">Invoice Total</td>
+                                <td scope="row"></td>
+                                <td scope="row"><input type="text" class="form-control" value="@Model.ShiftTotal" disabled></td>
+                                <td scope="row"><input type="text" class="form-control" value="@Model.WeekendTotal" disabled></td>
+                                <td scope="row"><input type="text" class="form-control" value="@Model.HouseCallTotal" disabled></td>
+                                <td scope="row"><input type="text" class="form-control" value="@Model.PhoneCallTotal" disabled></td>
+                                <td scope="row"><input type="text" class="form-control" value="@Model.InvoiceTotal" disabled></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -84,21 +104,23 @@
                                 <td scope="row">@i.ToString("dd/MM/yyyy")</td>
                                 <td scope="row"><input type="text" name="item" class="form-control" value="@(item != null && item.Item !=null ? item.Item : "")"></td>
                                 <td scope="row"><input type="text" name="Amount" class="form-control" value="@(item != null && item.Amount!=null ? item.Amount : "")"></td>
-                                <td scope="row">
+                                @if (item != null && item.Bill != null)
+                                {
+                                    <td scope="row">@item.Bill</td>
+                                    <td scope="row">
+                                        <a class="btn btn-outline-info btn-sm">Edit</a>
+                                        <a class="btn btn-outline-info btn-sm">Delete</a>
+                                        <a class="btn btn-outline-info btn-sm">View</a>
+                                    </td>
 
-                                    <div class="d-flex justify-content-between bg-light border border-secondary rounded">
-                                        <button type="button" id="choosenfile" class="col btn text-start text-secondary" onclick="document.getElementById('files').click()">
-                                            Select File
-                                        </button>
-                                        <input id="files" type="file" class="d-none form-control doc_uploder" name="File">
+                                }
+                                else
+                                {
+                                    <td scope="row"></td>
 
-                                        <button type="submit" class="btn btn-info text-white py-2" value="Upload">
-                                            <i class="fa fa-cloud-upload"></i>
-                                            <span class="dNone"> Upload </span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td scope="row"></td>
+                                    <td scope="row"></td>
+                                }
+
 
                             </tr>
                         }
@@ -107,8 +129,9 @@
             </div>
         </div>
         <div class="flex-row d-flex justify-content-end">
-
-            <button type="submit" class="btn btn-info text-white">Finalize</button>
+            <input type="text" class="form-control m-2" name="Bonus" id="bonus" placeholder="Bonus Amount">
+            <input type="text" class="form-control m-2" name="Discription" id="discription" placeholder="Admin Discription">
+            <button type="submit" class="btn btn-info text-white m-2" onclick="ApproveSheet()">Approve</button>
 
         </div>
 
@@ -146,32 +169,42 @@
             NoofPhoneConsultList.push($(this).val());
         });
         console.log(NoofPhoneConsultList);
-        let itemsList = [];
-        $('input[name="item"]').each(function () {
-            itemsList.push($(this).val());
-        });
-        console.log(itemsList);
-        let AmountList = [];
-        $('input[name="Amount"]').each(function () {
-            AmountList.push($(this).val());
-        });
-        console.log(AmountList);
-        let BillList = [];
         var sendInfo = {
             startDate: $("#startdate").val(),
             endDate: $("#endDate").val(),
+            PhysicianId: $("#PhysicianId").val(),
             TotalHours: TotalHoursList,
             IsWeekend: IsWeekendList,
             NoofHousecall: NoofHousecallList,
             NoofPhoneConsult: NoofPhoneConsultList,
-            Amount: AmountList,
-            Items: itemsList
         }
         $.ajax({
             type: "POST",
-            url: '@Url.Action("TimeSheetPost", "Physician")',
+            url: '@Url.Action("TimeSheetPost", "AdminNavbar")',
             dataType: 'json',
             data: sendInfo,
+            success: function (data) {
+                console.log("AJAX success");
+                location.reload();
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+
+    function ApproveSheet() {  
+        var sd = $("#startdate").val();
+        var ed = $("#endDate").val();
+        var id = $("#PhysicianId").val();
+        var disc = $("#discription").val();
+        var bonus = $("#bonus").val();
+   
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ApproveTimeSheet", "AdminNavbar")',
+            dataType: 'json',
+            data: {StartDate: sd, EndDate: ed, PhysicianId: id, Bonus: bonus, Discription: disc},
             success: function (data) {
                 console.log("AJAX success");
                 location.reload();

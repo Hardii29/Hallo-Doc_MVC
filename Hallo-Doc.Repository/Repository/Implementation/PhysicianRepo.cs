@@ -334,65 +334,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             t.startDate = startDate;
             return t;
         }
-        //public bool TimeSheetSave(TimesheetData model)
-        //{
-        //    var count = 0;
-        //    Invoice data = new Invoice();
-        //    data.PhysicianId = 9;
-        //    data.StartDate = model.startDate;
-        //    data.EndDate = model.endDate;
-        //    data.IsFinalize = false;
-        //    data.CreatedDate = DateTime.Now;
-        //    _context.Invoices.Add(data);
-        //    _context.SaveChanges();
-        //    for (var i = model.startDate; i <= model.endDate; i = i.AddDays(1))
-        //    {
-        //        TimeSheet detail = new TimeSheet();
-        //        detail.Date = default;
-        //        if (model.TotalHours[count] != null)
-        //        {
-        //            detail.Date = i;
-        //            detail.TotalHours = Convert.ToInt32(model.TotalHours[count]);
-        //        }
-        //        if (model.IsWeekend[count] != false)
-        //        {
-        //            detail.Date = i;
-        //            detail.Holiday = model.IsWeekend[count];
-        //        }
-        //        if (model.NoofPhoneConsult[count] != null)
-        //        {
-        //            detail.Date = i;
-        //            detail.NoOfPhoneCall = Convert.ToInt32(model.NoofPhoneConsult[count]);
-        //        }
-        //        if (model.NoofHousecall[count] != null)
-        //        {
-        //            detail.Date = i;
-        //            detail.NoOfHouseCall = Convert.ToInt32(model.NoofHousecall[count]);
-        //        }
-        //        if (detail.Date != default)
-        //        {
-        //            var isExist = _context.TimeSheets.Any(x => x.Date == detail.Date);
-        //            if (isExist)
-        //            {
-        //                detail.ModifiedDate = DateTime.Now;
-        //                _context.TimeSheets.Update(detail);
-        //                _context.SaveChanges();
-        //            }
-        //            else
-        //            {
-        //                detail.CreatedDate = DateTime.Now;
-        //                detail.InvoiceId = data.InvoiceId;
-        //                _context.TimeSheets.Add(detail);
-        //                _context.SaveChanges();
-        //            }
-        //        }
-        //        count++;
-        //    }
-        //    return true;
-        //}
+ 
         public bool TimeSheetSave(TimesheetData model)
         {
             var count = 0;
+          
             try
             {
                 var invoiceId = 0;
@@ -451,6 +397,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             detail.Date = i;
                             detail.Amount = model.Amount[count];
                         }
+                        if (model.Bills[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.Bill = model.Bills[count];
+                        }
                         if (detail.Date != default)
                         {
                             detail.InvoiceId = invoiceId;
@@ -493,6 +444,11 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                         {
                             detail.Date = i;
                             detail.Amount = model.Amount[count];
+                        }
+                        if (model.Bills[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.Bill = model.Bills[count];
                         }
                         if (detail.Date != default)
                         {
@@ -537,13 +493,26 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
                 var model = new ShowTimeSheet()
                 {
-                    Weeklysheet = data
+                    Weeklysheet = data,
+                    IsFinalize = exist.IsFinalize,
+                    IsApproved = exist.IsApproved
                 };
                 return model;
             }
             
             return null;
         }
-
+        public bool FinalizeSheet(DateOnly startDate)
+        {
+            var data = _context.Invoices.FirstOrDefault(x => x.StartDate == startDate);
+            if (data != null)
+            {
+                data.IsFinalize = true;
+                _context.Invoices.Update(data);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

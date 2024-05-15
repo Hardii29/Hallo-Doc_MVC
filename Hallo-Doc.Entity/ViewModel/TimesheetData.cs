@@ -14,6 +14,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public DateOnly startDate { get; set; }
         public DateOnly endDate { get; set; }
         public List<TimeSheet> TimeSheetInfo { get; set; }
+        public List<PayRate> PayRateInfo { get; set; }
         public List<string> OnCallHours { get; set; }
         public List<string> TotalHours { get; set; }
         public List<bool> IsWeekend { get; set; }
@@ -22,6 +23,12 @@ namespace Hallo_Doc.Entity.ViewModel
         public List<string> Items { get; set; }
         public List<string> Bills { get; set; }
         public List<string> Amount { get; set; }
+        public int PhysicianId { get; set; }
+        public int ShiftTotal { get; set; }
+        public int PhoneCallTotal { get; set; }
+        public int HouseCallTotal { get; set; }
+        public int WeekendTotal { get; set; }
+        public int InvoiceTotal { get; set; }
     }
     public class ShowTimeSheet
     {
@@ -38,6 +45,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public List<TimeSheet> TimeSheetDetail { get; set; }
         public bool? IsFinalize { get; set; }
         public bool? IsApproved { get; set; }
+        
         public string PhysicianName { get; set; }
         public DateOnly startDate { get; set; }
         public DateOnly endDate { get; set; }

@@ -1079,5 +1079,120 @@ namespace Hallo_Doc.Repository.Repository.Implementation
 
             return null;
         }
+        public TimesheetData TimeSheet(DateOnly startDate, DateOnly endDate, int PhysicianId)
+        {
+            var invoice = _context.Invoices.FirstOrDefault(i => i.PhysicianId == PhysicianId && i.StartDate == startDate && i.EndDate == endDate);
+            var result = _context.TimeSheets.Where(r => r.Date >= startDate && r.Date <= endDate && r.InvoiceId == invoice.InvoiceId).ToList();
+            var payRate = _context.PayRates.FirstOrDefault(p => p.PhysicianId == PhysicianId);
+            var payAmount = _context.PayRates.Where(p => p.PhysicianId == PhysicianId).ToList();
+            TimesheetData t = new();
+            t.PayRateInfo = payAmount;
+            t.TimeSheetInfo = result;
+            t.endDate = endDate;
+            t.startDate = startDate;
+            t.PhysicianId = PhysicianId;
+            if (payRate != null && result != null)
+            {
+                int hourlyRate = int.Parse(payRate.Shift);
+                int phoneConsultRate = int.Parse(payRate.PhoneConsults);
+                int houseCallRate = int.Parse(payRate.Housecall);
+                int weekendRate = int.Parse(payRate.NightShiftWeekend);
+                int totalHours = 0;
+                int phoneConsults = 0;
+                int houseCalls = 0;
+                int weekends = 0;
+                foreach (var entry in result)
+                {
+                    totalHours += (int)entry.TotalHours;
+                    phoneConsults += (int)entry.NoOfPhoneCall;
+                    houseCalls += (int)entry.NoOfHouseCall;
+                    if (entry.Holiday == true) // Check if the entry is for a weekend
+                    {
+                        weekends++;
+                    }
+                }
+                t.ShiftTotal = totalHours * hourlyRate;
+                t.HouseCallTotal = houseCalls * houseCallRate;
+                t.PhoneCallTotal = phoneConsults * phoneConsultRate;
+                t.WeekendTotal = weekends * weekendRate;
+                t.InvoiceTotal = t.HouseCallTotal + t.PhoneCallTotal + t.ShiftTotal + t.WeekendTotal;
+            }
+                return t;
+        }
+        public bool TimeSheetSave(TimesheetData model)
+        {
+            var count = 0;
+
+            try
+            {
+                var invoiceId = 0;
+                var invoice = _context.Invoices
+                .FirstOrDefault(r => r.StartDate == model.startDate && r.EndDate == model.endDate && r.PhysicianId == model.PhysicianId);
+           
+                    invoiceId = invoice.InvoiceId;
+                
+
+                for (var i = model.startDate; i <= model.endDate; i = i.AddDays(1))
+                {
+                    var detail = _context.TimeSheets.FirstOrDefault(x => x.Date == i && x.InvoiceId == invoiceId);
+                    if (detail != null)
+                    {
+                        detail.Date = default;
+                        if (model.TotalHours[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.TotalHours = Convert.ToInt32(model.TotalHours[count]);
+                        }
+                        if (model.IsWeekend[count] != false)
+                        {
+                            detail.Date = i;
+                            detail.Holiday = model.IsWeekend[count];
+                        }
+                        if (model.NoofPhoneConsult[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.NoOfPhoneCall = Convert.ToInt32(model.NoofPhoneConsult[count]);
+                        }
+                        if (model.NoofHousecall[count] != null)
+                        {
+                            detail.Date = i;
+                            detail.NoOfHouseCall = Convert.ToInt32(model.NoofHousecall[count]);
+                        }
+                        
+                        if (detail.Date != default)
+                        {
+                            detail.InvoiceId = invoiceId;
+                            detail.ModifiedDate = DateTime.Now;
+                            _context.TimeSheets.Update(detail);
+                            _context.SaveChanges();
+                        }
+
+                    }
+                    
+
+                    count++;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+
+            }
+        }
+        public bool ApproveSheet(DateOnly StartDate, DateOnly EndDate, int PhysicianId, string Bonus, string Discription)
+        {
+            var invoice = _context.Invoices.FirstOrDefault(i => i.StartDate ==  StartDate && i.EndDate == EndDate && i.PhysicianId == PhysicianId);
+            if (invoice != null)
+            {
+                invoice.IsApproved = true;
+                invoice.Bonus = Bonus;
+                invoice.AdminNotes = Discription;
+                _context.Invoices.Update(invoice);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

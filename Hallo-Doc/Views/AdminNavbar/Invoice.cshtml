@@ -138,9 +138,12 @@
                                                 <td scope="row">@item.Date</td>
                                                 <td scope="row">@item.Item</td>
                                                 <td scope="row">@item.Amount</td>
-                                                <td scope="row">bil-hfgdtg25436879634.pdf</td>
+                                                <td scope="row">@item.Bill</td>
                                                 <td scope="row">
-                                                    <a class="btn btn-outline-info btn-sm">View</a>
+                                                    @if (item.Bill != null)
+                                                    {
+                                                        <a class="btn btn-outline-info btn-sm" target="_blank" href="@Url.Action("ViewPdf", "Physician", new { fileName = item.Bill })">View</a>
+                                                    }
                                                 </td>
 
                                             </tr>

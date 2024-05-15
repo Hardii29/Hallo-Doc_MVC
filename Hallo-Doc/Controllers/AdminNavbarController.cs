@@ -467,5 +467,24 @@ namespace Hallo_Doc.Controllers
 
             return View(model);
         }
+        public IActionResult ApproveSheet(string startDate, string endDate, int PhysicianId)
+        {
+            DateOnly sd = DateOnly.ParseExact(startDate, "dd/MM/yyyy");
+            DateOnly ed = DateOnly.ParseExact(endDate, "dd/MM/yyyy");
+            var result = _adminNav.TimeSheet(sd, ed, PhysicianId);
+            return View(result);
+        }
+        [HttpPost]
+        public IActionResult TimeSheetPost(TimesheetData sendInfo)
+        {
+            var res = _adminNav.TimeSheetSave(sendInfo);
+            return Json(res);
+        }
+        [HttpPost]
+        public IActionResult ApproveTimeSheet(DateOnly StartDate, DateOnly EndDate, int PhysicianId, string Bonus, string Discription)
+        {
+            var result = _adminNav.ApproveSheet(StartDate, EndDate, PhysicianId, Bonus, Discription);
+            return Json(result);
+        }
     }
 }
