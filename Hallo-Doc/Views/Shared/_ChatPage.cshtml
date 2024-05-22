@@ -1,0 +1,13 @@
+﻿@model Hallo_Doc.Entity.ViewModel.ChatUser;@using System.IdentityModel.Tokens.Jwt;@{
+    string jwtToken = Context.Request.Cookies["jwt"];
+    string userId = "";
+    if (!string.IsNullOrEmpty(jwtToken))
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var token = handler.ReadToken(jwtToken) as JwtSecurityToken;
+
+        if (token != null)
+        {
+            userId = token.Claims.FirstOrDefault(claim => claim.Type == "UserID")?.Value ?? "";
+        }
+    }}<script src="~/lib/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="~/css/site.css" /><div class="offcanvas offcanvas-end w-30" tabindex="-1" id="chatWithOption" aria-labelledby="offcanvasRightLabel">    <div class="offcanvas-header p-3" style="background-color:#00bce7;color:#fff">        <div>            <h5 id="name">@Model.Name</h5>            <input id="userName" value="@Model.Aspid" hidden />            <input id="siteUser" value="@userId" hidden />        </div>        <div>            <button type="button" class="btn-close text-reset d-inline-flex" data-bs-dismiss="offcanvas" aria-label="Close">            </button>        </div>    </div>    <div class="offcanvas-body p-0" style="overflow-y:auto">        <div class="row m-0">                   <div class="col p-2" >                <ul id="messagesList" style="list-style-type:none;margin:0;padding:0;"></ul>                            </div>        </div>    </div>    <div class="offcanvas-footer" id="chatfooter">        <div class="row g-0">            <div class="col">                <div class="row g-0 ml-2">                    <div class="col-10 p-1 mb-3">                        <input type="text" id="userMessage" class="form-control" placeholder="Type a message..." />                    </div>                    <div class="col-2 p-1 mb-3">                        <button class="btn" id="sendMessage" style="background-color:#00bce7;color:#fff"><i class="fa-solid fa-paper-plane"></i></button>                    </div>                </div>            </div>        </div>    </div></div><script src="~/js/chat.js"></script>

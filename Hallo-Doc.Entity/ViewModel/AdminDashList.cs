@@ -22,6 +22,7 @@ namespace Hallo_Doc.Entity.ViewModel
         public string? Notes { get; set; }
         public int? RequestClientId { get; set; }
         public int? ProviderId { get; set; }
+        public string providerAspid { get; set; }
         public string? RequestorPhoneNumber { get; set; }
        
     }

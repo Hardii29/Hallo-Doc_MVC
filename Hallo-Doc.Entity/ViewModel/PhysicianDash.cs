@@ -15,7 +15,8 @@
         public string? Address { get; set; }
         public string? Notes { get; set; }
         public int? RequestClientId { get; set; }
-        public int? ProviderId { get; set; }
+        public string AspAdminId { get; set; }
+        public string AspPatientId { get; set; }
         public string? RequestorPhoneNumber { get; set; }
         public int Status { get; set; }
     }

@@ -8,6 +8,7 @@ using Hallo_Doc.Repository.Repository.Interface;
 using Hallo_Doc.Repository.Repository.Implementation;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
+using Hallo_Doc.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IAdminNavbar, AdminNavbarRepo>();
 builder.Services.AddScoped<IEmail_SMS, Email_SMSservices>();
 builder.Services.AddScoped<IPhysician, PhysicianRepo>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -44,8 +46,11 @@ app.UseRouting();
 app.UseNotyf();
 app.UseAuthorization();
 app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapHub<ChatHub>("/ChatHub");
+
 
 app.Run();

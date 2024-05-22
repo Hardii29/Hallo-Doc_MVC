@@ -51,7 +51,8 @@
                 <thead class="thead-dark bg-light">
                     <tr class="row" style="padding:10px;">
                         <th class="col">Created Date</th>
-                        <th class="col-6">Current status</th>
+                        <th class="col">Current status</th>
+                        <th class="col">Chat With</th>
                         <th class="col">Document</th>
                     </tr>
                 </thead>
@@ -61,7 +62,11 @@
                         {
                             <tr class="row mt-2">
                                 <td class="col"> @string.Format("{0:MMM dd, yyyy}", item.Request?.CreatedDate)</td>
-                                <td class="col-6">@item.Request?.Status</td>
+                                <td class="col">@item.Request?.Status</td>
+                                <td class="col">
+                                    <button type="button" class="btn btn-outline-info mr-1" onclick="ChatWith('@item.Request.AspPhysicianId')"><i class="fa fa-user-md me-1" aria-hidden="true"></i>Provider</button>
+                                    <button type="button" class="btn btn-outline-info" onclick="ChatWith('@item.Request.AspAdminId')"><i class="fa-solid fa-user-tie me-1"></i>Admin</button>
+                                </td>
                                 <td class="col">
                                     @if (item.HasFiles)
                                     {
@@ -84,6 +89,23 @@
         function darkMode() {
             var element = document.body;
             element.classList.toggle("darkMode");
+        }
+        function ChatWith(id) {
+            console.log(id);
+            $.ajax({
+                url: "@Url.Action("GetChatView", "Admin")",
+                method: "GET",
+                data: { Id: id },
+                success: function (data) {
+                    console.log(data);
+                    $('#partial').html(data);
+                    const chatwith = new bootstrap.Offcanvas(document.getElementById("chatWithOption"), {});
+                    chatwith.show();
+                },
+                error: function (error) {
+                    console.error("Error:", error);
+                }
+            });
         }
     </script>
 </body>

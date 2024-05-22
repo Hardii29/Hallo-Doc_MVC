@@ -93,6 +93,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                             Notes = rc != null ? rc.Notes : "",
                             ProviderId = req.PhysicianId,
+                            providerAspid = p != null ? p.AspNetUserId : "",
                             RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
                             RequestClientId = rc != null ? rc.RequestclientId : null
                         }).ToList();
@@ -1010,6 +1011,18 @@ namespace Hallo_Doc.Repository.Repository.Implementation
             E.FollowUp = ve.Followup;
             E.IsFinalize = false;
             _context.SaveChanges();
+        }
+        public ChatUser ChatInfo(string id)
+        {
+            ChatUser model = new ChatUser();
+            model.Aspid = id;
+            model.Name = _context.AspnetUsers.FirstOrDefault(a=> a.Id == id).Username;
+            return model;
+        }
+        public List<ChatHistory> ChatHistory(string Sender, string Reciever)
+        {
+            var message = _context.ChatHistories.Where(u => (u.Sender == Sender && u.Reciever == Reciever) || (u.Reciever == Sender && u.Sender == Reciever)).ToList();
+            return message;
         }
     }
 }

@@ -3,8 +3,7 @@
     ViewData["Title"] = "Admin Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<html>
-<body class="bg-light">
+
     <div>
         @Html.Partial("_CancelCase")
         @Html.Partial("_AssignCase")
@@ -14,6 +13,7 @@
         @Html.Partial("_SendAgreement")
         @Html.Partial("_RequestSupport")
         @Html.Partial("_SendLink")
+    @* @Html.Partial("_ChatPage") *@
     </div>
     <div class="container-fluid mt-3" style="width: 100%;">
        
@@ -129,132 +129,148 @@
 
     <div id="btnContent">  </div>
 
-    <script>
-        var statusidglobal = $(this).data("id");
-        var btnnameglobal = $(this).data("btn");
-        var exportData = '0';
-        $(document).ready(function () {
-            console.log("Document ready");
-            document.getElementById('newButton').focus();
-            exportData = '1';
-            console.log(exportData);
-            $.ajax({
-                url: '/Admin/GetPartialView',
-                method: 'GET',
-                data: { btnName: 'New', statusId: 1 },
-                success: function (data) {
-                    $("#btnContent").html(data);
-                },
-                error: function () {
-                    console.error('Error fetching default partial view.');
-                }
-            });
-                    
-            $(document).on("click", ".btn", function () {
-                btnnameglobal = $(this).data("btn");
-                console.log("Button clicked: " + btnnameglobal);
-                document.getElementById('cardName').innerText = "(" +btnnameglobal+ ")";
-                statusidglobal = $(this).data("id");
-                if (statusidglobal == 1) { exportData = '1'; console.log("exportData:"+exportData) }
-                if (statusidglobal == 2) { exportData = '2'; console.log("exportData:" + exportData) }
-                if (statusidglobal == 3) { exportData = '4,5'; console.log("exportData:" + exportData) }
-                if (statusidglobal == 4) { exportData = '6'; console.log("exportData:" + exportData) }
-                if (statusidglobal == 5) { exportData = '3,7,8'; console.log("exportData:" + exportData) }
-                if (statusidglobal == 6) { exportData = '9'; console.log("exportData:" + exportData) }
-
-                 $.ajax({
-                      url: '@Url.Action("GetPartialView", "Admin")',
-                      method: 'GET',
-                      data: { btnName: btnnameglobal, statusid:statusidglobal },
-                      success: function (data) {
-                           console.log("AJAX success");
-                           $("#btnContent").html(data);
-                           console.log("data added");
-                      },
-                      error: function () {
-                           console.error('Error fetching partial view.');
-                      }
-                 });
-            });
+<script>
+    var statusidglobal = $(this).data("id");
+    var btnnameglobal = $(this).data("btn");
+    var exportData = '0';
+    $(document).ready(function () {
+        console.log("Document ready");
+        document.getElementById('newButton').focus();
+        exportData = '1';
+        console.log(exportData);
+        $.ajax({
+            url: '/Admin/GetPartialView',
+            method: 'GET',
+            data: { btnName: 'New', statusId: 1 },
+            success: function (data) {
+                $("#btnContent").html(data);
+            },
+            error: function () {
+                console.error('Error fetching default partial view.');
+            }
         });
-        var reqtypeElements = document.getElementsByClassName('reqtype');
-        for (var i = 0; i < reqtypeElements.length; i++) {
-            reqtypeElements[i].addEventListener('click', handleSearchClick);
-        }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('searchInput').addEventListener('keyup', function (evt) {
-                if (evt.key === 'Enter') {
-                    evt.preventDefault();
-                    handleSearchClick();
-                }
-            });
-        });
-        function handleSearchClick() {
-            var searchValue = document.getElementById('searchInput').value;
-            var region = $("#SelectedRegion").val();
-            var requesttype = $(this).data("id");
-            var pagesize = $("#pagesizedropdown").val();
-            console.log(searchValue);
-            console.log(statusidglobal);
-            console.log(btnnameglobal);
-            console.log("Region id: " + region);
-            console.log("Request type id: " + requesttype);
-            console.log("pagesize:" + pagesize);
+        $(document).on("click", ".btn", function () {
+            btnnameglobal = $(this).data("btn");
+            console.log("Button clicked: " + btnnameglobal);
+            document.getElementById('cardName').innerText = "(" + btnnameglobal + ")";
+            statusidglobal = $(this).data("id");
+            if (statusidglobal == 1) { exportData = '1'; console.log("exportData:" + exportData) }
+            if (statusidglobal == 2) { exportData = '2'; console.log("exportData:" + exportData) }
+            if (statusidglobal == 3) { exportData = '4,5'; console.log("exportData:" + exportData) }
+            if (statusidglobal == 4) { exportData = '6'; console.log("exportData:" + exportData) }
+            if (statusidglobal == 5) { exportData = '3,7,8'; console.log("exportData:" + exportData) }
+            if (statusidglobal == 6) { exportData = '9'; console.log("exportData:" + exportData) }
+
             $.ajax({
-                type: "GET",
                 url: '@Url.Action("GetPartialView", "Admin")',
-                data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal, Region: region, pagesize: pagesize, requesttype: requesttype },
+                method: 'GET',
+                data: { btnName: btnnameglobal, statusid: statusidglobal },
                 success: function (data) {
                     console.log("AJAX success");
-
                     $("#btnContent").html(data);
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                }
-            });
-        }
-
-        var reqtypeElements = document.getElementsByClassName('reqtype');
-        for (var i = 0; i < reqtypeElements.length; i++) {
-            reqtypeElements[i].addEventListener('click', Export);
-        }
-       
-        function Export(status) {
-            var region = $("#SelectedRegion").val();
-            var requesttype = $(this).data("id");
-            console.log("Region id in export: " + region);
-            console.log("Request type id in export: " + requesttype);
-            console.log(status);
-            $.ajax({
-                method: "POST",
-                url: "/Admin/Export",
-                data: { status: status, Region: region, requesttype: requesttype },
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function (result) {
-                    var blob = new Blob([result], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                    var link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = 'RequestData.xlsx';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    window.URL.revokeObjectURL(link.href);
+                    console.log("data added");
                 },
                 error: function () {
-                    console.log("error");
+                    console.error('Error fetching partial view.');
                 }
             });
-        }
-        function resetModal() {
-            $('#sendLinkForm').trigger('reset');
-        }
-        function resetSupport() {
-            $('#requestSupportForm').trigger('reset');
-        }
-    </script>
-</body>
-</html>
+        });
+    });
+    var reqtypeElements = document.getElementsByClassName('reqtype');
+    for (var i = 0; i < reqtypeElements.length; i++) {
+        reqtypeElements[i].addEventListener('click', handleSearchClick);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('searchInput').addEventListener('keyup', function (evt) {
+            if (evt.key === 'Enter') {
+                evt.preventDefault();
+                handleSearchClick();
+            }
+        });
+    });
+    function handleSearchClick() {
+        var searchValue = document.getElementById('searchInput').value;
+        var region = $("#SelectedRegion").val();
+        var requesttype = $(this).data("id");
+        var pagesize = $("#pagesizedropdown").val();
+        console.log(searchValue);
+        console.log(statusidglobal);
+        console.log(btnnameglobal);
+        console.log("Region id: " + region);
+        console.log("Request type id: " + requesttype);
+        console.log("pagesize:" + pagesize);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetPartialView", "Admin")',
+            data: { searchValue: searchValue, statusid: statusidglobal, btnName: btnnameglobal, Region: region, pagesize: pagesize, requesttype: requesttype },
+            success: function (data) {
+                console.log("AJAX success");
+
+                $("#btnContent").html(data);
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+
+    var reqtypeElements = document.getElementsByClassName('reqtype');
+    for (var i = 0; i < reqtypeElements.length; i++) {
+        reqtypeElements[i].addEventListener('click', Export);
+    }
+
+    function Export(status) {
+        var region = $("#SelectedRegion").val();
+        var requesttype = $(this).data("id");
+        console.log("Region id in export: " + region);
+        console.log("Request type id in export: " + requesttype);
+        console.log(status);
+        $.ajax({
+            method: "POST",
+            url: "/Admin/Export",
+            data: { status: status, Region: region, requesttype: requesttype },
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (result) {
+                var blob = new Blob([result], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'RequestData.xlsx';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+            },
+            error: function () {
+                console.log("error");
+            }
+        });
+    }
+    function resetModal() {
+        $('#sendLinkForm').trigger('reset');
+    }
+    function resetSupport() {
+        $('#requestSupportForm').trigger('reset');
+    }
+
+    function ChatWith(id) {
+        console.log(id);
+        $.ajax({
+            url: "@Url.Action("GetChatView", "Admin")",
+            method: "GET",
+            data: {Id: id},
+            success: function (data) {
+                console.log(data);
+                $('#partial').html(data);
+                const chatwith = new bootstrap.Offcanvas(document.getElementById("chatWithOption"), {});
+                chatwith.show();
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+</script>

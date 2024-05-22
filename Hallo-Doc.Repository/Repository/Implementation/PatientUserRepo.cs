@@ -51,6 +51,8 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                         CreatedDate = (DateTime)request.CreatedDate,
                         Status = (status)request.Status,
                         fileId = fileId,
+                        AspAdminId = _context.Admins.FirstOrDefault(a => a.AdminId == 1).AspNetUserId,
+                        AspPhysicianId = _context.Physicians.FirstOrDefault(p => p.PhysicianId == 9).AspNetUserId,
                     },
                     HasFiles = HasFiles
                 });

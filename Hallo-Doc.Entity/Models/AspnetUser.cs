@@ -42,6 +42,12 @@ public partial class AspnetUser
     [InverseProperty("User")]
     public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; } = new List<AspNetUserRole>();
 
+    [InverseProperty("RecieverNavigation")]
+    public virtual ICollection<ChatHistory> ChatHistoryRecieverNavigations { get; set; } = new List<ChatHistory>();
+
+    [InverseProperty("SenderNavigation")]
+    public virtual ICollection<ChatHistory> ChatHistorySenderNavigations { get; set; } = new List<ChatHistory>();
+
     [InverseProperty("AspNetUser")]
     public virtual ICollection<Physician> Physicians { get; set; } = new List<Physician>();
 

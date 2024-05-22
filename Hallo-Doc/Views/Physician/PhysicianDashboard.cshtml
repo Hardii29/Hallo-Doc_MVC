@@ -9,6 +9,7 @@
 @Html.Partial("_TypeOfCare")
 @Html.Partial("_SendLink")
 @Html.Partial("_FinalizeEncounter")
+
 <body class="bg-light">
   
     <div class="container-fluid mt-3" style="width: 100%;">
@@ -156,5 +157,21 @@
     }
     function SendLinkReset() {
         $('#linkSendForm').trigger('reset');
+    }
+    function ChatWith(id) {
+        $.ajax({
+            url: "@Url.Action("GetChatView", "Admin")",
+            method: "GET",
+            data: {Id: id},
+            success: function (data) {
+                console.log(data);
+                $('#partial').html(data);
+                const chatwith = new bootstrap.Offcanvas(document.getElementById("chatWithOption"), {});
+                chatwith.show();
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
     }
 </script>

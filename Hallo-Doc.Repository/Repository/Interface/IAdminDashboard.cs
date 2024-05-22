@@ -51,8 +51,9 @@ namespace Hallo_Doc.Repository.Repository.Interface
         List<AdminDash> Export(string status, int? Region, int? requesttype);
         bool SendLink(string email, string firstName, string lastName);
         Encounter EncounterInfo(int RequestId);
-
         void EditEncounterinfo(Encounter ve);
+        ChatUser ChatInfo(string id);
+        List<ChatHistory> ChatHistory(string Sender, string Reciever);
 
     }
 }

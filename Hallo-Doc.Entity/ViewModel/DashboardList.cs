@@ -29,6 +29,8 @@ namespace Hallo_Doc.Entity.ViewModel
         public status Status { get; set; }
         public int UserId { get; set; }
         public int fileId { get; set; }
+        public string AspAdminId { get; set; }
+        public string AspPhysicianId { get; set; }
     }
     public class RequestWiseFile
     {

@@ -67,6 +67,7 @@ namespace Hallo_Doc.Repository.Repository.Implementation
                             Status = req.Status,
                             PatientMobile = rc != null ? rc.PhoneNumber : "",
                             Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
+                            AspAdminId = _context.Admins.FirstOrDefault(x => x.AdminId == 1).AspNetUserId,
                             RequestorPhoneNumber = req != null ? req.PhoneNumber : "",
                             RequestClientId = rc != null ? rc.RequestclientId : null
                         }).ToList();

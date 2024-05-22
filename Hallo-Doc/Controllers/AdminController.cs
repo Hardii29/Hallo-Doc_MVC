@@ -283,6 +283,16 @@ namespace Hallo_Doc.Controllers
                 _notyf.Success("Request Page is sent to the patient successfully..");
             }
             return RedirectToAction("Admin_dashboard");
-        }   
+        }
+        public IActionResult GetChatView(string Id)
+        {
+            var model = _adminDashboard.ChatInfo(Id);
+            return PartialView("_ChatPage", model);
+        }
+        public IActionResult GetChatHistory(string Sender, string Reciever)
+        {
+            var chat = _adminDashboard.ChatHistory(Sender, Reciever);
+            return Json(chat);
+        }
     }
 }

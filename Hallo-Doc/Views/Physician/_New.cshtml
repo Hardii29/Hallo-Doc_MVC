@@ -60,7 +60,9 @@
                     
                 </td>
                 <td class="col-4 text-white" style="background-color: @rows;">@request.Address</td>
-                <td class="col-2 text-white" style="background-color: @rows;"><button type="button" class="btn btn-outline-light"><i class="fa-solid fa-user-tie me-1"></i>Admin</button></td>
+                <td class="col-2 text-white" style="background-color: @rows;">
+                    <button type="button" class="btn btn-outline-light" onclick="ChatWith('@request.AspAdminId')"><i class="fa-solid fa-user-tie me-1"></i>Admin</button>
+                </td>
                 <td class="col-1 text-white" style="background-color: @rows;">
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
